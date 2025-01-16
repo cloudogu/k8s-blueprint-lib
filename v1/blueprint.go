@@ -8,15 +8,15 @@ import (
 	"github.com/pkg/errors"
 )
 
-// BlueprintV1 describes an abstraction of CES components that should be absent or present within one or more CES
-// instances. When the same Blueprint is applied to two different CES instances it is required to leave two equal
-// instances in terms of the components.
+// BlueprintV1 describes an abstraction of Cloudogu EcoSystem (CES) parts that should be absent or present within one or
+// more CES instances. When the same Blueprint is applied to two different CES instances it is required to leave two
+// equal instances in terms of the components.
 //
 // In general additions without changing the version are fine, as long as they don't change semantics. Removal or
 // renaming are breaking changes and require a new blueprint API version.
 type BlueprintV1 struct {
 	bpcore.GeneralBlueprint
-	// ID is the unique name of the set over all components. This blueprint ID should be used to distinguish from similar
+	// ID is the unique name of the set over all parts. This blueprint ID should be used to distinguish from similar
 	// blueprints between humans in an easy way. Must not be empty.
 	ID string `json:"blueprintId"`
 	// CesAppVersion defines the exact version of the cesapp that should be present in the CES instance after which this
@@ -75,9 +75,9 @@ const (
 	// TargetStateAbsent sets the state of the item to absent. If selected the chosen item must be absent after the
 	// blueprint was applied.
 	TargetStateAbsent
-	// targetStateIgnore is currently only internally used to mark items that are present in the CES instance at hand
+	// TargetStateIgnore is currently only internally used to mark items that are present in the CES instance at hand
 	// but not mentioned in the blueprint.
-	targetStateIgnore
+	TargetStateIgnore
 )
 
 // String returns a string representation of the given TargetState enum value.
