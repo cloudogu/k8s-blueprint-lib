@@ -60,9 +60,9 @@ const (
 	// TargetStateAbsent sets the state of the item to absent. If selected the chosen item must be absent after the
 	// blueprint was applied.
 	TargetStateAbsent
-	// targetStateIgnore is currently only internally used to mark items that are present in the CES instance at hand
+	// TargetStateIgnore is currently only internally used to mark items that are present in the CES instance at hand
 	// but not mentioned in the blueprint.
-	targetStateIgnore
+	TargetStateIgnore
 )
 
 // String returns a string representation of the given TargetState enum value.
