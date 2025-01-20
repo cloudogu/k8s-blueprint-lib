@@ -1,7 +1,5 @@
 package entities
 
-import "github.com/cloudogu/blueprint-lib/bpcore"
-
 type TargetComponent struct {
 	// Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
 	Name string `json:"name"`
@@ -9,7 +7,7 @@ type TargetComponent struct {
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
 	// TargetState defines a state of installation of this component. Optional field, but defaults to "TargetStatePresent"
-	TargetState bpcore.TargetState `json:"targetState"`
+	TargetState string `json:"targetState"`
 	// DeployConfig defines a generic property map for the component configuration. This field is optional.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless

@@ -58,8 +58,8 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			args{spec: BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
 				Components: []entities.TargetComponent{
-					{Name: "k8s/blueprint-operator", Version: v0211, TargetState: bpcore.TargetStatePresent},
-					{Name: "k8s/dogu-operator", Version: v2341, TargetState: bpcore.TargetStateAbsent, DeployConfig: map[string]interface{}{"deployNamespace": "ecosystem", "overwriteConfig": map[string]string{"key": "value"}}},
+					{Name: "k8s/blueprint-operator", Version: v0211, TargetState: bpcore.TargetStatePresent.String()},
+					{Name: "k8s/dogu-operator", Version: v2341, TargetState: bpcore.TargetStateAbsent.String(), DeployConfig: map[string]interface{}{"deployNamespace": "ecosystem", "overwriteConfig": map[string]string{"key": "value"}}},
 				},
 			}},
 			`{"blueprintApi":"v2","components":[{"name":"k8s/blueprint-operator","version":"0.2.1-1","targetState":"present"},{"name":"k8s/dogu-operator","version":"2.3.4-1","targetState":"absent","deployConfig":{"deployNamespace":"ecosystem","overwriteConfig":{"key":"value"}}}],"config":{"global":{}}}`,
@@ -194,8 +194,8 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
 				Components: []entities.TargetComponent{
-					{Name: "k8s/blueprint-operator", Version: v0211, TargetState: bpcore.TargetStatePresent},
-					{Name: "k8s/dogu-operator", Version: v2341, TargetState: bpcore.TargetStateAbsent},
+					{Name: "k8s/blueprint-operator", Version: v0211, TargetState: bpcore.TargetStatePresent.String()},
+					{Name: "k8s/dogu-operator", Version: v2341, TargetState: bpcore.TargetStateAbsent.String()},
 				},
 			},
 			assert.NoError,
