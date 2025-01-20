@@ -140,7 +140,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 				spec: BlueprintV2{
 					GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
 					Components: []entities.TargetComponent{
-						{Name: "k8s/name", Version: v2341, DeployConfig: map[string]interface{}{"key": "value"}},
+						{Name: "k8s/name", Version: v2341, TargetState: bpcore.TargetStatePresent.String(), DeployConfig: map[string]interface{}{"key": "value"}},
 					},
 				},
 			},
@@ -276,7 +276,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
 				Components: []entities.TargetComponent{
-					{Name: "k8s/name", Version: v2341, DeployConfig: map[string]interface{}{"key": "value"}},
+					{Name: "k8s/name", Version: v2341, TargetState: bpcore.TargetStatePresent.String(), DeployConfig: map[string]interface{}{"key": "value"}},
 				},
 			},
 			assert.NoError,
