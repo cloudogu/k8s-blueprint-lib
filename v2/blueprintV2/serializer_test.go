@@ -43,10 +43,10 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
 				Dogus: []entities.TargetDogu{
 					{
-						Name: "official/nginx", Version: v1201, TargetState: bpcore.TargetStatePresent, PlatformConfig: entities.PlatformConfig{ResourceConfig: entities.ResourceConfig{MinVolumeSize: "2Gi"}, ReverseProxyConfig: entities.ReverseProxyConfig{MaxBodySize: "2Gi", AdditionalConfig: "additional", RewriteTarget: "/"}},
+						Name: "official/nginx", Version: v1201, TargetState: bpcore.TargetStatePresent.String(), PlatformConfig: entities.PlatformConfig{ResourceConfig: entities.ResourceConfig{MinVolumeSize: "2Gi"}, ReverseProxyConfig: entities.ReverseProxyConfig{MaxBodySize: "2Gi", AdditionalConfig: "additional", RewriteTarget: "/"}},
 					},
 					{
-						Name: "premium/jira", Version: v2341, TargetState: bpcore.TargetStateAbsent,
+						Name: "premium/jira", Version: v2341, TargetState: bpcore.TargetStateAbsent.String(),
 					},
 				},
 			}},
@@ -183,8 +183,8 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
 				Dogus: []entities.TargetDogu{
-					{Name: "official/nginx", Version: v1201, TargetState: bpcore.TargetStatePresent},
-					{Name: "premium/jira", Version: v2341, TargetState: bpcore.TargetStateAbsent},
+					{Name: "official/nginx", Version: v1201, TargetState: bpcore.TargetStatePresent.String()},
+					{Name: "premium/jira", Version: v2341, TargetState: bpcore.TargetStateAbsent.String()},
 				}},
 			assert.NoError,
 		},

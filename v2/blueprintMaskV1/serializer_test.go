@@ -38,8 +38,8 @@ func TestSerializeBlueprintMask_ok(t *testing.T) {
 			args{spec: BlueprintMaskV1{
 				GeneralBlueprintMask: bpcore.GeneralBlueprintMask{API: bpcore.MaskV1},
 				Dogus: []MaskTargetDogu{
-					{Name: "official/nginx", Version: version1_2_0_1.String(), TargetState: bpcore.TargetStatePresent},
-					{Name: "premium/jira", Version: version3_0_2_2.String(), TargetState: bpcore.TargetStateAbsent},
+					{Name: "official/nginx", Version: version1_2_0_1.String(), TargetState: bpcore.TargetStatePresent.String()},
+					{Name: "premium/jira", Version: version3_0_2_2.String(), TargetState: bpcore.TargetStateAbsent.String()},
 				},
 			}},
 			`{"blueprintMaskApi":"v1","blueprintMaskId":"","dogus":[{"name":"official/nginx","version":"1.2.0-1","targetState":"present"},{"name":"premium/jira","version":"3.0.2-2","targetState":"absent"}]}`,
@@ -79,8 +79,8 @@ func TestDeserializeBlueprintMask_ok(t *testing.T) {
 			BlueprintMaskV1{
 				GeneralBlueprintMask: bpcore.GeneralBlueprintMask{API: bpcore.MaskV1},
 				Dogus: []MaskTargetDogu{
-					{Name: "official/nginx", Version: version1_2_0_1.String(), TargetState: bpcore.TargetStatePresent},
-					{Name: "premium/jira", Version: version3_0_2_2.String(), TargetState: bpcore.TargetStateAbsent},
+					{Name: "official/nginx", Version: version1_2_0_1.String(), TargetState: bpcore.TargetStatePresent.String()},
+					{Name: "premium/jira", Version: version3_0_2_2.String(), TargetState: bpcore.TargetStateAbsent.String()},
 				}},
 			assert.NoError,
 		},

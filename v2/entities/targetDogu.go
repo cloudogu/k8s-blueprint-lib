@@ -1,7 +1,5 @@
 package entities
 
-import "github.com/cloudogu/blueprint-lib/bpcore"
-
 // TargetDogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
 // was applied.
 type TargetDogu struct {
@@ -11,8 +9,8 @@ type TargetDogu struct {
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
 	// TargetState defines a state of installation of this dogu. Optional field, but defaults to "TargetStatePresent"
-	TargetState    bpcore.TargetState `json:"targetState"`
-	PlatformConfig PlatformConfig     `json:"platformConfig,omitempty"`
+	TargetState    string         `json:"targetState"`
+	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
 }
 
 type ResourceConfig struct {

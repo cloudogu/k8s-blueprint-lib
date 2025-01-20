@@ -56,7 +56,7 @@ type TargetState int
 const (
 	// TargetStatePresent is the default state. If selected the chosen item must be present after the blueprint was
 	// applied.
-	TargetStatePresent = iota
+	TargetStatePresent TargetState = iota
 	// TargetStateAbsent sets the state of the item to absent. If selected the chosen item must be absent after the
 	// blueprint was applied.
 	TargetStateAbsent
