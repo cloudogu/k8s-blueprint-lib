@@ -1,5 +1,7 @@
 package entities
 
+import "encoding/json"
+
 type TargetComponent struct {
 	// Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
 	Name string `json:"name"`
@@ -14,4 +16,32 @@ type TargetComponent struct {
 	DeployConfig DeployConfig `json:"deployConfig,omitempty"`
 }
 
+func (in TargetComponent) DeepCopyInto(out *TargetComponent) {
+	if out != nil {
+		out.Name = in.Name
+		out.Version = in.Version
+		out.TargetState = in.TargetState
+		out.DeployConfig = *in.DeployConfig.DeepCopy()
+	}
+}
+
 type DeployConfig map[string]interface{}
+
+func (in *DeployConfig) DeepCopy() *DeployConfig {
+	out := new(DeployConfig)
+	in.DeepCopyInto(out)
+	return out
+}
+
+func (in *DeployConfig) DeepCopyInto(out *DeployConfig) {
+	if out != nil {
+		jsonStr, err := json.Marshal(in)
+		if err != nil {
+			return
+		}
+		err = json.Unmarshal(jsonStr, in)
+		if err != nil {
+			return
+		}
+	}
+}
