@@ -10,12 +10,8 @@ import (
 type BlueprintApi string
 
 const (
-	// V1 is the classic version 1 API identifier of Cloudogu EcoSystem blueprint mechanism inside VMs.
-	V1 BlueprintApi = "v1"
 	// V2 is the API version of the BlueprintV2 json format used in the MultiNode-CES inside kubernetes, e.g. for Blueprint-CRs.
 	V2 BlueprintApi = "v2"
-	// TestEmpty is a non-production, test-only API identifier of Cloudogu EcoSystem blueprint mechanism.
-	TestEmpty BlueprintApi = "test/empty"
 )
 
 type BlueprintMaskApi string
