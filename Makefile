@@ -1,5 +1,5 @@
 # Set these to the desired values
-ARTIFACT_ID=cesapp-lib
+ARTIFACT_ID=k8s-blueprint-lib
 VERSION=0.1.0
 
 GOTAG?=1.23.4
