@@ -7,7 +7,7 @@ import (
 	"github.com/cloudogu/cesapp-lib/core"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/cloudogu/blueprint-lib/bpcore"
+	"github.com/cloudogu/k8s-blueprint-lib/json/bpcore"
 )
 
 var (

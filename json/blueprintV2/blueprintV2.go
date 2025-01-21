@@ -1,8 +1,8 @@
 package blueprintV2
 
 import (
-	"github.com/cloudogu/blueprint-lib/bpcore"
-	"github.com/cloudogu/blueprint-lib/v2/entities"
+	"github.com/cloudogu/k8s-blueprint-lib/json/bpcore"
+	"github.com/cloudogu/k8s-blueprint-lib/json/entities"
 )
 
 // BlueprintV2 describes an abstraction of CES components that should be absent or present within one or more CES

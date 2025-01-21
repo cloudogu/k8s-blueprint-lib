@@ -1,7 +1,7 @@
 package blueprintMaskV1
 
 import (
-	"github.com/cloudogu/blueprint-lib/bpcore"
+	"github.com/cloudogu/k8s-blueprint-lib/json/bpcore"
 )
 
 // BlueprintMaskV1 describes an abstraction of CES components that should alter a blueprint definition before

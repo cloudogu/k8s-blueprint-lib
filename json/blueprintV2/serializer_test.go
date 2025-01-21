@@ -7,8 +7,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/cloudogu/blueprint-lib/bpcore"
-	"github.com/cloudogu/blueprint-lib/v2/entities"
+	"github.com/cloudogu/k8s-blueprint-lib/json/bpcore"
+	"github.com/cloudogu/k8s-blueprint-lib/json/entities"
 )
 
 const (
