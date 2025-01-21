@@ -12,7 +12,7 @@ changelog = new Changelog(this)
 
 // Configuration of repository
 repositoryOwner = "cloudogu"
-repositoryName = "blueprint-lib"
+repositoryName = "k8s-blueprint-lib"
 project = "github.com/${repositoryOwner}/${repositoryName}"
 goVersion = "1.23.4"
 
