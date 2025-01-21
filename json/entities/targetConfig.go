@@ -1,6 +1,9 @@
 package entities
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 // TargetConfig contains Dogu and Cloudogu EcoSystem specific configuration data which determine set-up and run
 // behaviour respectively.
@@ -30,11 +33,11 @@ func (in *DoguConfigMap) DeepCopyInto(out *DoguConfigMap) {
 	if out != nil {
 		jsonStr, err := json.Marshal(in)
 		if err != nil {
-			return
+			panic(fmt.Errorf("error marshaling DoguConfigMap: %w", err))
 		}
 		err = json.Unmarshal(jsonStr, out)
 		if err != nil {
-			return
+			panic(fmt.Errorf("error unmarshaling DoguConfigMap: %w", err))
 		}
 	}
 }
@@ -78,11 +81,11 @@ func (in *GlobalConfig) DeepCopyInto(out *GlobalConfig) {
 	if out != nil {
 		jsonStr, err := json.Marshal(in)
 		if err != nil {
-			return
+			panic(fmt.Errorf("error marshaling GlobalConfig: %w", err))
 		}
 		err = json.Unmarshal(jsonStr, out)
 		if err != nil {
-			return
+			panic(fmt.Errorf("error unmarshaling GlobalConfig: %w", err))
 		}
 	}
 }
