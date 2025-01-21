@@ -11,6 +11,13 @@ type TargetConfig struct {
 	Global GlobalConfig `json:"global,omitempty"`
 }
 
+func (in TargetConfig) DeepCopyInto(out *TargetConfig) {
+	if out != nil {
+		out.Global = *in.Global.DeepCopy()
+		out.Dogus = *in.Dogus.DeepCopy()
+	}
+}
+
 type DoguConfigMap map[string]CombinedDoguConfig
 
 func (in *DoguConfigMap) DeepCopy() *DoguConfigMap {
@@ -25,7 +32,7 @@ func (in *DoguConfigMap) DeepCopyInto(out *DoguConfigMap) {
 		if err != nil {
 			return
 		}
-		err = json.Unmarshal(jsonStr, in)
+		err = json.Unmarshal(jsonStr, out)
 		if err != nil {
 			return
 		}
@@ -61,13 +68,6 @@ type DoguConfigKey struct {
 
 type DoguConfigValue string
 
-func (in TargetConfig) DeepCopyInto(out *TargetConfig) {
-	if out != nil {
-		out.Global = *in.Global.DeepCopy()
-		out.Dogus = *in.Dogus.DeepCopy()
-	}
-}
-
 func (in *GlobalConfig) DeepCopy() *GlobalConfig {
 	out := new(GlobalConfig)
 	in.DeepCopyInto(out)
@@ -80,7 +80,7 @@ func (in *GlobalConfig) DeepCopyInto(out *GlobalConfig) {
 		if err != nil {
 			return
 		}
-		err = json.Unmarshal(jsonStr, in)
+		err = json.Unmarshal(jsonStr, out)
 		if err != nil {
 			return
 		}
