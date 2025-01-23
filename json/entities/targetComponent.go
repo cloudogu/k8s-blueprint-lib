@@ -1,6 +1,9 @@
 package entities
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"fmt"
+)
 
 type TargetComponent struct {
 	// Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
@@ -37,11 +40,11 @@ func (in *DeployConfig) DeepCopyInto(out *DeployConfig) {
 	if out != nil {
 		jsonStr, err := json.Marshal(in)
 		if err != nil {
-			return
+			panic(fmt.Errorf("error unmarshaling DeployConfig: %w", err))
 		}
-		err = json.Unmarshal(jsonStr, in)
+		err = json.Unmarshal(jsonStr, out)
 		if err != nil {
-			return
+			panic(fmt.Errorf("error unmarshaling DeployConfig: %w", err))
 		}
 	}
 }
