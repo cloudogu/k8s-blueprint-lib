@@ -1,6 +1,6 @@
 # Set these to the desired values
 ARTIFACT_ID=k8s-blueprint-lib
-VERSION=0.1.0
+VERSION=1.0.0
 
 GOTAG?=1.23.4
 MAKEFILES_VERSION=9.5.2
