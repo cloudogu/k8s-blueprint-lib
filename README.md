@@ -1,6 +1,5 @@
-# blueprint-lib
-The cesapp-lib is a golang library which contains fundamental structs and functionality shared across the application regarding the Cloudogu
-EcoSystem blueprint mechanics.
+# k8s-blueprint-lib
+The k8s-blueprint-lib is a golang library which contains fundamental structs and functionality shared across the application regarding the kubernetes Cloudogu EcoSystem blueprint mechanics.
 
 ---
 ## What is the Cloudogu EcoSystem?
