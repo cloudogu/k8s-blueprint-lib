@@ -30,3 +30,4 @@ go.work.sum
 target/
 vendor/
 build/tmp/
+.bin/
