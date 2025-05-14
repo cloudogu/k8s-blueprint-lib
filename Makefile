@@ -22,5 +22,9 @@ include build/make/clean.mk
 include build/make/release.mk
 include build/make/mocks.mk
 
+include build/make/digital-signature.mk
+include build/make/k8s-component.mk
+include build/make/k8s-crd.mk
+
 
 default: compile
