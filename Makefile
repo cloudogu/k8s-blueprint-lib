@@ -3,7 +3,7 @@ ARTIFACT_ID=k8s-blueprint-lib
 VERSION=1.0.0
 
 GOTAG?=1.24.3
-MAKEFILES_VERSION=9.5.2
+MAKEFILES_VERSION=9.9.1
 
 GO_BUILD_FLAGS?=-mod=vendor -a ./...
 .DEFAULT_GOAL:=default
