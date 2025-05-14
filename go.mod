@@ -6,7 +6,6 @@ toolchain go1.24.3
 
 require (
 	github.com/cloudogu/cesapp-lib v0.18.0
-	github.com/cloudogu/k8s-blueprint-operator/v2 v2.5.0
 	github.com/stretchr/testify v1.10.0
 	k8s.io/apimachinery v0.33.0
 	k8s.io/client-go v0.32.1
@@ -14,9 +13,6 @@ require (
 )
 
 require (
-	github.com/Masterminds/semver/v3 v3.3.0 // indirect
-	github.com/cloudogu/ces-commons-lib v0.2.0 // indirect
-	github.com/cloudogu/k8s-registry-lib v0.5.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/eapache/go-resiliency v1.7.0 // indirect
 	github.com/emicklei/go-restful/v3 v3.12.1 // indirect
@@ -41,7 +37,6 @@ require (
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/x448/float16 v0.8.4 // indirect
-	golang.org/x/exp v0.0.0-20241009180824-f66d83c29e7c // indirect
 	golang.org/x/net v0.38.0 // indirect
 	golang.org/x/oauth2 v0.23.0 // indirect
 	golang.org/x/sys v0.31.0 // indirect
