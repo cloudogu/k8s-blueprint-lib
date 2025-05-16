@@ -43,8 +43,8 @@ const (
 )
 
 type AdditionalMount struct {
-	SourceType string `json:"sourceType"`
-	Name       string `json:"name"`
-	Volume     string `json:"volume"`
-	Subfolder  string `json:"subfolder,omitempty"`
+	SourceType DataSourceType `json:"sourceType"`
+	Name       string         `json:"name"`
+	Volume     string         `json:"volume"`
+	Subfolder  string         `json:"subfolder,omitempty"`
 }
