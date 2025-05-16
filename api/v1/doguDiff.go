@@ -15,6 +15,7 @@ type DoguDiffState struct {
 	InstallationState  string             `json:"installationState"`
 	ResourceConfig     ResourceConfig     `json:"resourceConfig,omitempty"`
 	ReverseProxyConfig ReverseProxyConfig `json:"reverseProxyConfig,omitempty"`
+	AdditionalMounts   []AdditionalMount  `json:"additionalMounts,omitempty" patchStrategy:"replace"`
 }
 
 type ResourceConfig struct {
@@ -30,3 +31,20 @@ type ReverseProxyConfig struct {
 // DoguAction is the action that needs to be done for a dogu
 // to achieve the desired state in the cluster.
 type DoguAction string
+
+type DataSourceType string
+
+//goland:noinspection GoUnusedConst
+const (
+	// DataSourceConfigMap mounts a config map as a data source.
+	DataSourceConfigMap DataSourceType = "ConfigMap"
+	// DataSourceSecret mounts a secret as a data source.
+	DataSourceSecret DataSourceType = "Secret"
+)
+
+type AdditionalMount struct {
+	SourceType string `json:"sourceType"`
+	Name       string `json:"name"`
+	Volume     string `json:"volume"`
+	Subfolder  string `json:"subfolder,omitempty"`
+}
