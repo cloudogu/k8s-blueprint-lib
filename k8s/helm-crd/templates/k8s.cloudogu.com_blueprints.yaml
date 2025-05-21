@@ -184,6 +184,32 @@ spec:
                             type: string
                           platformConfig:
                             properties:
+                              additionalMounts:
+                                items:
+                                  description: AdditionalMount is a description of what data should be mounted to a specific Dogu volume (already defined in dogu.json).
+                                  properties:
+                                    name:
+                                      description: Name is the name of the data source.
+                                      type: string
+                                    sourceType:
+                                      description: |-
+                                        SourceType defines where the data is coming from.
+                                        Valid options are:
+                                          ConfigMap - data stored in a kubernetes ConfigMap.
+                                          Secret - data stored in a kubernetes Secret.
+                                      type: string
+                                    subfolder:
+                                      description: Subfolder defines a subfolder in which the data should be put within the volume.
+                                      type: string
+                                    volume:
+                                      description: Volume is the name of the volume to which the data should be mounted. It is defined in the respective dogu.json.
+                                      type: string
+                                  required:
+                                    - name
+                                    - sourceType
+                                    - volume
+                                  type: object
+                                type: array
                               resource:
                                 properties:
                                   minVolumeSize:
@@ -374,6 +400,23 @@ spec:
                           actual:
                             description: DoguDiffState is either the actual or desired state of a dogu in the cluster.
                             properties:
+                              additionalMounts:
+                                items:
+                                  properties:
+                                    name:
+                                      type: string
+                                    sourceType:
+                                      type: string
+                                    subfolder:
+                                      type: string
+                                    volume:
+                                      type: string
+                                  required:
+                                    - name
+                                    - sourceType
+                                    - volume
+                                  type: object
+                                type: array
                               installationState:
                                 type: string
                               namespace:
@@ -400,6 +443,23 @@ spec:
                           expected:
                             description: DoguDiffState is either the actual or desired state of a dogu in the cluster.
                             properties:
+                              additionalMounts:
+                                items:
+                                  properties:
+                                    name:
+                                      type: string
+                                    sourceType:
+                                      type: string
+                                    subfolder:
+                                      type: string
+                                    volume:
+                                      type: string
+                                  required:
+                                    - name
+                                    - sourceType
+                                    - volume
+                                  type: object
+                                type: array
                               installationState:
                                 type: string
                               namespace:
