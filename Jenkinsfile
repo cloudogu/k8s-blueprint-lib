@@ -14,7 +14,7 @@ changelog = new Changelog(this)
 repositoryOwner = "cloudogu"
 repositoryName = "k8s-blueprint-lib"
 project = "github.com/${repositoryOwner}/${repositoryName}"
-goVersion = "1.23.4"
+goVersion = "1.24.3"
 
 // Configuration of branches
 productionReleaseBranch = "main"
