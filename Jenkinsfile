@@ -35,23 +35,25 @@ node('docker') {
             make 'clean'
         }
 
-        stage('Build') {
-            make 'compile'
-        }
+        withBuildDependencies {
+            stage('Build') {
+                make 'compile'
+            }
 
-        stage('Unit Tests') {
-            make 'unit-test'
-            junit allowEmptyResults: true, testResults: 'target/unit-tests/*-tests.xml'
-        }
+            stage('Unit Tests') {
+                make 'unit-test'
+                junit allowEmptyResults: true, testResults: 'target/unit-tests/*-tests.xml'
+            }
 
-        stage('Integration Test') {
-            // If SKIP_DOCKER_TESTS is true, tests which need Docker containers are skipped
-            make 'integration-test'
-            junit allowEmptyResults: true, testResults: 'target/integration-tests/*-tests.xml'
-        }
+            stage('Integration Test') {
+                // If SKIP_DOCKER_TESTS is true, tests which need Docker containers are skipped
+                make 'integration-test'
+                junit allowEmptyResults: true, testResults: 'target/integration-tests/*-tests.xml'
+            }
 
-        stage("Review dog analysis") {
-            stageStaticAnalysisReviewDog()
+            stage("Review dog analysis") {
+                stageStaticAnalysisReviewDog()
+            }
         }
 
         stage('SonarQube') {
@@ -121,3 +123,14 @@ void stageAutomaticRelease() {
 void make(String makeArgs) {
     sh "make ${makeArgs}"
 }
+
+void withBuildDependencies(Closure closure) {
+    new Docker(this)
+        .image("golang:${goVersion}")
+        .mountJenkinsUser()
+        .inside("--network ${buildnetwork} -e ETCD=${etcdContainerName} -e SKIP_SYSLOG_TESTS=true -e SKIP_DOCKER_TESTS=true --volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}") {
+            closure.call()
+        }
+    }
+}
+
