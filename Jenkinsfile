@@ -128,9 +128,8 @@ void withBuildDependencies(Closure closure) {
     new Docker(this)
         .image("golang:${goVersion}")
         .mountJenkinsUser()
-        .inside("--network ${buildnetwork} -e ETCD=${etcdContainerName} -e SKIP_SYSLOG_TESTS=true -e SKIP_DOCKER_TESTS=true --volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}") {
+        .inside("-e SKIP_SYSLOG_TESTS=true -e SKIP_DOCKER_TESTS=true --volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}") {
             closure.call()
         }
-    }
 }
 
