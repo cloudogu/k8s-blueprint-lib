@@ -35,25 +35,23 @@ node('docker') {
             make 'clean'
         }
 
-        withBuildDependencies {
-            stage('Build') {
-                make 'compile'
-            }
+        stage('Build') {
+            make 'compile'
+        }
 
-            stage('Unit Tests') {
-                make 'unit-test'
-                junit allowEmptyResults: true, testResults: 'target/unit-tests/*-tests.xml'
-            }
+        stage('Unit Tests') {
+            make 'unit-test'
+            junit allowEmptyResults: true, testResults: 'target/unit-tests/*-tests.xml'
+        }
 
-            stage('Integration Test') {
-                // If SKIP_DOCKER_TESTS is true, tests which need Docker containers are skipped
-                make 'integration-test'
-                junit allowEmptyResults: true, testResults: 'target/integration-tests/*-tests.xml'
-            }
+        stage('Integration Test') {
+            // If SKIP_DOCKER_TESTS is true, tests which need Docker containers are skipped
+            make 'integration-test'
+            junit allowEmptyResults: true, testResults: 'target/integration-tests/*-tests.xml'
+        }
 
-            stage("Review dog analysis") {
-                stageStaticAnalysisReviewDog()
-            }
+        stage("Review dog analysis") {
+            stageStaticAnalysisReviewDog()
         }
 
         stage('SonarQube') {
@@ -123,21 +121,3 @@ void stageAutomaticRelease() {
 void make(String makeArgs) {
     sh "make ${makeArgs}"
 }
-
-void withBuildDependencies(Closure closure) {
-    def etcdImage = docker.image('quay.io/coreos/etcd:v3.2.32')
-    def etcdContainerName = "${JOB_BASE_NAME}-${BUILD_NUMBER}".replaceAll("\\/|%2[fF]", "-")
-    withDockerNetwork { buildnetwork ->
-        etcdImage.withRun("--network ${buildnetwork} --name ${etcdContainerName}", 'etcd --listen-client-urls http://0.0.0.0:4001 --advertise-client-urls http://0.0.0.0:4001')
-                {
-                    new Docker(this)
-                            .image("golang:${goVersion}")
-                            .mountJenkinsUser()
-                            .inside("--network ${buildnetwork} -e ETCD=${etcdContainerName} -e SKIP_SYSLOG_TESTS=true -e SKIP_DOCKER_TESTS=true --volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}")
-                                    {
-                                        closure.call()
-                                    }
-                }
-    }
-}
-
