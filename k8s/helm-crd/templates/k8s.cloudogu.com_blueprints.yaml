@@ -7,7 +7,7 @@ metadata:
   name: blueprints.k8s.cloudogu.com
   labels:
     app: ces
-    app.kubernetes.io/name: k8s-blueprint-lib-crd
+    app.kubernetes.io/name: k8s-blueprint-lib
 spec:
   group: k8s.cloudogu.com
   names:
@@ -183,6 +183,7 @@ spec:
                             description: Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
                             type: string
                           platformConfig:
+                            description: PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
                             properties:
                               additionalMounts:
                                 items:
@@ -307,7 +308,7 @@ spec:
                               - installationState
                             type: object
                           neededActions:
-                            description: NeededActions contains the refined actions as decided by the application's state determination automaton.
+                            description: NeededActions contains the necessary actions to apply the wanted state for this component.
                             items:
                               description: |-
                                 ComponentAction is the action that needs to be done for a component
@@ -500,8 +501,10 @@ spec:
                     globalConfigDiff:
                       description: GlobalConfigDiff is the difference between the GlobalConfig in the EffectiveBlueprint and the cluster state.
                       items:
+                        description: GlobalConfigEntryDiff contains the difference and the needed actions for a single global config key
                         properties:
                           actual:
+                            description: GlobalConfigValueState represents either the actual or expected state of a global config key
                             properties:
                               exists:
                                 type: boolean
@@ -511,6 +514,7 @@ spec:
                               - exists
                             type: object
                           expected:
+                            description: GlobalConfigValueState represents either the actual or expected state of a global config key
                             properties:
                               exists:
                                 type: boolean
