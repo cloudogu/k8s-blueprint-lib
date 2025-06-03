@@ -12,7 +12,7 @@ GO_BUILD_FLAGS?=-mod=vendor -a ./...
 
 PRE_COMPILE = generate-deepcopy
 IMAGE_IMPORT_TARGET=image-import
-CHECK_VAR_TARGETS=check-all-vars
+CHECK_VAR_TARGETS=check-all-vars-without-image
 
 include build/make/variables.mk
 INTEGRATION_TEST_NAME_PATTERN=.*_inttest$$
@@ -35,7 +35,7 @@ include build/make/k8s-crd.mk
 
 default: compile
 
-# Override make target to use k8s-dogu-lib as label
+# Override make target to use k8s-blueprint-lib as label
 .PHONY: crd-add-labels
 crd-add-labels: $(BINARY_YQ)
 	@echo "Adding labels to CRD..."
