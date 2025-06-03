@@ -20,12 +20,14 @@ import (
 
 var testCtx = context.Background()
 
+const apiBasePathTestNS = "/apis/k8s.cloudogu.com/v1/namespaces/test/" + resourceName
+
 func Test_blueprintClient_Get(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, "GET", request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints/testblueprint", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS+"/testblueprint", request.URL.Path)
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
@@ -56,7 +58,7 @@ func Test_blueprintClient_List(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodGet, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
@@ -89,7 +91,7 @@ func Test_blueprintClient_Watch(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, "GET", request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
 			assert.Equal(t, http.NoBody, request.Body)
 			assert.Equal(t, "labelSelector=test&watch=true", request.URL.RawQuery)
 
@@ -120,7 +122,7 @@ func Test_blueprintClient_Create(t *testing.T) {
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPost, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS, request.URL.Path, resourceName)
 
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
@@ -156,7 +158,7 @@ func Test_blueprintClient_Update(t *testing.T) {
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints/tocreate", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS+"/tocreate", request.URL.Path)
 
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
@@ -192,7 +194,7 @@ func Test_blueprintClient_UpdateStatus(t *testing.T) {
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints/tocreate/status", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS+"/tocreate/status", request.URL.Path)
 
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
@@ -226,7 +228,7 @@ func Test_blueprintClient_Delete(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodDelete, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints/testblueprint", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS+"/testblueprint", request.URL.Path)
 
 			writer.Header().Add("content-type", "application/json")
 			writer.WriteHeader(200)
@@ -252,7 +254,7 @@ func Test_blueprintClient_DeleteCollection(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodDelete, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
 			assert.Equal(t, "labelSelector=test", request.URL.RawQuery)
 			writer.Header().Add("content-type", "application/json")
 			writer.WriteHeader(200)
@@ -278,7 +280,7 @@ func Test_blueprintClient_Patch(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPatch, request.Method)
-			assert.Equal(t, "/apis/k8s.cloudogu.com/v1/namespaces/test/blueprints/testblueprint", request.URL.Path)
+			assert.Equal(t, apiBasePathTestNS+"/testblueprint", request.URL.Path)
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 			assert.Equal(t, []byte("test"), bytes)

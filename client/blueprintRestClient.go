@@ -13,6 +13,8 @@ import (
 	"github.com/cloudogu/k8s-blueprint-lib/api/v1"
 )
 
+const resourceName = "blueprints"
+
 type BlueprintInterface interface {
 	// Create takes the representation of a blueprint and creates it.  Returns the server's representation of the blueprint, and an error, if there is any.
 	Create(ctx context.Context, blueprint *v1.Blueprint, opts metav1.CreateOptions) (*v1.Blueprint, error)
@@ -52,7 +54,7 @@ func (d *blueprintClient) Get(ctx context.Context, name string, options metav1.G
 	result = &v1.Blueprint{}
 	err = d.client.Get().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
 		Do(ctx).
@@ -69,7 +71,7 @@ func (d *blueprintClient) List(ctx context.Context, opts metav1.ListOptions) (re
 	result = &v1.BlueprintList{}
 	err = d.client.Get().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Do(ctx).
@@ -86,7 +88,7 @@ func (d *blueprintClient) Watch(ctx context.Context, opts metav1.ListOptions) (w
 	opts.Watch = true
 	return d.client.Get().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Watch(ctx)
@@ -97,7 +99,7 @@ func (d *blueprintClient) Create(ctx context.Context, blueprint *v1.Blueprint, o
 	result = &v1.Blueprint{}
 	err = d.client.Post().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(blueprint).
 		Do(ctx).
@@ -110,7 +112,7 @@ func (d *blueprintClient) Update(ctx context.Context, blueprint *v1.Blueprint, o
 	result = &v1.Blueprint{}
 	err = d.client.Put().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		Name(blueprint.Name).
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(blueprint).
@@ -125,7 +127,7 @@ func (d *blueprintClient) UpdateStatus(ctx context.Context, blueprint *v1.Bluepr
 	result = &v1.Blueprint{}
 	err = d.client.Put().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		Name(blueprint.Name).
 		SubResource("status").
 		VersionedParams(&opts, scheme.ParameterCodec).
@@ -139,7 +141,7 @@ func (d *blueprintClient) UpdateStatus(ctx context.Context, blueprint *v1.Bluepr
 func (d *blueprintClient) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
 	return d.client.Delete().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		Name(name).
 		Body(&opts).
 		Do(ctx).
@@ -154,7 +156,7 @@ func (d *blueprintClient) DeleteCollection(ctx context.Context, opts metav1.Dele
 	}
 	return d.client.Delete().
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		VersionedParams(&listOpts, scheme.ParameterCodec).
 		Timeout(timeout).
 		Body(&opts).
@@ -167,7 +169,7 @@ func (d *blueprintClient) Patch(ctx context.Context, name string, pt types.Patch
 	result = &v1.Blueprint{}
 	err = d.client.Patch(pt).
 		Namespace(d.ns).
-		Resource("blueprints").
+		Resource(resourceName).
 		Name(name).
 		SubResource(subresources...).
 		VersionedParams(&opts, scheme.ParameterCodec).
