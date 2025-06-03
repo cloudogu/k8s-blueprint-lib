@@ -9,7 +9,8 @@ type TargetDogu struct {
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
 	// TargetState defines a state of installation of this dogu. Optional field, but defaults to "TargetStatePresent"
-	TargetState    string         `json:"targetState"`
+	TargetState string `json:"targetState"`
+	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
 	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
 }
 
