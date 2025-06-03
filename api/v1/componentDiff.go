@@ -11,7 +11,7 @@ type ComponentDiff struct {
 	Actual ComponentDiffState `json:"actual"`
 	// Expected contains the desired component's target state.
 	Expected ComponentDiffState `json:"expected"`
-	// NeededActions contains the refined actions as decided by the application's state determination automaton.
+	// NeededActions contains the necessary actions to apply the wanted state for this component.
 	NeededActions []ComponentAction `json:"neededActions"`
 }
 
