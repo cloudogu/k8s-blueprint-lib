@@ -147,6 +147,38 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			want:    `{"blueprintApi":"v2","components":[{"name":"k8s/name","version":"2.3.4-1","targetState":"present","deployConfig":{"key":"value"}}],"config":{"global":{}}}`,
 			wantErr: assert.NoError,
 		},
+
+		{
+			name: "dogu additionalMounts",
+			args: args{
+				spec: BlueprintV2{
+					GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
+					Dogus: []entities.TargetDogu{
+						{
+							Name:        "official/nginx",
+							Version:     v1201,
+							TargetState: bpcore.TargetStatePresent.String(),
+							PlatformConfig: entities.PlatformConfig{AdditionalMountsConfig: []entities.AdditionalMount{
+								{
+									SourceType: entities.DataSourceConfigMap,
+									Name:       "test",
+									Volume:     "testvolume",
+									Subfolder:  "empty",
+								},
+								{
+									SourceType: entities.DataSourceSecret,
+									Name:       "sec",
+									Volume:     "secvolume",
+									Subfolder:  "secfolder",
+								},
+							}},
+						},
+					},
+				},
+			},
+			want:    `{"blueprintApi":"v2","dogus":[{"name":"official/nginx","version":"1.2.0-1","targetState":"present","platformConfig":{"resource":{},"reverseProxy":{},"additionalMounts":[{"sourceType":"ConfigMap","name":"test","volume":"testvolume","subfolder":"empty"},{"sourceType":"Secret","name":"sec","volume":"secvolume","subfolder":"secfolder"}]}}],"config":{"global":{}}}`,
+			wantErr: assert.NoError,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
@@ -188,6 +220,35 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 				}},
 			assert.NoError,
 		},
+		{
+			"dogus additionalMounts",
+			args{spec: `{"blueprintApi":"v2","dogus":[{"name":"official/nginx","version":"1.2.0-1","targetState":"present","platformConfig":{"resource":{},"reverseProxy":{},"additionalMounts":[{"sourceType":"ConfigMap","name":"test","volume":"testvolume","subfolder":"empty"},{"sourceType":"Secret","name":"sec","volume":"secvolume","subfolder":"secfolder"}]}}],"config":{"global":{}}}`},
+			BlueprintV2{
+				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
+				Dogus: []entities.TargetDogu{
+					{
+						Name:        "official/nginx",
+						Version:     v1201,
+						TargetState: bpcore.TargetStatePresent.String(),
+						PlatformConfig: entities.PlatformConfig{AdditionalMountsConfig: []entities.AdditionalMount{
+							{
+								SourceType: entities.DataSourceConfigMap,
+								Name:       "test",
+								Volume:     "testvolume",
+								Subfolder:  "empty",
+							},
+							{
+								SourceType: entities.DataSourceSecret,
+								Name:       "sec",
+								Volume:     "secvolume",
+								Subfolder:  "secfolder",
+							},
+						}},
+					},
+				}},
+			assert.NoError,
+		},
+
 		{
 			"components in blueprint",
 			args{spec: `{"blueprintApi":"v2","components":[{"name":"k8s/blueprint-operator","version":"0.2.1-1","targetState":"present"},{"name":"k8s/dogu-operator","version":"2.3.4-1","targetState":"absent"}]}`},

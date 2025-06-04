@@ -14,12 +14,20 @@ changelog = new Changelog(this)
 repositoryOwner = "cloudogu"
 repositoryName = "k8s-blueprint-lib"
 project = "github.com/${repositoryOwner}/${repositoryName}"
-goVersion = "1.23.4"
+goVersion = "1.24.3"
 
 // Configuration of branches
 productionReleaseBranch = "main"
 developmentBranch = "develop"
 currentBranch = "${env.BRANCH_NAME}"
+
+registry = "registry.cloudogu.com"
+registry_namespace = "k8s"
+
+makefile = new Makefile(this)
+k8sTargetDir = "target/k8s"
+helmCRDChartDir = "${k8sTargetDir}/helm-crd"
+helmCRDChartName = "k8s-blueprint-operator-crd"
 
 node('docker') {
     timestamps {
@@ -109,7 +117,26 @@ void stageAutomaticRelease() {
         return
     }
 
-    String releaseVersion = gitWrapper.getSimpleBranchName()
+    String controllerVersion = makefile.getVersion()
+    String releaseVersion = "v${controllerVersion}".toString()
+
+    stage('Push Helm chart to Harbor') {
+        new Docker(this)
+                .image("golang:${goVersion}")
+                .mountJenkinsUser()
+                .inside("--volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}")
+                        {
+                            make 'crd-helm-package'
+                            archiveArtifacts "${k8sTargetDir}/**/*"
+
+                            // Push charts
+                            withCredentials([usernamePassword(credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
+                                sh ".bin/helm registry login ${registry} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'"
+
+                                sh ".bin/helm push ${helmCRDChartDir}/${helmCRDChartName}-${controllerVersion}.tgz oci://${registry}/${registry_namespace}/"
+                            }
+                        }
+    }
 
     stage('Finish Release') {
         gitflow.finishRelease(releaseVersion, productionReleaseBranch)
@@ -125,19 +152,11 @@ void make(String makeArgs) {
 }
 
 void withBuildDependencies(Closure closure) {
-    def etcdImage = docker.image('quay.io/coreos/etcd:v3.2.32')
-    def etcdContainerName = "${JOB_BASE_NAME}-${BUILD_NUMBER}".replaceAll("\\/|%2[fF]", "-")
-    withDockerNetwork { buildnetwork ->
-        etcdImage.withRun("--network ${buildnetwork} --name ${etcdContainerName}", 'etcd --listen-client-urls http://0.0.0.0:4001 --advertise-client-urls http://0.0.0.0:4001')
-                {
-                    new Docker(this)
-                            .image("golang:${goVersion}")
-                            .mountJenkinsUser()
-                            .inside("--network ${buildnetwork} -e ETCD=${etcdContainerName} -e SKIP_SYSLOG_TESTS=true -e SKIP_DOCKER_TESTS=true --volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}")
-                                    {
-                                        closure.call()
-                                    }
-                }
-    }
+    new Docker(this)
+        .image("golang:${goVersion}")
+        .mountJenkinsUser()
+        .inside("-e SKIP_SYSLOG_TESTS=true -e SKIP_DOCKER_TESTS=true --volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}") {
+            closure.call()
+        }
 }
 
