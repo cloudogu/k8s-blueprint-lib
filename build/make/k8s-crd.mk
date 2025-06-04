@@ -119,3 +119,12 @@ crd-component-apply: check-k8s-namespace-env-var crd-helm-chart-import crd-compo
 crd-component-delete: check-k8s-namespace-env-var crd-component-generate ## Deletes the CRD component YAML resource from the actual defined context.
 	@kubectl delete -f "${K8S_RESOURCE_CRD_COMPONENT}" --namespace="${NAMESPACE}" --context="${KUBE_CONTEXT_NAME}" || true
 	@echo "Done."
+
+
+##@ Controller specific targets
+
+.PHONY: generate-deepcopy
+generate-deepcopy: ${CONTROLLER_GEN} ## Generate code containing DeepCopy* method implementations.
+	@echo "Auto-generate deepcopy functions..."
+	@$(CONTROLLER_GEN) object:headerFile="hack/boilerplate.go.txt" paths="./..."
+

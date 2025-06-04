@@ -1,5 +1,10 @@
 package entities
 
+import (
+	"encoding/json"
+	"fmt"
+)
+
 // TargetDogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
 // was applied.
 type TargetDogu struct {
@@ -12,6 +17,25 @@ type TargetDogu struct {
 	TargetState string `json:"targetState"`
 	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
 	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
+}
+
+func (in *TargetDogu) DeepCopy() *TargetDogu {
+	out := new(TargetDogu)
+	in.DeepCopyInto(out)
+	return out
+}
+
+func (in *TargetDogu) DeepCopyInto(out *TargetDogu) {
+	if out != nil {
+		jsonStr, err := json.Marshal(in)
+		if err != nil {
+			panic(fmt.Errorf("error marshaling TargetDogu: %w", err))
+		}
+		err = json.Unmarshal(jsonStr, out)
+		if err != nil {
+			panic(fmt.Errorf("error unmarshaling TargetDogu: %w", err))
+		}
+	}
 }
 
 type ResourceConfig struct {
