@@ -21,6 +21,14 @@ productionReleaseBranch = "main"
 developmentBranch = "develop"
 currentBranch = "${env.BRANCH_NAME}"
 
+registry = "registry.cloudogu.com"
+registry_namespace = "k8s"
+
+makefile = new Makefile(this)
+k8sTargetDir = "target/k8s"
+helmCRDChartDir = "${k8sTargetDir}/helm-crd"
+helmCRDChartName = "k8s-blueprint-operator-crd"
+
 node('docker') {
     timestamps {
         properties([
@@ -109,7 +117,26 @@ void stageAutomaticRelease() {
         return
     }
 
-    String releaseVersion = gitWrapper.getSimpleBranchName()
+    String controllerVersion = makefile.getVersion()
+    String releaseVersion = "v${controllerVersion}".toString()
+
+    stage('Push Helm chart to Harbor') {
+        new Docker(this)
+                .image("golang:${goVersion}")
+                .mountJenkinsUser()
+                .inside("--volume ${WORKSPACE}:/go/src/${project} -w /go/src/${project}")
+                        {
+                            make 'crd-helm-package'
+                            archiveArtifacts "${k8sTargetDir}/**/*"
+
+                            // Push charts
+                            withCredentials([usernamePassword(credentialsId: 'harborhelmchartpush', usernameVariable: 'HARBOR_USERNAME', passwordVariable: 'HARBOR_PASSWORD')]) {
+                                sh ".bin/helm registry login ${registry} --username '${HARBOR_USERNAME}' --password '${HARBOR_PASSWORD}'"
+
+                                sh ".bin/helm push ${helmCRDChartDir}/${helmCRDChartName}-${controllerVersion}.tgz oci://${registry}/${registry_namespace}/"
+                            }
+                        }
+    }
 
     stage('Finish Release') {
         gitflow.finishRelease(releaseVersion, productionReleaseBranch)
