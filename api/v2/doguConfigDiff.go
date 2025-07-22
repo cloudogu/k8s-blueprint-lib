@@ -16,7 +16,9 @@ type DoguConfigEntryDiff struct {
 }
 
 // +kubebuilder:object:generate:=false
+
 type SensitiveDoguConfigDiff = DoguConfigDiff
 
 // +kubebuilder:object:generate:=false
+
 type SensitiveDoguConfigEntryDiff = DoguConfigEntryDiff
