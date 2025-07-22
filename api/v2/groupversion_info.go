@@ -1,7 +1,7 @@
 // Package v1 contains API Schema definitions for the k8s v1 API group
 // +kubebuilder:object:generate=true
 // +groupName=k8s.cloudogu.com
-package v1
+package v2
 
 import (
 	"k8s.io/apimachinery/pkg/runtime/schema"

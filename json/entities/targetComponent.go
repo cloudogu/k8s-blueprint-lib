@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-type TargetComponent struct {
+type Component struct {
 	// Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
 	Name string `json:"name"`
 	// Version defines the version of the component that is to be installed. Must not be empty if the targetState is "present";
@@ -19,7 +19,7 @@ type TargetComponent struct {
 	DeployConfig DeployConfig `json:"deployConfig,omitempty"`
 }
 
-func (in TargetComponent) DeepCopyInto(out *TargetComponent) {
+func (in Component) DeepCopyInto(out *Component) {
 	if out != nil {
 		out.Name = in.Name
 		out.Version = in.Version

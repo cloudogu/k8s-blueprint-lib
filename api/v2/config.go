@@ -1,4 +1,4 @@
-package v1
+package v2
 
 type Config struct {
 	Dogus  map[string]CombinedDoguConfig `json:"dogus,omitempty"`

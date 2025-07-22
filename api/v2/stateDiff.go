@@ -1,6 +1,6 @@
-package v1
+package v2
 
-// StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
+// StateDiff is the result of comparing the Blueprint to the current cluster state.
 // It describes what operations need to be done to achieve the desired state of the blueprint.
 type StateDiff struct {
 	// DoguDiffs maps simple dogu names to the determined diff.
@@ -9,6 +9,6 @@ type StateDiff struct {
 	ComponentDiffs map[string]ComponentDiff `json:"componentDiffs,omitempty"`
 	// DoguConfigDiffs maps simple dogu names to the determined config diff.
 	DoguConfigDiffs map[string]CombinedDoguConfigDiff `json:"doguConfigDiffs,omitempty"`
-	// GlobalConfigDiff is the difference between the GlobalConfig in the EffectiveBlueprint and the cluster state.
+	// GlobalConfigDiff is the difference between the GlobalConfig in the Blueprint and the cluster state.
 	GlobalConfigDiff GlobalConfigDiff `json:"globalConfigDiff,omitempty"`
 }

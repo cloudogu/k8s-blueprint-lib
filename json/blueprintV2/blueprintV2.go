@@ -16,15 +16,15 @@ type BlueprintV2 struct {
 	// Dogus contains a set of exact dogu versions, which should be present or absent
 	// in the CES instance after this blueprint was applied.
 	// Optional.
-	Dogus []entities.TargetDogu `json:"dogus,omitempty"`
+	Dogus []entities.Dogu `json:"dogus,omitempty"`
 	// Components are a set of exact package versions,
 	// which should be present or absent in the CES instance after which this blueprint was applied.
 	// The packages must correspond to the used package manager.
 	// Optional.
-	Components []entities.TargetComponent `json:"components,omitempty"`
+	Components []entities.Component `json:"components,omitempty"`
 	// Config is used for ecosystem configuration to be applied.
 	// Optional.
-	Config entities.TargetConfig `json:"config,omitempty"`
+	Config entities.Config `json:"config,omitempty"`
 }
 
 // RegistryConfig contains hierarchically organized key-value data configuration data on how a Cloudogu EcoSystem or its

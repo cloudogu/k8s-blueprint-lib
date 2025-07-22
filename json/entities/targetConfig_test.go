@@ -59,10 +59,10 @@ func TestDoguConfigMap_DeepCopy(t *testing.T) {
 func TestTargetConfig_DeepCopyInto(t *testing.T) {
 	t.Run("should copy empty objects", func(t *testing.T) {
 		// given
-		input := &TargetConfig{}
+		input := &Config{}
 
 		// when
-		actual := &TargetConfig{}
+		actual := &Config{}
 		input.DeepCopyInto(actual)
 
 		// then
@@ -71,7 +71,7 @@ func TestTargetConfig_DeepCopyInto(t *testing.T) {
 	})
 	t.Run("should copy simple config objects", func(t *testing.T) {
 		// given
-		input := &TargetConfig{
+		input := &Config{
 			Dogus: DoguConfigMap{"redmine": CombinedDoguConfig{Config: DoguConfig{
 				Present: map[string]string{"hello": "world"}}}},
 			Global: GlobalConfig{
@@ -79,7 +79,7 @@ func TestTargetConfig_DeepCopyInto(t *testing.T) {
 		}
 
 		// when
-		actual := &TargetConfig{}
+		actual := &Config{}
 		input.DeepCopyInto(actual)
 
 		// then

@@ -5,16 +5,16 @@ import (
 	"fmt"
 )
 
-// TargetConfig contains Dogu and Cloudogu EcoSystem specific configuration data which determine set-up and run
+// Config contains Dogu and Cloudogu EcoSystem specific configuration data which determine set-up and run
 // behaviour respectively.
-type TargetConfig struct {
+type Config struct {
 	// Dogus contains Dogu specific configuration data which determine set-up and run behaviour.
 	Dogus DoguConfigMap `json:"dogus,omitempty"`
 	// Dogus contains Cloudogu EcoSystem specific configuration data which determine set-up and run behaviour.
 	Global GlobalConfig `json:"global,omitempty"`
 }
 
-func (in TargetConfig) DeepCopyInto(out *TargetConfig) {
+func (in Config) DeepCopyInto(out *Config) {
 	if out != nil {
 		out.Global = *in.Global.DeepCopy()
 		out.Dogus = *in.Dogus.DeepCopy()

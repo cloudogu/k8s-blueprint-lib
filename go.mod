@@ -1,4 +1,4 @@
-module github.com/cloudogu/k8s-blueprint-lib
+module github.com/cloudogu/k8s-blueprint-lib/v2
 
 go 1.24.0
 

@@ -15,7 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
 
-	k8sv1 "github.com/cloudogu/k8s-blueprint-lib/api/v1"
+	k8sv1 "github.com/cloudogu/k8s-blueprint-lib/api/v2"
 )
 
 var testCtx = context.Background()
@@ -31,7 +31,7 @@ func Test_blueprintClient_Get(t *testing.T) {
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
-			blueprint := &k8sv1.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
+			blueprint := &k8sv1.BlueprintCR{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
 			blueprintBytes, err := json.Marshal(blueprint)
 			require.NoError(t, err)
 			_, err = writer.Write(blueprintBytes)
@@ -63,7 +63,7 @@ func Test_blueprintClient_List(t *testing.T) {
 
 			writer.Header().Add("content-type", "application/json")
 			blueprintList := k8sv1.BlueprintList{}
-			blueprint := &k8sv1.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
+			blueprint := &k8sv1.BlueprintCR{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
 			blueprintList.Items = append(blueprintList.Items, *blueprint)
 			blueprintBytes, err := json.Marshal(blueprintList)
 			require.NoError(t, err)
@@ -118,7 +118,7 @@ func Test_blueprintClient_Watch(t *testing.T) {
 func Test_blueprintClient_Create(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &k8sv1.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &k8sv1.BlueprintCR{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPost, request.Method)
@@ -127,7 +127,7 @@ func Test_blueprintClient_Create(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &k8sv1.Blueprint{}
+			createdBlueprint := &k8sv1.BlueprintCR{}
 			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
 			assert.Equal(t, "tocreate", createdBlueprint.Name)
 
@@ -154,7 +154,7 @@ func Test_blueprintClient_Create(t *testing.T) {
 func Test_blueprintClient_Update(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &k8sv1.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &k8sv1.BlueprintCR{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
@@ -163,7 +163,7 @@ func Test_blueprintClient_Update(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &k8sv1.Blueprint{}
+			createdBlueprint := &k8sv1.BlueprintCR{}
 			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
 			assert.Equal(t, "tocreate", createdBlueprint.Name)
 
@@ -190,7 +190,7 @@ func Test_blueprintClient_Update(t *testing.T) {
 func Test_blueprintClient_UpdateStatus(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &k8sv1.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &k8sv1.BlueprintCR{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
@@ -199,7 +199,7 @@ func Test_blueprintClient_UpdateStatus(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &k8sv1.Blueprint{}
+			createdBlueprint := &k8sv1.BlueprintCR{}
 			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
 			assert.Equal(t, "tocreate", createdBlueprint.Name)
 
@@ -284,7 +284,7 @@ func Test_blueprintClient_Patch(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 			assert.Equal(t, []byte("test"), bytes)
-			result, err := json.Marshal(k8sv1.Blueprint{})
+			result, err := json.Marshal(k8sv1.BlueprintCR{})
 			require.NoError(t, err)
 
 			writer.Header().Add("content-type", "application/json")

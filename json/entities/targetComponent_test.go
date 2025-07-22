@@ -61,8 +61,8 @@ func TestDeployConfig_DeepCopy(t *testing.T) {
 func TestTargetComponent_DeepCopyInto(t *testing.T) {
 	t.Run("should copy empty target component", func(t *testing.T) {
 		// given
-		input := TargetComponent{}
-		actual := TargetComponent{}
+		input := Component{}
+		actual := Component{}
 
 		// when
 		input.DeepCopyInto(&actual)
@@ -77,13 +77,13 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
 			Absent: []string{"redmineKeyToBeDeleted"},
 		}}}
-		input := TargetComponent{
+		input := Component{
 			Name:         "k8s/my-comp",
 			Version:      "1.2.3",
 			TargetState:  bpcore.TargetStateAbsent.String(),
 			DeployConfig: inputDeployConfig,
 		}
-		actual := TargetComponent{}
+		actual := Component{}
 
 		// when
 		input.DeepCopyInto(&actual)
@@ -91,7 +91,7 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		// then
 		require.NotSame(t, &input, &actual)
 		require.NotNil(t, actual)
-		expected := TargetComponent{
+		expected := Component{
 			Name:        "k8s/my-comp",
 			Version:     "1.2.3",
 			TargetState: bpcore.TargetStateAbsent.String(),

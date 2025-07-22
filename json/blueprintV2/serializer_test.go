@@ -41,7 +41,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			"dogus in blueprint",
 			args{spec: BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Dogus: []entities.TargetDogu{
+				Dogus: []entities.Dogu{
 					{
 						Name: "official/nginx", Version: v1201, TargetState: bpcore.TargetStatePresent.String(), PlatformConfig: entities.PlatformConfig{ResourceConfig: entities.ResourceConfig{MinVolumeSize: "2Gi"}, ReverseProxyConfig: entities.ReverseProxyConfig{MaxBodySize: "2Gi", AdditionalConfig: "additional", RewriteTarget: "/"}},
 					},
@@ -57,7 +57,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			"components in blueprint",
 			args{spec: BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Components: []entities.TargetComponent{
+				Components: []entities.Component{
 					{Name: "k8s/blueprint-operator", Version: v0211, TargetState: bpcore.TargetStatePresent.String()},
 					{Name: "k8s/dogu-operator", Version: v2341, TargetState: bpcore.TargetStateAbsent.String(), DeployConfig: map[string]interface{}{"deployNamespace": "ecosystem", "overwriteConfig": map[string]string{"key": "value"}}},
 				},
@@ -69,7 +69,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			"regular dogu config in blueprint",
 			args{spec: BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Config: entities.TargetConfig{
+				Config: entities.Config{
 					Dogus: map[string]entities.CombinedDoguConfig{
 						"ldap": {
 							Config: entities.DoguConfig{
@@ -94,7 +94,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			"sensitive dogu config in blueprint",
 			args{spec: BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Config: entities.TargetConfig{
+				Config: entities.Config{
 					Dogus: map[string]entities.CombinedDoguConfig{
 						"redmine": {
 							SensitiveConfig: entities.SensitiveDoguConfig{
@@ -117,7 +117,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			"global config in blueprint",
 			args{spec: BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Config: entities.TargetConfig{
+				Config: entities.Config{
 					Global: entities.GlobalConfig{
 						Present: map[string]string{
 							"key_provider": "pkcs1v15",
@@ -139,7 +139,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			args: args{
 				spec: BlueprintV2{
 					GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-					Components: []entities.TargetComponent{
+					Components: []entities.Component{
 						{Name: "k8s/name", Version: v2341, TargetState: bpcore.TargetStatePresent.String(), DeployConfig: map[string]interface{}{"key": "value"}},
 					},
 				},
@@ -153,7 +153,7 @@ func TestSerializeBlueprint_ok(t *testing.T) {
 			args: args{
 				spec: BlueprintV2{
 					GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-					Dogus: []entities.TargetDogu{
+					Dogus: []entities.Dogu{
 						{
 							Name:        "official/nginx",
 							Version:     v1201,
@@ -214,7 +214,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","dogus":[{"name":"official/nginx","version":"1.2.0-1","targetState":"present"},{"name":"premium/jira","version":"2.3.4-1","targetState":"absent"}]}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Dogus: []entities.TargetDogu{
+				Dogus: []entities.Dogu{
 					{Name: "official/nginx", Version: v1201, TargetState: bpcore.TargetStatePresent.String()},
 					{Name: "premium/jira", Version: v2341, TargetState: bpcore.TargetStateAbsent.String()},
 				}},
@@ -225,7 +225,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","dogus":[{"name":"official/nginx","version":"1.2.0-1","targetState":"present","platformConfig":{"resource":{},"reverseProxy":{},"additionalMounts":[{"sourceType":"ConfigMap","name":"test","volume":"testvolume","subfolder":"empty"},{"sourceType":"Secret","name":"sec","volume":"secvolume","subfolder":"secfolder"}]}}],"config":{"global":{}}}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Dogus: []entities.TargetDogu{
+				Dogus: []entities.Dogu{
 					{
 						Name:        "official/nginx",
 						Version:     v1201,
@@ -254,7 +254,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","components":[{"name":"k8s/blueprint-operator","version":"0.2.1-1","targetState":"present"},{"name":"k8s/dogu-operator","version":"2.3.4-1","targetState":"absent"}]}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Components: []entities.TargetComponent{
+				Components: []entities.Component{
 					{Name: "k8s/blueprint-operator", Version: v0211, TargetState: bpcore.TargetStatePresent.String()},
 					{Name: "k8s/dogu-operator", Version: v2341, TargetState: bpcore.TargetStateAbsent.String()},
 				},
@@ -266,7 +266,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","config":{"dogus":{"ldap":{"config":{"present":{"container_config/memory_limit":"500m","container_config/swap_limit":"500m","password_change/notification_enabled":"true"},"absent":["password_change/mail_subject","password_change/mail_text","user_search_size_limit"]}}}}}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Config: entities.TargetConfig{
+				Config: entities.Config{
 					Dogus: map[string]entities.CombinedDoguConfig{
 						"ldap": {
 							Config: entities.DoguConfig{
@@ -292,7 +292,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","config":{"dogus":{"redmine":{"sensitiveConfig":{"present":{"my-secret-password":"password-value","my-secret-password-2":"password-value-2"},"absent":["my-secret-password-3"]}}}}}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Config: entities.TargetConfig{
+				Config: entities.Config{
 					Dogus: map[string]entities.CombinedDoguConfig{
 						"redmine": {
 							SensitiveConfig: entities.SensitiveDoguConfig{
@@ -315,7 +315,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","config":{"global":{"present":{"admin_group":"ces-admin","fqdn":"ces.example.com","key_provider":"pkcs1v15"},"absent":["default_dogu","some_other_key"]}}}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Config: entities.TargetConfig{
+				Config: entities.Config{
 					Global: entities.GlobalConfig{
 						Present: map[string]string{
 							"key_provider": "pkcs1v15",
@@ -336,7 +336,7 @@ func TestDeserializeBlueprint_ok(t *testing.T) {
 			args{spec: `{"blueprintApi":"v2","components":[{"name":"k8s/name","version":"2.3.4-1","targetState":"present","deployConfig":{"key":"value"}}],"config":{"global":{}}}`},
 			BlueprintV2{
 				GeneralBlueprint: bpcore.GeneralBlueprint{API: bpcore.V2},
-				Components: []entities.TargetComponent{
+				Components: []entities.Component{
 					{Name: "k8s/name", Version: v2341, TargetState: bpcore.TargetStatePresent.String(), DeployConfig: map[string]interface{}{"key": "value"}},
 				},
 			},

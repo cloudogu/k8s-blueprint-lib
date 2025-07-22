@@ -1,4 +1,4 @@
-package v1
+package v2
 
 type CombinedDoguConfigDiff struct {
 	DoguConfigDiff          DoguConfigDiff          `json:"doguConfigDiff,omitempty"`
