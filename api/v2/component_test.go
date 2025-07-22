@@ -1,7 +1,6 @@
-package entities
+package v2
 
 import (
-	"github.com/cloudogu/k8s-blueprint-lib/json/bpcore"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"maps"
@@ -72,7 +71,7 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		require.NotNil(t, actual)
 		assert.Empty(t, actual)
 	})
-	t.Run("should copy simple target component", func(t *testing.T) {
+	t.Run("should copy simple component", func(t *testing.T) {
 		// given
 		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
 			Absent: []string{"redmineKeyToBeDeleted"},
@@ -80,7 +79,7 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		input := Component{
 			Name:         "k8s/my-comp",
 			Version:      "1.2.3",
-			TargetState:  bpcore.TargetStateAbsent.String(),
+			Absent:       true,
 			DeployConfig: inputDeployConfig,
 		}
 		actual := Component{}
@@ -92,9 +91,9 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		require.NotSame(t, &input, &actual)
 		require.NotNil(t, actual)
 		expected := Component{
-			Name:        "k8s/my-comp",
-			Version:     "1.2.3",
-			TargetState: bpcore.TargetStateAbsent.String(),
+			Name:    "k8s/my-comp",
+			Version: "1.2.3",
+			Absent:  true,
 			DeployConfig: DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
 				Absent: []string{"redmineKeyToBeDeleted"},
 			}}},
@@ -102,7 +101,7 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		// types get sadly unaliased. Check the values here instead
 		assert.Equal(t, expected.Name, actual.Name)
 		assert.Equal(t, expected.Version, actual.Version)
-		assert.Equal(t, expected.TargetState, actual.TargetState)
+		assert.Equal(t, expected.Absent, actual.Absent)
 		expectedMapConfig := unaliasDeployConfig(t, expected.DeployConfig)
 		actualMapConfig := unaliasDeployConfig(t, actual.DeployConfig)
 		expectedRedmineConfig := expectedMapConfig["redmine"]

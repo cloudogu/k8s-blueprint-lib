@@ -1,8 +1,12 @@
 package v2
 
+// Config contains Dogu and Cloudogu EcoSystem specific configuration data which determine set-up and run
+// behaviour respectively.
 type Config struct {
-	Dogus  map[string]CombinedDoguConfig `json:"dogus,omitempty"`
-	Global GlobalConfig                  `json:"global,omitempty"`
+	// Dogus contains Dogu specific configuration data which determine set-up and run behaviour.
+	Dogus map[string]CombinedDoguConfig `json:"dogus,omitempty"`
+	// Dogus contains EcoSystem specific configuration data which determine set-up and run behaviour.
+	Global GlobalConfig `json:"global,omitempty"`
 }
 
 type CombinedDoguConfig struct {

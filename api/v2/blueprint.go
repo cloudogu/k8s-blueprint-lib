@@ -1,9 +1,5 @@
 package v2
 
-import (
-	"github.com/cloudogu/k8s-blueprint-lib/json/entities"
-)
-
 // Blueprint describes an abstraction of CES components which should be absent or present within one or more CES
 // instances.
 //
@@ -12,13 +8,13 @@ import (
 type Blueprint struct {
 	// Dogus contains a set of exact dogu versions which should be present or absent in the CES instance after which this
 	// blueprint was applied. Optional.
-	Dogus []entities.Dogu `json:"dogus,omitempty"`
+	Dogus []Dogu `json:"dogus,omitempty"`
 	// Components contains a set of exact component versions which should be present or absent in the CES instance after which
 	// this blueprint was applied. Optional.
-	Components []entities.Component `json:"components,omitempty"`
+	Components []Component `json:"components,omitempty"`
 	// Config is used for ecosystem configuration to be applied.
 	// Optional.
-	Config entities.Config `json:"config,omitempty"`
+	Config Config `json:"config,omitempty"`
 }
 
 // BlueprintMask describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
@@ -29,5 +25,5 @@ type Blueprint struct {
 type BlueprintMask struct {
 	// Dogus contains a set of exact dogu with their versions which should be present or absent.
 	// Optional.
-	Dogus []entities.Dogu `json:"dogus,omitempty"`
+	Dogus []Dogu `json:"dogus,omitempty"`
 }

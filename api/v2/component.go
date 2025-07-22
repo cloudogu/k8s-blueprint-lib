@@ -1,4 +1,4 @@
-package entities
+package v2
 
 import (
 	"encoding/json"
@@ -11,8 +11,8 @@ type Component struct {
 	// Version defines the version of the component that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
-	// TargetState defines a state of installation of this component. Optional field, but defaults to "TargetStatePresent"
-	TargetState string `json:"targetState,omitempty"`
+	// Absent defines if the component should be absent in the ecosystem. Defaults to false.
+	Absent bool `json:"absent,omitempty"`
 	// DeployConfig defines a generic property map for the component configuration. This field is optional.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless
@@ -23,7 +23,7 @@ func (in Component) DeepCopyInto(out *Component) {
 	if out != nil {
 		out.Name = in.Name
 		out.Version = in.Version
-		out.TargetState = in.TargetState
+		out.Absent = in.Absent
 		out.DeployConfig = *in.DeployConfig.DeepCopy()
 	}
 }

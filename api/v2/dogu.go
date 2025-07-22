@@ -1,4 +1,4 @@
-package entities
+package v2
 
 import (
 	"encoding/json"
@@ -13,8 +13,8 @@ type Dogu struct {
 	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
-	// TargetState defines a state of installation of this dogu. Optional field, but defaults to "TargetStatePresent"
-	TargetState string `json:"targetState"`
+	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+	Absent string `json:"absent,omitempty"`
 	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
 	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
 }

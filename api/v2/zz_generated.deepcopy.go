@@ -9,7 +9,6 @@ This file was generated with "make generate-deepcopy".
 package v2
 
 import (
-	"github.com/cloudogu/k8s-blueprint-lib/json/entities"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 
@@ -364,14 +363,14 @@ func (in *Blueprint) DeepCopyInto(out *Blueprint) {
 	*out = *in
 	if in.Dogus != nil {
 		in, out := &in.Dogus, &out.Dogus
-		*out = make([]entities.Dogu, len(*in))
+		*out = make([]Dogu, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
 	}
 	if in.Components != nil {
 		in, out := &in.Components, &out.Components
-		*out = make([]entities.Component, len(*in))
+		*out = make([]Component, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}

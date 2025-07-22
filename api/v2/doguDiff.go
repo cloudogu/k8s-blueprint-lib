@@ -18,33 +18,6 @@ type DoguDiffState struct {
 	AdditionalMounts   []AdditionalMount  `json:"additionalMounts,omitempty" patchStrategy:"replace"`
 }
 
-type ResourceConfig struct {
-	MinVolumeSize string `json:"minVolumeSize,omitempty"`
-}
-
-type ReverseProxyConfig struct {
-	MaxBodySize      string `json:"maxBodySize,omitempty"`
-	RewriteTarget    string `json:"rewriteTarget,omitempty"`
-	AdditionalConfig string `json:"additionalConfig,omitempty"`
-}
-
 // DoguAction is the action that needs to be done for a dogu
 // to achieve the desired state in the cluster.
 type DoguAction string
-
-type DataSourceType string
-
-//goland:noinspection GoUnusedConst
-const (
-	// DataSourceConfigMap mounts a config map as a data source.
-	DataSourceConfigMap DataSourceType = "ConfigMap"
-	// DataSourceSecret mounts a secret as a data source.
-	DataSourceSecret DataSourceType = "Secret"
-)
-
-type AdditionalMount struct {
-	SourceType DataSourceType `json:"sourceType"`
-	Name       string         `json:"name"`
-	Volume     string         `json:"volume"`
-	Subfolder  string         `json:"subfolder,omitempty"`
-}

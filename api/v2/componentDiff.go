@@ -1,9 +1,5 @@
 package v2
 
-import (
-	"github.com/cloudogu/k8s-blueprint-lib/json/entities"
-)
-
 // ComponentDiff is the comparison of a Component's desired state vs. its cluster state.
 // It contains the operation that needs to be done to achieve this desired state.
 type ComponentDiff struct {
@@ -32,7 +28,7 @@ type ComponentDiffState struct {
 	// DeployConfig contains generic properties for the component.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless
-	DeployConfig entities.DeployConfig `json:"deployConfig,omitempty"`
+	DeployConfig DeployConfig `json:"deployConfig,omitempty"`
 }
 
 // ComponentAction is the action that needs to be done for a component
