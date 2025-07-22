@@ -14,7 +14,7 @@ type Dogu struct {
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
-	Absent string `json:"absent,omitempty"`
+	Absent bool `json:"absent,omitempty"`
 	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
 	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
 }
