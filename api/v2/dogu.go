@@ -5,13 +5,27 @@ import (
 	"fmt"
 )
 
-// Dogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
-// was applied.
-type Dogu struct {
+// MaskDogu is used to override dogu versions and the Absent state.
+// You cannot add dogus which are not yet in the blueprint.
+type MaskDogu struct {
 	// Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
 	Name string `json:"name"`
 	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
+	Version string `json:"version"`
+	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+	Absent bool `json:"absent,omitempty"`
+}
+
+// Dogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
+// was applied.
+type Dogu struct {
+	// Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
+	// +required
+	Name string `json:"name"`
+	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
+	// otherwise it is optional and is not going to be interpreted.
+	// +required
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
 	Absent bool `json:"absent,omitempty"`

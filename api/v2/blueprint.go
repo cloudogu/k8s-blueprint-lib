@@ -23,7 +23,7 @@ type Blueprint struct {
 // In general additions without changing the version are fine, as long as they don't change semantics. Removal or
 // renaming are breaking changes and require a new blueprint API version.
 type BlueprintMask struct {
-	// Dogus contains a set of exact dogu with their versions which should be present or absent.
-	// Optional.
-	Dogus []Dogu `json:"dogus,omitempty"`
+	// Dogus contains a set of dogus with their versions which should be present or absent.
+	// +Optional.
+	Dogus []MaskDogu `json:"dogus,omitempty"`
 }
