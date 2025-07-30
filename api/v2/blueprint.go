@@ -1,11 +1,11 @@
 package v2
 
-// Blueprint describes an abstraction of CES components which should be absent or present within one or more CES
+// BlueprintManifest describes an abstraction of CES components which should be absent or present within one or more CES
 // instances.
 //
 // In general, additions without changing the version are fine, as long as they don't change semantics. Removal or
 // renaming are breaking changes and require a new blueprint API version.
-type Blueprint struct {
+type BlueprintManifest struct {
 	// Dogus contains a set of exact dogu versions which should be present or absent in the CES instance after which this
 	// blueprint was applied. Optional.
 	Dogus []Dogu `json:"dogus,omitempty"`

@@ -24,7 +24,7 @@ type V1Alpha1Interface interface {
 	blueprintGetter
 }
 
-// blueprintGetter provides a Kubernetes client for accessing Kubernetes Cloudogu EcoSystem BlueprintCR CRs.
+// blueprintGetter provides a Kubernetes client for accessing Kubernetes Cloudogu EcoSystem Blueprint CRs.
 type blueprintGetter interface {
 	// Blueprints returns a client for blueprints in the given namespace.
 	Blueprints(namespace string) BlueprintInterface
