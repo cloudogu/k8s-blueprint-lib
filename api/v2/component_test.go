@@ -41,18 +41,18 @@ func TestDeployConfig_DeepCopy(t *testing.T) {
 		})
 		t.Run("mutation of one DeployConfig should not mutate a copy", func(t *testing.T) {
 			// given
-			input := &DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
+			input := &DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
 				Absent: []string{"redmineKeyToBeDeleted"},
 			}}}
 
 			// when
 			actual := input.DeepCopy()
 			mappedInput := unaliasDeployConfig(t, *input)
-			mappedInput["redmine"] = CombinedDoguConfig{Config: DoguConfig{}} // overwrite ALL the things \o/
+			mappedInput["redmine"] = CombinedDoguConfig{Config: nil} // overwrite ALL the things \o/
 
 			// then
 			_ = unaliasDeployConfig(t, *actual)
-			assert.Empty(t, mappedInput["redmine"])
+			assert.Emptyf(t, mappedInput["redmine"], "redmine config is: %+v", mappedInput["redmine"])
 		})
 	})
 }
@@ -73,7 +73,7 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 	})
 	t.Run("should copy simple component", func(t *testing.T) {
 		// given
-		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
+		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
 			Absent: []string{"redmineKeyToBeDeleted"},
 		}}}
 		input := Component{
@@ -94,7 +94,7 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 			Name:    "k8s/my-comp",
 			Version: "1.2.3",
 			Absent:  true,
-			DeployConfig: DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
+			DeployConfig: DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
 				Absent: []string{"redmineKeyToBeDeleted"},
 			}}},
 		}
