@@ -58,6 +58,33 @@ const (
 	StatusPhaseRestartsTriggered StatusPhase = "restartsTriggered"
 )
 
+// +kubebuilder:object:root=true
+// +kubebuilder:resource:shortName=bp
+// +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase",description="The current status of the resource"
+// +kubebuilder:printcolumn:name="DryRun",type="boolean",JSONPath=".spec.dryRun",description="Whether the resource is started as a dry run"
+// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
+
+// Blueprint is the Schema for the blueprints API
+type Blueprint struct {
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
+
+	// Spec defines the desired state of the Blueprint.
+	Spec BlueprintSpec `json:"spec,omitempty"`
+	// Status defines the observed state of the Blueprint.
+	Status BlueprintStatus `json:"status,omitempty"`
+}
+
+// +kubebuilder:object:root=true
+
+// BlueprintList contains a list of Blueprint
+type BlueprintList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []Blueprint `json:"items"`
+}
+
 // BlueprintSpec defines the desired state of Blueprint
 type BlueprintSpec struct {
 	// Blueprint json with the desired state of the ecosystem.
@@ -84,33 +111,6 @@ type BlueprintStatus struct {
 	// StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
 	// It describes what operations need to be done to achieve the desired state of the blueprint.
 	StateDiff StateDiff `json:"stateDiff,omitempty"`
-}
-
-// +kubebuilder:object:root=true
-// +kubebuilder:resource:shortName=bp
-// +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase",description="The current status of the resource"
-// +kubebuilder:printcolumn:name="DryRun",type="boolean",JSONPath=".spec.dryRun",description="Whether the resource is started as a dry run"
-// +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
-
-// Blueprint is the Schema for the blueprints API
-type Blueprint struct {
-	metav1.TypeMeta   `json:",inline"`
-	metav1.ObjectMeta `json:"metadata,omitempty"`
-
-	// Spec defines the desired state of the Blueprint.
-	Spec BlueprintSpec `json:"spec,omitempty"`
-	// Status defines the observed state of the Blueprint.
-	Status BlueprintStatus `json:"status,omitempty"`
-}
-
-// +kubebuilder:object:root=true
-
-// BlueprintList contains a list of Blueprint
-type BlueprintList struct {
-	metav1.TypeMeta `json:",inline"`
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Blueprint `json:"items"`
 }
 
 func init() {
