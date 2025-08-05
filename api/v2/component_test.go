@@ -57,8 +57,8 @@ func TestDeployConfig_DeepCopy(t *testing.T) {
 	})
 }
 
-func TestTargetComponent_DeepCopyInto(t *testing.T) {
-	t.Run("should copy empty target component", func(t *testing.T) {
+func TestComponent_DeepCopyInto(t *testing.T) {
+	t.Run("should copy empty component", func(t *testing.T) {
 		// given
 		input := Component{}
 		actual := Component{}
