@@ -3,6 +3,7 @@ package kubernetes
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"net/http"
 	"net/http/httptest"
@@ -20,7 +21,7 @@ import (
 
 var testCtx = context.Background()
 
-const apiBasePathTestNS = "/apis/k8s.cloudogu.com/v2/namespaces/test/" + resourceName
+var apiBasePathTestNS = fmt.Sprintf("/apis/%s/%s/namespaces/test/%s", k8sv1.GroupVersion.Group, k8sv1.GroupVersion.Version, resourceName)
 
 func Test_blueprintClient_Get(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
