@@ -6,7 +6,7 @@ type Config struct {
 	// Dogus contains Dogu specific configuration data which determine set-up and run behaviour.
 	// +optional
 	Dogus map[string]CombinedDoguConfig `json:"dogus,omitempty"`
-	// Dogus contains EcoSystem specific configuration data which determine set-up and run behaviour.
+	// Global contains EcoSystem specific configuration data which determine set-up and run behaviour.
 	// +optional
 	Global GlobalConfig `json:"global,omitempty"`
 }
