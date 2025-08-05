@@ -104,6 +104,8 @@ type BlueprintSpec struct {
 
 // BlueprintStatus defines the observed state of Blueprint
 type BlueprintStatus struct {
+	// Conditions shows the current state of the blueprint
+	Conditions []metav1.Condition `json:"conditions"`
 	// Phase represents the processing state of the blueprint
 	Phase StatusPhase `json:"phase,omitempty"`
 	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
