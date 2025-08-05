@@ -20,7 +20,7 @@ import (
 
 var testCtx = context.Background()
 
-const apiBasePathTestNS = "/apis/k8s.cloudogu.com/v1/namespaces/test/" + resourceName
+const apiBasePathTestNS = "/apis/k8s.cloudogu.com/v2/namespaces/test/" + resourceName
 
 func Test_blueprintClient_Get(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
