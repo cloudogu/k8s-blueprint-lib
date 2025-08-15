@@ -5,7 +5,7 @@ APPEND_CRD_SUFFIX=false
 VERSION=1.3.0
 
 GOTAG?=1.24.3
-MAKEFILES_VERSION=9.10.0
+MAKEFILES_VERSION=10.2.0
 
 GO_BUILD_FLAGS?=-mod=vendor -a ./...
 .DEFAULT_GOAL:=default
@@ -29,8 +29,7 @@ include build/make/release.mk
 include build/make/mocks.mk
 
 include build/make/digital-signature.mk
-include build/make/k8s-component.mk
-include build/make/k8s-crd.mk
+include build/make/k8s-controller.mk
 
 
 default: compile

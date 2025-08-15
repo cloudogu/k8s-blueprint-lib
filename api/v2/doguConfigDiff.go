@@ -1,4 +1,4 @@
-package v1
+package v2
 
 type CombinedDoguConfigDiff struct {
 	DoguConfigDiff          DoguConfigDiff          `json:"doguConfigDiff,omitempty"`
@@ -16,7 +16,9 @@ type DoguConfigEntryDiff struct {
 }
 
 // +kubebuilder:object:generate:=false
+
 type SensitiveDoguConfigDiff = DoguConfigDiff
 
 // +kubebuilder:object:generate:=false
+
 type SensitiveDoguConfigEntryDiff = DoguConfigEntryDiff

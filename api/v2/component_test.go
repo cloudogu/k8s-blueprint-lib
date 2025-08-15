@@ -1,7 +1,6 @@
-package entities
+package v2
 
 import (
-	"github.com/cloudogu/k8s-blueprint-lib/json/bpcore"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"maps"
@@ -42,27 +41,27 @@ func TestDeployConfig_DeepCopy(t *testing.T) {
 		})
 		t.Run("mutation of one DeployConfig should not mutate a copy", func(t *testing.T) {
 			// given
-			input := &DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
+			input := &DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
 				Absent: []string{"redmineKeyToBeDeleted"},
 			}}}
 
 			// when
 			actual := input.DeepCopy()
 			mappedInput := unaliasDeployConfig(t, *input)
-			mappedInput["redmine"] = CombinedDoguConfig{Config: DoguConfig{}} // overwrite ALL the things \o/
+			mappedInput["redmine"] = CombinedDoguConfig{Config: nil} // overwrite ALL the things \o/
 
 			// then
 			_ = unaliasDeployConfig(t, *actual)
-			assert.Empty(t, mappedInput["redmine"])
+			assert.Emptyf(t, mappedInput["redmine"], "redmine config is: %+v", mappedInput["redmine"])
 		})
 	})
 }
 
-func TestTargetComponent_DeepCopyInto(t *testing.T) {
-	t.Run("should copy empty target component", func(t *testing.T) {
+func TestComponent_DeepCopyInto(t *testing.T) {
+	t.Run("should copy empty component", func(t *testing.T) {
 		// given
-		input := TargetComponent{}
-		actual := TargetComponent{}
+		input := Component{}
+		actual := Component{}
 
 		// when
 		input.DeepCopyInto(&actual)
@@ -72,18 +71,18 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		require.NotNil(t, actual)
 		assert.Empty(t, actual)
 	})
-	t.Run("should copy simple target component", func(t *testing.T) {
+	t.Run("should copy simple component", func(t *testing.T) {
 		// given
-		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
+		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
 			Absent: []string{"redmineKeyToBeDeleted"},
 		}}}
-		input := TargetComponent{
+		input := Component{
 			Name:         "k8s/my-comp",
 			Version:      "1.2.3",
-			TargetState:  bpcore.TargetStateAbsent.String(),
+			Absent:       true,
 			DeployConfig: inputDeployConfig,
 		}
-		actual := TargetComponent{}
+		actual := Component{}
 
 		// when
 		input.DeepCopyInto(&actual)
@@ -91,18 +90,18 @@ func TestTargetComponent_DeepCopyInto(t *testing.T) {
 		// then
 		require.NotSame(t, &input, &actual)
 		require.NotNil(t, actual)
-		expected := TargetComponent{
-			Name:        "k8s/my-comp",
-			Version:     "1.2.3",
-			TargetState: bpcore.TargetStateAbsent.String(),
-			DeployConfig: DeployConfig{"redmine": CombinedDoguConfig{Config: DoguConfig{
+		expected := Component{
+			Name:    "k8s/my-comp",
+			Version: "1.2.3",
+			Absent:  true,
+			DeployConfig: DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
 				Absent: []string{"redmineKeyToBeDeleted"},
 			}}},
 		}
 		// types get sadly unaliased. Check the values here instead
 		assert.Equal(t, expected.Name, actual.Name)
 		assert.Equal(t, expected.Version, actual.Version)
-		assert.Equal(t, expected.TargetState, actual.TargetState)
+		assert.Equal(t, expected.Absent, actual.Absent)
 		expectedMapConfig := unaliasDeployConfig(t, expected.DeployConfig)
 		actualMapConfig := unaliasDeployConfig(t, actual.DeployConfig)
 		expectedRedmineConfig := expectedMapConfig["redmine"]

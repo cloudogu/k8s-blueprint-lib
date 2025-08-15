@@ -44,9 +44,7 @@ node('docker') {
         }
 
         withBuildDependencies {
-            stage('Build') {
-                make 'compile'
-            }
+            // no build stage as we have no main function in this lib
 
             stage('Unit Tests') {
                 make 'unit-test'

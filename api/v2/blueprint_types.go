@@ -1,4 +1,4 @@
-package v1
+package v2
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -58,37 +58,9 @@ const (
 	StatusPhaseRestartsTriggered StatusPhase = "restartsTriggered"
 )
 
-// BlueprintSpec defines the desired state of Blueprint
-type BlueprintSpec struct {
-	// Blueprint json with the desired state of the ecosystem.
-	Blueprint string `json:"blueprint"`
-	// BlueprintMask json can further restrict the desired state from the blueprint.
-	BlueprintMask string `json:"blueprintMask,omitempty"`
-	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
-	IgnoreDoguHealth bool `json:"ignoreDoguHealth,omitempty"`
-	// IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
-	IgnoreComponentHealth bool `json:"ignoreComponentHealth,omitempty"`
-	// AllowDoguNamespaceSwitch lets the user switch the namespace of dogus in the blueprint mask
-	// in comparison to the blueprint.
-	AllowDoguNamespaceSwitch bool `json:"allowDoguNamespaceSwitch,omitempty"`
-	// DryRun lets the user test a blueprint run to check if all attributes of the blueprint are correct and avoid a result with a failure state.
-	DryRun bool `json:"dryRun,omitempty"`
-}
-
-// BlueprintStatus defines the observed state of Blueprint
-type BlueprintStatus struct {
-	// Phase represents the processing state of the blueprint
-	Phase StatusPhase `json:"phase,omitempty"`
-	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
-	EffectiveBlueprint EffectiveBlueprint `json:"effectiveBlueprint,omitempty"`
-	// StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
-	// It describes what operations need to be done to achieve the desired state of the blueprint.
-	StateDiff StateDiff `json:"stateDiff,omitempty"`
-}
-
 // +kubebuilder:object:root=true
+// +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
-// +kubebuilder:resource:shortName="bp"
 // +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase",description="The current status of the resource"
 // +kubebuilder:printcolumn:name="DryRun",type="boolean",JSONPath=".spec.dryRun",description="Whether the resource is started as a dry run"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
@@ -111,6 +83,34 @@ type BlueprintList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
 	Items           []Blueprint `json:"items"`
+}
+
+// BlueprintSpec defines the desired state of Blueprint
+type BlueprintSpec struct {
+	// Blueprint json with the desired state of the ecosystem.
+	Blueprint BlueprintManifest `json:"blueprint"`
+	// BlueprintMask json can further restrict the desired state from the blueprint.
+	BlueprintMask BlueprintMask `json:"blueprintMask,omitempty"`
+	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
+	IgnoreDoguHealth bool `json:"ignoreDoguHealth,omitempty"`
+	// IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
+	IgnoreComponentHealth bool `json:"ignoreComponentHealth,omitempty"`
+	// AllowDoguNamespaceSwitch lets the user switch the namespace of dogus in the blueprint mask
+	// in comparison to the blueprint.
+	AllowDoguNamespaceSwitch bool `json:"allowDoguNamespaceSwitch,omitempty"`
+	// DryRun lets the user test a blueprint run to check if all attributes of the blueprint are correct and avoid a result with a failure state.
+	DryRun bool `json:"dryRun,omitempty"`
+}
+
+// BlueprintStatus defines the observed state of Blueprint
+type BlueprintStatus struct {
+	// Phase represents the processing state of the blueprint
+	Phase StatusPhase `json:"phase,omitempty"`
+	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
+	EffectiveBlueprint BlueprintManifest `json:"effectiveBlueprint,omitempty"`
+	// StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
+	// It describes what operations need to be done to achieve the desired state of the blueprint.
+	StateDiff StateDiff `json:"stateDiff,omitempty"`
 }
 
 func init() {

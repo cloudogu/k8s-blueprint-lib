@@ -9,7 +9,7 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
 
-	"github.com/cloudogu/k8s-blueprint-lib/api/v1"
+	"github.com/cloudogu/k8s-blueprint-lib/v2/api/v2"
 )
 
 // Interface extends the kubernetes.Interface to add functionality for handling the custom resources of this operator.
@@ -65,12 +65,12 @@ func (cs *ClientSet) EcosystemV1Alpha1() V1Alpha1Interface {
 // newForConfig creates a new V1Alpha1Client for a given rest.Config.
 func newForConfig(c *rest.Config) (*V1Alpha1Client, error) {
 	config := *c
-	gv := schema.GroupVersion{Group: v1.GroupVersion.Group, Version: v1.GroupVersion.Version}
+	gv := schema.GroupVersion{Group: v2.GroupVersion.Group, Version: v2.GroupVersion.Version}
 	config.ContentConfig.GroupVersion = &gv
 	config.APIPath = "/apis"
 
 	s := scheme.Scheme
-	err := v1.AddToScheme(s)
+	err := v2.AddToScheme(s)
 	if err != nil {
 		return nil, err
 	}

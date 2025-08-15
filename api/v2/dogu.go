@@ -1,39 +1,53 @@
-package entities
+package v2
 
 import (
 	"encoding/json"
 	"fmt"
 )
 
-// TargetDogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
-// was applied.
-type TargetDogu struct {
+// MaskDogu is used to override dogu versions and the Absent state.
+// You cannot add dogus which are not yet in the blueprint.
+type MaskDogu struct {
 	// Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
 	Name string `json:"name"`
 	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
-	// TargetState defines a state of installation of this dogu. Optional field, but defaults to "TargetStatePresent"
-	TargetState string `json:"targetState"`
+	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+	Absent bool `json:"absent,omitempty"`
+}
+
+// Dogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
+// was applied.
+type Dogu struct {
+	// Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
+	// +required
+	Name string `json:"name"`
+	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
+	// otherwise it is optional and is not going to be interpreted.
+	// +required
+	Version string `json:"version"`
+	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+	Absent bool `json:"absent,omitempty"`
 	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
 	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
 }
 
-func (in *TargetDogu) DeepCopy() *TargetDogu {
-	out := new(TargetDogu)
+func (in *Dogu) DeepCopy() *Dogu {
+	out := new(Dogu)
 	in.DeepCopyInto(out)
 	return out
 }
 
-func (in *TargetDogu) DeepCopyInto(out *TargetDogu) {
+func (in *Dogu) DeepCopyInto(out *Dogu) {
 	if out != nil {
 		jsonStr, err := json.Marshal(in)
 		if err != nil {
-			panic(fmt.Errorf("error marshaling TargetDogu: %w", err))
+			panic(fmt.Errorf("error marshaling Dogu: %w", err))
 		}
 		err = json.Unmarshal(jsonStr, out)
 		if err != nil {
-			panic(fmt.Errorf("error unmarshaling TargetDogu: %w", err))
+			panic(fmt.Errorf("error unmarshaling Dogu: %w", err))
 		}
 	}
 }
