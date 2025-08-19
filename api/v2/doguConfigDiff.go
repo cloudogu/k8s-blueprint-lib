@@ -1,7 +1,9 @@
 package v2
 
 type CombinedDoguConfigDiff struct {
-	DoguConfigDiff          DoguConfigDiff          `json:"doguConfigDiff,omitempty"`
+	// +optional
+	DoguConfigDiff DoguConfigDiff `json:"doguConfigDiff,omitempty"`
+	// +optional
 	SensitiveDoguConfigDiff SensitiveDoguConfigDiff `json:"sensitiveDoguConfigDiff,omitempty"`
 }
 

@@ -14,6 +14,7 @@ type MaskDogu struct {
 	// otherwise it is optional and is not going to be interpreted.
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+	// +optional
 	Absent bool `json:"absent,omitempty"`
 }
 
@@ -28,8 +29,10 @@ type Dogu struct {
 	// +required
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+	// +optional
 	Absent bool `json:"absent,omitempty"`
 	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
+	// +optional
 	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
 }
 
@@ -53,12 +56,16 @@ func (in *Dogu) DeepCopyInto(out *Dogu) {
 }
 
 type ResourceConfig struct {
+	// +optional
 	MinVolumeSize string `json:"minVolumeSize,omitempty"`
 }
 
 type ReverseProxyConfig struct {
-	MaxBodySize      string `json:"maxBodySize,omitempty"`
-	RewriteTarget    string `json:"rewriteTarget,omitempty"`
+	// +optional
+	MaxBodySize string `json:"maxBodySize,omitempty"`
+	// +optional
+	RewriteTarget string `json:"rewriteTarget,omitempty"`
+	// +optional
 	AdditionalConfig string `json:"additionalConfig,omitempty"`
 }
 
@@ -89,7 +96,10 @@ type AdditionalMount struct {
 }
 
 type PlatformConfig struct {
-	ResourceConfig         ResourceConfig     `json:"resource,omitempty"`
-	ReverseProxyConfig     ReverseProxyConfig `json:"reverseProxy,omitempty"`
-	AdditionalMountsConfig []AdditionalMount  `json:"additionalMounts,omitempty" patchStrategy:"replace"`
+	// +optional
+	ResourceConfig ResourceConfig `json:"resource,omitempty"`
+	// +optional
+	ReverseProxyConfig ReverseProxyConfig `json:"reverseProxy,omitempty"`
+	// +optional
+	AdditionalMountsConfig []AdditionalMount `json:"additionalMounts,omitempty" patchStrategy:"replace"`
 }
