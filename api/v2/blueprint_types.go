@@ -7,28 +7,24 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-type StatusPhase string
-
+//nolint:unused
+//goland:noinspection GoUnusedConst
 const (
-	// StatusPhaseNew marks a newly created blueprint-CR.
-	StatusPhaseNew StatusPhase = ""
-	// StatusPhaseBlueprintApplicationFailed shows that the blueprint application failed.
-	StatusPhaseBlueprintApplicationFailed StatusPhase = "blueprintApplicationFailed"
-	// StatusPhaseBlueprintApplied indicates that the blueprint was applied but the ecosystem is not healthy yet.
-	StatusPhaseBlueprintApplied StatusPhase = "blueprintApplied"
-	// StatusPhaseFailed marks that an error occurred during processing of the blueprint.
-	StatusPhaseFailed StatusPhase = "failed"
-	// StatusPhaseCompleted marks the blueprint as successfully applied.
-	StatusPhaseCompleted StatusPhase = "completed"
-	// StatusPhaseRestartsTriggered indicates that a restart has been triggered for all Dogus that needed a restart.
-	// Restarts are needed when the Dogu config changes.
-	StatusPhaseRestartsTriggered StatusPhase = "restartsTriggered"
+	ConditionValid                = "Valid"
+	ConditionExecutable           = "Executable"
+	ConditionEcosystemHealthy     = "EcosystemHealthy"
+	ConditionSelfUpgradeCompleted = "SelfUpgradeCompleted"
+	ConditionConfigApplied        = "ConfigApplied"
+	ConditionComponentsApplied    = "ComponentsApplied"
+	ConditionDogusApplied         = "DogusApplied"
+	ConditionBlueprintApplied     = "BlueprintApplied"
+	ConditionCompleted            = "Completed"
 )
 
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase",description="The current status of the resource"
+// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.conditions['Completed']['status']",description="Whether the resource is completed in the current state"
 // +kubebuilder:printcolumn:name="DryRun",type="boolean",JSONPath=".spec.dryRun",description="Whether the resource is started as a dry run"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 
@@ -83,9 +79,6 @@ type BlueprintStatus struct {
 	// Conditions shows the current state of the blueprint
 	// +optional
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
-	// Phase represents the processing state of the blueprint
-	// +optional
-	Phase StatusPhase `json:"phase,omitempty"`
 	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
 	// +optional
 	EffectiveBlueprint BlueprintManifest `json:"effectiveBlueprint,omitempty"`
