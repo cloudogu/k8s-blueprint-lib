@@ -46,7 +46,7 @@ type SecretReference struct {
 
 // Validate ensures ConfigEntry has valid state
 func (c *ConfigEntry) Validate() error {
-	if *c.Absent {
+	if c.Absent != nil && *c.Absent {
 		if c.Value != nil || c.SecretRef != nil {
 			return fmt.Errorf("absent entries cannot have value or secretRef")
 		}
@@ -57,7 +57,7 @@ func (c *ConfigEntry) Validate() error {
 	hasValue := c.Value != nil
 	hasSecretRef := c.SecretRef != nil
 
-	if hasValue != hasSecretRef {
+	if hasValue == hasSecretRef {
 		return fmt.Errorf("config entries can have either a value or a secretRef")
 	}
 
