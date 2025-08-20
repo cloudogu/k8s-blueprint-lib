@@ -13,7 +13,7 @@ type Component struct {
 	Version string `json:"version"`
 	// Absent defines if the component should be absent in the ecosystem. Defaults to false.
 	// +optional
-	Absent bool `json:"absent,omitempty"`
+	Absent *bool `json:"absent,omitempty"`
 	// DeployConfig defines a generic property map for the component configuration. This field is optional.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless

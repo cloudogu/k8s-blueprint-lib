@@ -21,7 +21,7 @@ type ConfigEntry struct {
 
 	// Absent indicates whether this key should be deleted (true) or set (false)
 	// +optional
-	Absent bool `json:"absent,omitempty"`
+	Absent *bool `json:"absent,omitempty"`
 
 	// Value is used for regular (non-sensitive) configuration entries
 	// Mutually exclusive with SecretRef
@@ -46,7 +46,7 @@ type SecretReference struct {
 
 // Validate ensures ConfigEntry has valid state
 func (c *ConfigEntry) Validate() error {
-	if c.Absent {
+	if *c.Absent {
 		if c.Value != nil || c.SecretRef != nil {
 			return fmt.Errorf("absent entries cannot have value or secretRef")
 		}

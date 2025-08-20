@@ -32,11 +32,11 @@ const (
 type Blueprint struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
-	metav1.ObjectMeta `json:"metadata,omitempty"`
+	*metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec defines the desired state of the Blueprint.
 	// +optional
-	Spec BlueprintSpec `json:"spec,omitempty"`
+	Spec *BlueprintSpec `json:"spec,omitempty"`
 	// Status defines the observed state of the Blueprint.
 	// +optional
 	Status *BlueprintStatus `json:"status,omitempty"`
@@ -48,20 +48,20 @@ type BlueprintSpec struct {
 	Blueprint BlueprintManifest `json:"blueprint"`
 	// BlueprintMask json can further restrict the desired state from the blueprint.
 	// +optional
-	BlueprintMask BlueprintMask `json:"blueprintMask,omitempty"`
+	BlueprintMask *BlueprintMask `json:"blueprintMask,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
-	IgnoreDoguHealth bool `json:"ignoreDoguHealth,omitempty"`
+	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`
 	// IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
 	// +optional
-	IgnoreComponentHealth bool `json:"ignoreComponentHealth,omitempty"`
+	IgnoreComponentHealth *bool `json:"ignoreComponentHealth,omitempty"`
 	// AllowDoguNamespaceSwitch lets the user switch the namespace of dogus in the blueprint mask
 	// in comparison to the blueprint.
 	// +optional
-	AllowDoguNamespaceSwitch bool `json:"allowDoguNamespaceSwitch,omitempty"`
+	AllowDoguNamespaceSwitch *bool `json:"allowDoguNamespaceSwitch,omitempty"`
 	// DryRun lets the user test a blueprint run to check if all attributes of the blueprint are correct and avoid a result with a failure state.
 	// +optional
-	DryRun bool `json:"dryRun,omitempty"`
+	DryRun *bool `json:"dryRun,omitempty"`
 }
 
 // BlueprintStatus defines the observed state of Blueprint
@@ -71,11 +71,11 @@ type BlueprintStatus struct {
 	Conditions []metav1.Condition `json:"conditions,omitempty"`
 	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
 	// +optional
-	EffectiveBlueprint BlueprintManifest `json:"effectiveBlueprint,omitempty"`
+	EffectiveBlueprint *BlueprintManifest `json:"effectiveBlueprint,omitempty"`
 	// StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
 	// It describes what operations need to be done to achieve the desired state of the blueprint.
 	// +optional
-	StateDiff StateDiff `json:"stateDiff,omitempty"`
+	StateDiff *StateDiff `json:"stateDiff,omitempty"`
 }
 
 func init() {

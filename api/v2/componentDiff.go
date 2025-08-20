@@ -17,10 +17,10 @@ type ComponentDiffState struct {
 	// Namespace is part of the address under which the component will be obtained. This namespace must NOT
 	// to be confused with the K8s cluster namespace.
 	// +optional
-	Namespace string `json:"distributionNamespace,omitempty"`
+	Namespace *string `json:"distributionNamespace,omitempty"`
 	// Version contains the component's version.
 	// +optional
-	Version string `json:"version,omitempty"`
+	Version *string `json:"version,omitempty"`
 	// InstallationState contains the component's installation state. Such a state correlate with the domain Actions:
 	//
 	//  - domain.ActionInstall

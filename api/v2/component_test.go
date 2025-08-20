@@ -41,9 +41,10 @@ func TestDeployConfig_DeepCopy(t *testing.T) {
 		})
 		t.Run("mutation of one DeployConfig should not mutate a copy", func(t *testing.T) {
 			// given
+			truePtr := true
 			input := &DeployConfig{"redmine": ConfigEntry{
 				Key:    "redmineKeyToBeDeleted",
-				Absent: true,
+				Absent: &truePtr,
 			}}
 
 			// when
@@ -74,14 +75,15 @@ func TestComponent_DeepCopyInto(t *testing.T) {
 	})
 	t.Run("should copy simple component", func(t *testing.T) {
 		// given
+		truePtr := true
 		inputDeployConfig := DeployConfig{"redmine": ConfigEntry{
 			Key:    "redmineKeyToBeDeleted",
-			Absent: true,
+			Absent: &truePtr,
 		}}
 		input := Component{
 			Name:         "k8s/my-comp",
 			Version:      "1.2.3",
-			Absent:       true,
+			Absent:       &truePtr,
 			DeployConfig: inputDeployConfig,
 		}
 		actual := Component{}
@@ -95,10 +97,10 @@ func TestComponent_DeepCopyInto(t *testing.T) {
 		expected := Component{
 			Name:    "k8s/my-comp",
 			Version: "1.2.3",
-			Absent:  true,
+			Absent:  &truePtr,
 			DeployConfig: DeployConfig{"redmine": ConfigEntry{
 				Key:    "redmineKeyToBeDeleted",
-				Absent: true,
+				Absent: &truePtr,
 			}},
 		}
 		// types get sadly unaliased. Check the values here instead

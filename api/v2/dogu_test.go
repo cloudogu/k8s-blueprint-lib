@@ -6,6 +6,7 @@ import (
 )
 
 func TestDogu_DeepCopy(t *testing.T) {
+	falsePtr := false
 	tests := []struct {
 		name  string
 		given *Dogu
@@ -16,12 +17,12 @@ func TestDogu_DeepCopy(t *testing.T) {
 			given: &Dogu{
 				Name:    "test",
 				Version: "1.2.3-4",
-				Absent:  false,
+				Absent:  &falsePtr,
 			},
 			want: &Dogu{
 				Name:    "test",
 				Version: "1.2.3-4",
-				Absent:  false,
+				Absent:  &falsePtr,
 			},
 		},
 	}

@@ -15,7 +15,7 @@ type MaskDogu struct {
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
 	// +optional
-	Absent bool `json:"absent,omitempty"`
+	Absent *bool `json:"absent,omitempty"`
 }
 
 // Dogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
@@ -30,10 +30,10 @@ type Dogu struct {
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
 	// +optional
-	Absent bool `json:"absent,omitempty"`
+	Absent *bool `json:"absent,omitempty"`
 	// PlatformConfig defines infrastructure configuration around the dogu, such as reverse proxy config, volume size etc.
 	// +optional
-	PlatformConfig PlatformConfig `json:"platformConfig,omitempty"`
+	PlatformConfig *PlatformConfig `json:"platformConfig,omitempty"`
 }
 
 func (in *Dogu) DeepCopy() *Dogu {
@@ -57,16 +57,16 @@ func (in *Dogu) DeepCopyInto(out *Dogu) {
 
 type ResourceConfig struct {
 	// +optional
-	MinVolumeSize string `json:"minVolumeSize,omitempty"`
+	MinVolumeSize *string `json:"minVolumeSize,omitempty"`
 }
 
 type ReverseProxyConfig struct {
 	// +optional
-	MaxBodySize string `json:"maxBodySize,omitempty"`
+	MaxBodySize *string `json:"maxBodySize,omitempty"`
 	// +optional
-	RewriteTarget string `json:"rewriteTarget,omitempty"`
+	RewriteTarget *string `json:"rewriteTarget,omitempty"`
 	// +optional
-	AdditionalConfig string `json:"additionalConfig,omitempty"`
+	AdditionalConfig *string `json:"additionalConfig,omitempty"`
 }
 
 type DataSourceType string
@@ -92,14 +92,14 @@ type AdditionalMount struct {
 	Volume string `json:"volume"`
 	// Subfolder defines a subfolder in which the data should be put within the volume.
 	// +optional
-	Subfolder string `json:"subfolder,omitempty"`
+	Subfolder *string `json:"subfolder,omitempty"`
 }
 
 type PlatformConfig struct {
 	// +optional
-	ResourceConfig ResourceConfig `json:"resource,omitempty"`
+	ResourceConfig *ResourceConfig `json:"resource,omitempty"`
 	// +optional
-	ReverseProxyConfig ReverseProxyConfig `json:"reverseProxy,omitempty"`
+	ReverseProxyConfig *ReverseProxyConfig `json:"reverseProxy,omitempty"`
 	// +optional
 	AdditionalMountsConfig []AdditionalMount `json:"additionalMounts,omitempty" patchStrategy:"replace"`
 }

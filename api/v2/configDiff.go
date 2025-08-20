@@ -5,8 +5,8 @@ type ConfigAction string
 // ConfigValueState represents either the actual or expected state of a config key
 type ConfigValueState struct {
 	// +optional
-	Value  string `json:"value,omitempty"`
-	Exists bool   `json:"exists"`
+	Value  *string `json:"value,omitempty"`
+	Exists bool    `json:"exists"`
 }
 
 // ConfigDiff is a list of differences between Config in the Blueprint and the cluster state

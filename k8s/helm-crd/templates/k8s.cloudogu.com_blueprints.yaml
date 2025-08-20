@@ -20,10 +20,10 @@ spec:
   scope: Namespaced
   versions:
     - additionalPrinterColumns:
-        - description: The current status of the resource
-          jsonPath: .status.phase
-          name: Status
-          type: string
+        - description: Whether the resource is completed in the current state
+          jsonPath: .status.conditions['Completed']['status']
+          name: Completed
+          type: boolean
         - description: Whether the resource is started as a dry run
           jsonPath: .spec.dryRun
           name: DryRun
@@ -95,76 +95,76 @@ spec:
                       properties:
                         dogus:
                           additionalProperties:
-                            description: CombinedDoguConfig states how a dogu should be configured.
-                            properties:
-                              config:
-                                description: |-
-                                  DoguConfig describes the config for this dogu.
-                                  Only use this config for entries, which need no special protection.
-                                  Otherwise, use SensitiveConfig instead.
-                                properties:
-                                  absent:
-                                    description: Absent is a list of config keys which should be absent or get deleted.
-                                    items:
+                            items:
+                              description: ConfigEntry represents a single configuration entry that can be either regular or sensitive
+                              properties:
+                                absent:
+                                  description: Absent indicates whether this key should be deleted (true) or set (false)
+                                  type: boolean
+                                key:
+                                  description: Key is the configuration key name
+                                  type: string
+                                secretRef:
+                                  description: |-
+                                    SecretRef is used for sensitive configuration entries
+                                    Mutually exclusive with Value
+                                  properties:
+                                    key:
+                                      description: Key is the key within the secret
                                       type: string
-                                    type: array
-                                  present:
-                                    additionalProperties:
+                                    name:
+                                      description: Name is the name of the secret in the same namespace
                                       type: string
-                                    description: Present describes config keys which should be present or should be set otherwise.
-                                    type: object
-                                type: object
-                              sensitiveConfig:
-                                description: |-
-                                  SensitiveConfig describes the sensitive config for this dogu.
-                                  In contrast to DoguConfig, this config can contain credentials, api keys licences etc.
-                                properties:
-                                  absent:
-                                    description: Absent is a list of config keys which should be absent or get deleted.
-                                    items:
-                                      type: string
-                                    type: array
-                                  present:
-                                    description: Present describes config keys which should be present or should be set otherwise.
-                                    items:
-                                      properties:
-                                        key:
-                                          description: Key is the name of the sensitive config key.
-                                          type: string
-                                        secretKey:
-                                          description: |-
-                                            SecretKey is the name of the key within the secret given by SecretName.
-                                            The value is used as the value for the sensitive config key.
-                                          type: string
-                                        secretName:
-                                          description: |-
-                                            SecretName is the name of the secret, from which the config key should be loaded.
-                                            The secret must be in the same namespace.
-                                          type: string
-                                      required:
-                                        - key
-                                        - secretKey
-                                        - secretName
-                                      type: object
-                                    type: array
-                                type: object
-                            type: object
-                          description: Dogus contains Dogu specific configuration data which determine set-up and run behaviour.
+                                  required:
+                                    - key
+                                    - name
+                                  type: object
+                                value:
+                                  description: |-
+                                    Value is used for regular (non-sensitive) configuration entries
+                                    Mutually exclusive with SecretRef
+                                  type: string
+                              required:
+                                - key
+                              type: object
+                            type: array
+                          description: Dogus contains Dogu specific configuration entries
                           type: object
                         global:
-                          description: Global contains EcoSystem specific configuration data which determine set-up and run behaviour.
-                          properties:
-                            absent:
-                              description: Absent is a list of config keys which should be absent or get deleted.
-                              items:
+                          description: Global contains EcoSystem specific configuration entries
+                          items:
+                            description: ConfigEntry represents a single configuration entry that can be either regular or sensitive
+                            properties:
+                              absent:
+                                description: Absent indicates whether this key should be deleted (true) or set (false)
+                                type: boolean
+                              key:
+                                description: Key is the configuration key name
                                 type: string
-                              type: array
-                            present:
-                              additionalProperties:
+                              secretRef:
+                                description: |-
+                                  SecretRef is used for sensitive configuration entries
+                                  Mutually exclusive with Value
+                                properties:
+                                  key:
+                                    description: Key is the key within the secret
+                                    type: string
+                                  name:
+                                    description: Name is the name of the secret in the same namespace
+                                    type: string
+                                required:
+                                  - key
+                                  - name
+                                type: object
+                              value:
+                                description: |-
+                                  Value is used for regular (non-sensitive) configuration entries
+                                  Mutually exclusive with SecretRef
                                 type: string
-                              description: Present describes config keys which should be present or should be set otherwise.
-                              type: object
-                          type: object
+                            required:
+                              - key
+                            type: object
+                          type: array
                       type: object
                     dogus:
                       description: |-
@@ -372,76 +372,76 @@ spec:
                       properties:
                         dogus:
                           additionalProperties:
-                            description: CombinedDoguConfig states how a dogu should be configured.
-                            properties:
-                              config:
-                                description: |-
-                                  DoguConfig describes the config for this dogu.
-                                  Only use this config for entries, which need no special protection.
-                                  Otherwise, use SensitiveConfig instead.
-                                properties:
-                                  absent:
-                                    description: Absent is a list of config keys which should be absent or get deleted.
-                                    items:
+                            items:
+                              description: ConfigEntry represents a single configuration entry that can be either regular or sensitive
+                              properties:
+                                absent:
+                                  description: Absent indicates whether this key should be deleted (true) or set (false)
+                                  type: boolean
+                                key:
+                                  description: Key is the configuration key name
+                                  type: string
+                                secretRef:
+                                  description: |-
+                                    SecretRef is used for sensitive configuration entries
+                                    Mutually exclusive with Value
+                                  properties:
+                                    key:
+                                      description: Key is the key within the secret
                                       type: string
-                                    type: array
-                                  present:
-                                    additionalProperties:
+                                    name:
+                                      description: Name is the name of the secret in the same namespace
                                       type: string
-                                    description: Present describes config keys which should be present or should be set otherwise.
-                                    type: object
-                                type: object
-                              sensitiveConfig:
-                                description: |-
-                                  SensitiveConfig describes the sensitive config for this dogu.
-                                  In contrast to DoguConfig, this config can contain credentials, api keys licences etc.
-                                properties:
-                                  absent:
-                                    description: Absent is a list of config keys which should be absent or get deleted.
-                                    items:
-                                      type: string
-                                    type: array
-                                  present:
-                                    description: Present describes config keys which should be present or should be set otherwise.
-                                    items:
-                                      properties:
-                                        key:
-                                          description: Key is the name of the sensitive config key.
-                                          type: string
-                                        secretKey:
-                                          description: |-
-                                            SecretKey is the name of the key within the secret given by SecretName.
-                                            The value is used as the value for the sensitive config key.
-                                          type: string
-                                        secretName:
-                                          description: |-
-                                            SecretName is the name of the secret, from which the config key should be loaded.
-                                            The secret must be in the same namespace.
-                                          type: string
-                                      required:
-                                        - key
-                                        - secretKey
-                                        - secretName
-                                      type: object
-                                    type: array
-                                type: object
-                            type: object
-                          description: Dogus contains Dogu specific configuration data which determine set-up and run behaviour.
+                                  required:
+                                    - key
+                                    - name
+                                  type: object
+                                value:
+                                  description: |-
+                                    Value is used for regular (non-sensitive) configuration entries
+                                    Mutually exclusive with SecretRef
+                                  type: string
+                              required:
+                                - key
+                              type: object
+                            type: array
+                          description: Dogus contains Dogu specific configuration entries
                           type: object
                         global:
-                          description: Global contains EcoSystem specific configuration data which determine set-up and run behaviour.
-                          properties:
-                            absent:
-                              description: Absent is a list of config keys which should be absent or get deleted.
-                              items:
+                          description: Global contains EcoSystem specific configuration entries
+                          items:
+                            description: ConfigEntry represents a single configuration entry that can be either regular or sensitive
+                            properties:
+                              absent:
+                                description: Absent indicates whether this key should be deleted (true) or set (false)
+                                type: boolean
+                              key:
+                                description: Key is the configuration key name
                                 type: string
-                              type: array
-                            present:
-                              additionalProperties:
+                              secretRef:
+                                description: |-
+                                  SecretRef is used for sensitive configuration entries
+                                  Mutually exclusive with Value
+                                properties:
+                                  key:
+                                    description: Key is the key within the secret
+                                    type: string
+                                  name:
+                                    description: Name is the name of the secret in the same namespace
+                                    type: string
+                                required:
+                                  - key
+                                  - name
+                                type: object
+                              value:
+                                description: |-
+                                  Value is used for regular (non-sensitive) configuration entries
+                                  Mutually exclusive with SecretRef
                                 type: string
-                              description: Present describes config keys which should be present or should be set otherwise.
-                              type: object
-                          type: object
+                            required:
+                              - key
+                            type: object
+                          type: array
                       type: object
                     dogus:
                       description: |-
@@ -513,9 +513,6 @@ spec:
                         type: object
                       type: array
                   type: object
-                phase:
-                  description: Phase represents the processing state of the blueprint
-                  type: string
                 stateDiff:
                   description: |-
                     StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
@@ -596,72 +593,41 @@ spec:
                       type: object
                     doguConfigDiffs:
                       additionalProperties:
-                        properties:
-                          doguConfigDiff:
-                            items:
+                        description: ConfigDiff is a list of differences between Config in the Blueprint and the cluster state
+                        items:
+                          description: ConfigEntryDiff contains the difference and the needed actions for a single config key
+                          properties:
+                            actual:
+                              description: ConfigValueState represents either the actual or expected state of a config key
                               properties:
-                                actual:
-                                  properties:
-                                    exists:
-                                      type: boolean
-                                    value:
-                                      type: string
-                                  required:
-                                    - exists
-                                  type: object
-                                expected:
-                                  properties:
-                                    exists:
-                                      type: boolean
-                                    value:
-                                      type: string
-                                  required:
-                                    - exists
-                                  type: object
-                                key:
-                                  type: string
-                                neededAction:
+                                exists:
+                                  type: boolean
+                                value:
                                   type: string
                               required:
-                                - actual
-                                - expected
-                                - key
-                                - neededAction
+                                - exists
                               type: object
-                            type: array
-                          sensitiveDoguConfigDiff:
-                            items:
+                            expected:
+                              description: ConfigValueState represents either the actual or expected state of a config key
                               properties:
-                                actual:
-                                  properties:
-                                    exists:
-                                      type: boolean
-                                    value:
-                                      type: string
-                                  required:
-                                    - exists
-                                  type: object
-                                expected:
-                                  properties:
-                                    exists:
-                                      type: boolean
-                                    value:
-                                      type: string
-                                  required:
-                                    - exists
-                                  type: object
-                                key:
-                                  type: string
-                                neededAction:
+                                exists:
+                                  type: boolean
+                                value:
                                   type: string
                               required:
-                                - actual
-                                - expected
-                                - key
-                                - neededAction
+                                - exists
                               type: object
-                            type: array
-                        type: object
+                            key:
+                              type: string
+                            neededAction:
+                              type: string
+                          required:
+                            - actual
+                            - expected
+                            - key
+                            - neededAction
+                          type: object
+                        type: array
                       description: DoguConfigDiffs maps simple dogu names to the determined config diff.
                       type: object
                     doguDiffs:
@@ -791,10 +757,10 @@ spec:
                     globalConfigDiff:
                       description: GlobalConfigDiff is the difference between the GlobalConfig in the Blueprint and the cluster state.
                       items:
-                        description: GlobalConfigEntryDiff contains the difference and the needed actions for a single global config key
+                        description: ConfigEntryDiff contains the difference and the needed actions for a single config key
                         properties:
                           actual:
-                            description: GlobalConfigValueState represents either the actual or expected state of a global config key
+                            description: ConfigValueState represents either the actual or expected state of a config key
                             properties:
                               exists:
                                 type: boolean
@@ -804,7 +770,7 @@ spec:
                               - exists
                             type: object
                           expected:
-                            description: GlobalConfigValueState represents either the actual or expected state of a global config key
+                            description: ConfigValueState represents either the actual or expected state of a config key
                             properties:
                               exists:
                                 type: boolean

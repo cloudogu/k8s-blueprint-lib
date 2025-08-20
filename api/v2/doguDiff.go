@@ -11,14 +11,14 @@ type DoguDiff struct {
 // DoguDiffState is either the actual or desired state of a dogu in the cluster.
 type DoguDiffState struct {
 	// +optional
-	Namespace string `json:"namespace,omitempty"`
+	Namespace *string `json:"namespace,omitempty"`
 	// +optional
-	Version           string `json:"version,omitempty"`
-	InstallationState string `json:"installationState"`
+	Version           *string `json:"version,omitempty"`
+	InstallationState string  `json:"installationState"`
 	// +optional
-	ResourceConfig ResourceConfig `json:"resourceConfig,omitempty"`
+	ResourceConfig *ResourceConfig `json:"resourceConfig,omitempty"`
 	// +optional
-	ReverseProxyConfig ReverseProxyConfig `json:"reverseProxyConfig,omitempty"`
+	ReverseProxyConfig *ReverseProxyConfig `json:"reverseProxyConfig,omitempty"`
 	// +optional
 	AdditionalMounts []AdditionalMount `json:"additionalMounts,omitempty" patchStrategy:"replace"`
 }

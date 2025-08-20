@@ -16,7 +16,7 @@ type BlueprintManifest struct {
 	Components []Component `json:"components,omitempty"`
 	// Config is used for ecosystem configuration to be applied.
 	// +optional
-	Config Config `json:"config,omitempty"`
+	Config *Config `json:"config,omitempty"`
 }
 
 // BlueprintMask describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
