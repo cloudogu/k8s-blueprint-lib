@@ -34,9 +34,6 @@ type BlueprintInterface interface {
 	// Get takes name of the blueprint, and returns the corresponding blueprint object, and an error if there is any.
 	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v2.Blueprint, error)
 
-	// List takes label and field selectors, and returns the list of Blueprints that match those selectors.
-	List(ctx context.Context, opts metav1.ListOptions) (*v2.BlueprintList, error)
-
 	// Watch returns a watch.Interface that watches the requested blueprints.
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
 
@@ -57,23 +54,6 @@ func (d *blueprintClient) Get(ctx context.Context, name string, options metav1.G
 		Resource(resourceName).
 		Name(name).
 		VersionedParams(&options, scheme.ParameterCodec).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-// List takes label and field selectors, and returns the list of Blueprints that match those selectors.
-func (d *blueprintClient) List(ctx context.Context, opts metav1.ListOptions) (result *v2.BlueprintList, err error) {
-	var timeout time.Duration
-	if opts.TimeoutSeconds != nil {
-		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
-	}
-	result = &v2.BlueprintList{}
-	err = d.client.Get().
-		Namespace(d.ns).
-		Resource(resourceName).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Timeout(timeout).
 		Do(ctx).
 		Into(result)
 	return

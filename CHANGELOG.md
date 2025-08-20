@@ -17,6 +17,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#7] **Breaking** flatten config structure to be less hierarchical
 - [#7] **Breaking** use conditions instead of status phases
 
+### Removed
+- [#7] BlueprintList-type, because Blueprints are now singletons per namespace
+
 ## [v1.3.0] - 2025-06-04
 ### Added
 - [#3] blueprints now support additionalMounts for configMaps and secrets in dogus

@@ -39,17 +39,7 @@ type Blueprint struct {
 	Spec BlueprintSpec `json:"spec,omitempty"`
 	// Status defines the observed state of the Blueprint.
 	// +optional
-	Status BlueprintStatus `json:"status,omitempty"`
-}
-
-// +kubebuilder:object:root=true
-
-// BlueprintList contains a list of Blueprint
-type BlueprintList struct {
-	metav1.TypeMeta `json:",inline"`
-	// +optional
-	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []Blueprint `json:"items"`
+	Status *BlueprintStatus `json:"status,omitempty"`
 }
 
 // BlueprintSpec defines the desired state of Blueprint
@@ -89,5 +79,5 @@ type BlueprintStatus struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Blueprint{}, &BlueprintList{})
+	SchemeBuilder.Register(&Blueprint{})
 }

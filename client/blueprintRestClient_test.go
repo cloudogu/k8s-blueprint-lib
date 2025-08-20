@@ -54,39 +54,6 @@ func Test_blueprintClient_Get(t *testing.T) {
 	})
 }
 
-func Test_blueprintClient_List(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		// given
-		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			assert.Equal(t, http.MethodGet, request.Method)
-			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
-			assert.Equal(t, http.NoBody, request.Body)
-
-			writer.Header().Add("content-type", "application/json")
-			blueprintList := bpv2.BlueprintList{}
-			blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
-			blueprintList.Items = append(blueprintList.Items, *blueprint)
-			blueprintBytes, err := json.Marshal(blueprintList)
-			require.NoError(t, err)
-			_, err = writer.Write(blueprintBytes)
-			require.NoError(t, err)
-		}))
-
-		config := rest.Config{
-			Host: server.URL,
-		}
-		client, err := newForConfig(&config)
-		require.NoError(t, err)
-		dClient := client.Blueprints("test")
-
-		// when
-		_, err = dClient.List(testCtx, v1.ListOptions{})
-
-		// then
-		require.NoError(t, err)
-	})
-}
-
 func Test_blueprintClient_Watch(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
