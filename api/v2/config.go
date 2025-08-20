@@ -1,65 +1,70 @@
 package v2
 
+import "fmt"
+
 // Config contains Dogu and Cloudogu EcoSystem specific configuration data which determine set-up and run
-// behaviour respectively.
+// behavior respectively.
 type Config struct {
-	// Dogus contains Dogu specific configuration data which determine set-up and run behaviour.
+	// Dogus contains Dogu specific configuration entries
 	// +optional
-	Dogus map[string]CombinedDoguConfig `json:"dogus,omitempty"`
-	// Global contains EcoSystem specific configuration data which determine set-up and run behaviour.
+	Dogus map[string][]ConfigEntry `json:"dogus,omitempty"`
+	// Global contains EcoSystem specific configuration entries
 	// +optional
-	Global GlobalConfig `json:"global,omitempty"`
+	Global []ConfigEntry `json:"global,omitempty"`
 }
 
-// CombinedDoguConfig states how a dogu should be configured.
-type CombinedDoguConfig struct {
-	// DoguConfig describes the config for this dogu.
-	// Only use this config for entries, which need no special protection.
-	// Otherwise, use SensitiveConfig instead.
-	// +optional
-	Config *DoguConfig `json:"config,omitempty"`
-	// SensitiveConfig describes the sensitive config for this dogu.
-	// In contrast to DoguConfig, this config can contain credentials, api keys licences etc.
-	// +optional
-	SensitiveConfig *SensitiveDoguConfig `json:"sensitiveConfig,omitempty"`
-}
-
-type DoguConfig presentAbsentConfig
-
-type SensitiveDoguConfig PresentAbsentSensitiveConfig
-
-type GlobalConfig presentAbsentConfig
-
-type presentAbsentConfig struct {
-	// Present describes config keys which should be present or should be set otherwise.
-	// +optional
-	Present map[string]string `json:"present,omitempty"`
-	// Absent is a list of config keys which should be absent or get deleted.
-	// +optional
-	Absent []string `json:"absent,omitempty"`
-}
-
-// PresentAbsentSensitiveConfig describes which sensitive config should be present or absent.
-// +optional
-type PresentAbsentSensitiveConfig struct {
-	// Present describes config keys which should be present or should be set otherwise.
-	// +optional
-	Present []SensitiveConfigEntry `json:"present,omitempty"`
-	// Absent is a list of config keys which should be absent or get deleted.
-	// +optional
-	Absent []string `json:"absent,omitempty"`
-}
-
-type SensitiveConfigEntry struct {
-	// Key is the name of the sensitive config key.
+// ConfigEntry represents a single configuration entry that can be either regular or sensitive
+type ConfigEntry struct {
+	// Key is the configuration key name
 	// +required
 	Key string `json:"key"`
-	// SecretName is the name of the secret, from which the config key should be loaded.
-	// The secret must be in the same namespace.
+
+	// Absent indicates whether this key should be deleted (true) or set (false)
+	// +optional
+	Absent bool `json:"absent,omitempty"`
+
+	// Value is used for regular (non-sensitive) configuration entries
+	// Mutually exclusive with SecretRef
+	// +optional
+	Value *string `json:"value,omitempty"`
+
+	// SecretRef is used for sensitive configuration entries
+	// Mutually exclusive with Value
+	// +optional
+	SecretRef *SecretReference `json:"secretRef,omitempty"`
+}
+
+// SecretReference points to a value in a Kubernetes secret
+type SecretReference struct {
+	// Name is the name of the secret in the same namespace
 	// +required
-	SecretName string `json:"secretName"`
-	// SecretKey is the name of the key within the secret given by SecretName.
-	// The value is used as the value for the sensitive config key.
+	Name string `json:"name"`
+	// Key is the key within the secret
 	// +required
-	SecretKey string `json:"secretKey"`
+	Key string `json:"key"`
+}
+
+// Validate ensures ConfigEntry has valid state
+func (c *ConfigEntry) Validate() error {
+	if c.Absent {
+		if c.Value != nil || c.SecretRef != nil {
+			return fmt.Errorf("absent entries cannot have value or secretRef")
+		}
+		return nil
+	}
+
+	// For present entries, exactly one of Value or SecretRef must be set
+	hasValue := c.Value != nil
+	hasSecretRef := c.SecretRef != nil
+
+	if hasValue != hasSecretRef {
+		return fmt.Errorf("config entries can have either a value or a secretRef")
+	}
+
+	return nil
+}
+
+// IsSensitive returns true if this is a sensitive config entry
+func (c *ConfigEntry) IsSensitive() bool {
+	return c.SecretRef != nil
 }

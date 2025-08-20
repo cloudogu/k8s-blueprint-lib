@@ -41,14 +41,15 @@ func TestDeployConfig_DeepCopy(t *testing.T) {
 		})
 		t.Run("mutation of one DeployConfig should not mutate a copy", func(t *testing.T) {
 			// given
-			input := &DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
-				Absent: []string{"redmineKeyToBeDeleted"},
-			}}}
+			input := &DeployConfig{"redmine": ConfigEntry{
+				Key:    "redmineKeyToBeDeleted",
+				Absent: true,
+			}}
 
 			// when
 			actual := input.DeepCopy()
 			mappedInput := unaliasDeployConfig(t, *input)
-			mappedInput["redmine"] = CombinedDoguConfig{Config: nil} // overwrite ALL the things \o/
+			mappedInput["redmine"] = ConfigEntry{} // overwrite ALL the things \o/
 
 			// then
 			_ = unaliasDeployConfig(t, *actual)
@@ -73,9 +74,10 @@ func TestComponent_DeepCopyInto(t *testing.T) {
 	})
 	t.Run("should copy simple component", func(t *testing.T) {
 		// given
-		inputDeployConfig := DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
-			Absent: []string{"redmineKeyToBeDeleted"},
-		}}}
+		inputDeployConfig := DeployConfig{"redmine": ConfigEntry{
+			Key:    "redmineKeyToBeDeleted",
+			Absent: true,
+		}}
 		input := Component{
 			Name:         "k8s/my-comp",
 			Version:      "1.2.3",
@@ -94,9 +96,10 @@ func TestComponent_DeepCopyInto(t *testing.T) {
 			Name:    "k8s/my-comp",
 			Version: "1.2.3",
 			Absent:  true,
-			DeployConfig: DeployConfig{"redmine": CombinedDoguConfig{Config: &DoguConfig{
-				Absent: []string{"redmineKeyToBeDeleted"},
-			}}},
+			DeployConfig: DeployConfig{"redmine": ConfigEntry{
+				Key:    "redmineKeyToBeDeleted",
+				Absent: true,
+			}},
 		}
 		// types get sadly unaliased. Check the values here instead
 		assert.Equal(t, expected.Name, actual.Name)
