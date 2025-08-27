@@ -152,8 +152,8 @@ func (in *BlueprintSpec) DeepCopyInto(out *BlueprintSpec) {
 		*out = new(bool)
 		**out = **in
 	}
-	if in.DryRun != nil {
-		in, out := &in.DryRun, &out.DryRun
+	if in.Stopped != nil {
+		in, out := &in.Stopped, &out.Stopped
 		*out = new(bool)
 		**out = **in
 	}

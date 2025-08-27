@@ -25,14 +25,13 @@ const (
 // +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.conditions['Completed']['status']",description="Whether the resource is completed in the current state"
-// +kubebuilder:printcolumn:name="DryRun",type="boolean",JSONPath=".spec.dryRun",description="Whether the resource is started as a dry run"
+// +kubebuilder:printcolumn:name="Stopped",type="boolean",JSONPath=".spec.stopped",description="Whether the resource is started as a dry run"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 
 // Blueprint is the Schema for the blueprints API
 type Blueprint struct {
-	metav1.TypeMeta `json:",inline"`
-	// +optional
-	*metav1.ObjectMeta `json:"metadata,omitempty"`
+	metav1.TypeMeta   `json:",inline"`
+	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec defines the desired state of the Blueprint.
 	// +optional
@@ -60,9 +59,9 @@ type BlueprintSpec struct {
 	// in comparison to the blueprint.
 	// +optional
 	AllowDoguNamespaceSwitch *bool `json:"allowDoguNamespaceSwitch,omitempty"`
-	// DryRun lets the user test a blueprint run to check if all attributes of the blueprint are correct and avoid a result with a failure state.
+	// Stopped lets the user stop the blueprint execution. The blueprint will still check if all attributes are correct and avoid a result with a failure state.
 	// +optional
-	DryRun *bool `json:"dryRun,omitempty"`
+	Stopped *bool `json:"stopped,omitempty"`
 }
 
 // BlueprintStatus defines the observed state of Blueprint

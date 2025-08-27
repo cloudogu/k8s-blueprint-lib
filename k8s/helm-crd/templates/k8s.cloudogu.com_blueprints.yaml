@@ -25,8 +25,8 @@ spec:
           name: Completed
           type: boolean
         - description: Whether the resource is started as a dry run
-          jsonPath: .spec.dryRun
-          name: DryRun
+          jsonPath: .spec.stopped
+          name: Stopped
           type: boolean
         - description: The age of the resource
           jsonPath: .metadata.creationTimestamp
@@ -263,14 +263,14 @@ spec:
                         type: object
                       type: array
                   type: object
-                dryRun:
-                  description: DryRun lets the user test a blueprint run to check if all attributes of the blueprint are correct and avoid a result with a failure state.
-                  type: boolean
                 ignoreComponentHealth:
                   description: IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
                   type: boolean
                 ignoreDoguHealth:
                   description: IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
+                  type: boolean
+                stopped:
+                  description: Stopped lets the user stop the blueprint execution. The blueprint will still check if all attributes are correct and avoid a result with a failure state.
                   type: boolean
               required:
                 - blueprint
