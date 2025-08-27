@@ -45,6 +45,7 @@ type Blueprint struct {
 // BlueprintSpec defines the desired state of Blueprint
 type BlueprintSpec struct {
 	// Blueprint json with the desired state of the ecosystem.
+	// +required
 	Blueprint BlueprintManifest `json:"blueprint"`
 	// BlueprintMask json can further restrict the desired state from the blueprint.
 	// +optional

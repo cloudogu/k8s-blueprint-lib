@@ -7,9 +7,11 @@ import (
 
 type Component struct {
 	// Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
+	// +required
 	Name string `json:"name"`
 	// Version defines the version of the component that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
+	// +required
 	Version string `json:"version"`
 	// Absent defines if the component should be absent in the ecosystem. Defaults to false.
 	// +optional

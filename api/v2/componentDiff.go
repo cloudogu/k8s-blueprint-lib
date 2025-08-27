@@ -4,10 +4,13 @@ package v2
 // It contains the operation that needs to be done to achieve this desired state.
 type ComponentDiff struct {
 	// Actual contains the component's state in the current system.
+	// +required
 	Actual ComponentDiffState `json:"actual"`
 	// Expected contains the desired component's target state.
+	// +required
 	Expected ComponentDiffState `json:"expected"`
 	// NeededActions contains the necessary actions to apply the wanted state for this component.
+	// +required
 	NeededActions []ComponentAction `json:"neededActions"`
 }
 
@@ -26,6 +29,7 @@ type ComponentDiffState struct {
 	//  - domain.ActionInstall
 	//  - domain.ActionUninstall
 	//  - and so on
+	// +required
 	InstallationState string `json:"installationState"`
 	// DeployConfig contains generic properties for the component.
 	// +kubebuilder:pruning:PreserveUnknownFields

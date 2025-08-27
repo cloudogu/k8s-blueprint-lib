@@ -9,9 +9,11 @@ import (
 // You cannot add dogus which are not yet in the blueprint.
 type MaskDogu struct {
 	// Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
+	// +required
 	Name string `json:"name"`
 	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
+	// +required
 	Version string `json:"version"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
 	// +optional
@@ -85,10 +87,13 @@ type AdditionalMount struct {
 	// Valid options are:
 	//   ConfigMap - data stored in a kubernetes ConfigMap.
 	//   Secret - data stored in a kubernetes Secret.
+	// +required
 	SourceType DataSourceType `json:"sourceType"`
 	// Name is the name of the data source.
+	// +required
 	Name string `json:"name"`
 	// Volume is the name of the volume to which the data should be mounted. It is defined in the respective dogu.json.
+	// +required
 	Volume string `json:"volume"`
 	// Subfolder defines a subfolder in which the data should be put within the volume.
 	// +optional
