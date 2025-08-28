@@ -2,62 +2,10 @@ package v2
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
 	"testing"
-)
 
-func TestConfigEntry_IsSensitive(t *testing.T) {
-	testValue := "testValue"
-	truePtr := true
-	type fields struct {
-		Key       string
-		Absent    *bool
-		Value     *string
-		SecretRef *SecretReference
-	}
-	tests := []struct {
-		name   string
-		fields fields
-		want   bool
-	}{
-		{
-			name: "Without SecretRef is not sensitive",
-			fields: fields{
-				Key:   "testKey",
-				Value: &testValue,
-			},
-			want: false,
-		},
-		{
-			name: "With SecretRef is sensitive",
-			fields: fields{
-				Key:       "testKey",
-				SecretRef: &SecretReference{Name: "testSecret"},
-			},
-			want: true,
-		},
-		{
-			name: "Absent with secretRef is sensitive",
-			fields: fields{
-				Key:       "testKey",
-				Absent:    &truePtr,
-				SecretRef: &SecretReference{Name: "testSecret"},
-			},
-			want: true,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			c := &ConfigEntry{
-				Key:       tt.fields.Key,
-				Absent:    tt.fields.Absent,
-				Value:     tt.fields.Value,
-				SecretRef: tt.fields.SecretRef,
-			}
-			assert.Equalf(t, tt.want, c.IsSensitive(), "IsSensitive()")
-		})
-	}
-}
+	"github.com/stretchr/testify/assert"
+)
 
 func TestConfigEntry_Validate(t *testing.T) {
 	testValue := "testValue"

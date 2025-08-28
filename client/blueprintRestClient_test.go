@@ -32,7 +32,7 @@ func Test_blueprintClient_Get(t *testing.T) {
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
-			blueprint := &bpv2.Blueprint{ObjectMeta: &v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
+			blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
 			blueprintBytes, err := json.Marshal(blueprint)
 			require.NoError(t, err)
 			_, err = writer.Write(blueprintBytes)
@@ -86,7 +86,7 @@ func Test_blueprintClient_Watch(t *testing.T) {
 func Test_blueprintClient_Create(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv2.Blueprint{ObjectMeta: &v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPost, request.Method)
@@ -122,7 +122,7 @@ func Test_blueprintClient_Create(t *testing.T) {
 func Test_blueprintClient_Update(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv2.Blueprint{ObjectMeta: &v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
@@ -158,7 +158,7 @@ func Test_blueprintClient_Update(t *testing.T) {
 func Test_blueprintClient_UpdateStatus(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv2.Blueprint{ObjectMeta: &v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)

@@ -37,11 +37,7 @@ func (in *AdditionalMount) DeepCopy() *AdditionalMount {
 func (in *Blueprint) DeepCopyInto(out *Blueprint) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
-	if in.ObjectMeta != nil {
-		in, out := &in.ObjectMeta, &out.ObjectMeta
-		*out = new(v1.ObjectMeta)
-		(*in).DeepCopyInto(*out)
-	}
+	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
 	if in.Spec != nil {
 		in, out := &in.Spec, &out.Spec
 		*out = new(BlueprintSpec)
@@ -246,6 +242,11 @@ func (in *ComponentDiffState) DeepCopyInto(out *ComponentDiffState) {
 		*out = new(string)
 		**out = **in
 	}
+	if in.Absent != nil {
+		in, out := &in.Absent, &out.Absent
+		*out = new(bool)
+		**out = **in
+	}
 	in.DeployConfig.DeepCopyInto(&out.DeployConfig)
 }
 
@@ -331,6 +332,11 @@ func (in *ConfigEntry) DeepCopyInto(out *ConfigEntry) {
 	if in.Value != nil {
 		in, out := &in.Value, &out.Value
 		*out = new(string)
+		**out = **in
+	}
+	if in.Sensitive != nil {
+		in, out := &in.Sensitive, &out.Sensitive
+		*out = new(bool)
 		**out = **in
 	}
 	if in.SecretRef != nil {
@@ -420,6 +426,11 @@ func (in *DoguDiffState) DeepCopyInto(out *DoguDiffState) {
 	if in.Version != nil {
 		in, out := &in.Version, &out.Version
 		*out = new(string)
+		**out = **in
+	}
+	if in.Absent != nil {
+		in, out := &in.Absent, &out.Absent
+		*out = new(bool)
 		**out = **in
 	}
 	if in.ResourceConfig != nil {

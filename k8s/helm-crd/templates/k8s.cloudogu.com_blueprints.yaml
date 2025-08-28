@@ -119,6 +119,9 @@ spec:
                                     - key
                                     - name
                                   type: object
+                                sensitive:
+                                  description: Sensitive indicates whether this config is sensitive and should be stored securely (true) or not (false)
+                                  type: boolean
                                 value:
                                   description: |-
                                     Value is used for regular (non-sensitive) configuration entries
@@ -156,6 +159,9 @@ spec:
                                   - key
                                   - name
                                 type: object
+                              sensitive:
+                                description: Sensitive indicates whether this config is sensitive and should be stored securely (true) or not (false)
+                                type: boolean
                               value:
                                 description: |-
                                   Value is used for regular (non-sensitive) configuration entries
@@ -396,6 +402,9 @@ spec:
                                     - key
                                     - name
                                   type: object
+                                sensitive:
+                                  description: Sensitive indicates whether this config is sensitive and should be stored securely (true) or not (false)
+                                  type: boolean
                                 value:
                                   description: |-
                                     Value is used for regular (non-sensitive) configuration entries
@@ -433,6 +442,9 @@ spec:
                                   - key
                                   - name
                                 type: object
+                              sensitive:
+                                description: Sensitive indicates whether this config is sensitive and should be stored securely (true) or not (false)
+                                type: boolean
                               value:
                                 description: |-
                                   Value is used for regular (non-sensitive) configuration entries
@@ -527,6 +539,9 @@ spec:
                           actual:
                             description: Actual contains the component's state in the current system.
                             properties:
+                              absent:
+                                description: Absent defines if the component should be absent in the ecosystem. Defaults to false.
+                                type: boolean
                               deployConfig:
                                 description: DeployConfig contains generic properties for the component.
                                 x-kubernetes-preserve-unknown-fields: true
@@ -535,24 +550,16 @@ spec:
                                   Namespace is part of the address under which the component will be obtained. This namespace must NOT
                                   to be confused with the K8s cluster namespace.
                                 type: string
-                              installationState:
-                                description: |-
-                                  InstallationState contains the component's installation state. Such a state correlate with the domain Actions:
-
-
-                                   - domain.ActionInstall
-                                   - domain.ActionUninstall
-                                   - and so on
-                                type: string
                               version:
                                 description: Version contains the component's version.
                                 type: string
-                            required:
-                              - installationState
                             type: object
                           expected:
                             description: Expected contains the desired component's target state.
                             properties:
+                              absent:
+                                description: Absent defines if the component should be absent in the ecosystem. Defaults to false.
+                                type: boolean
                               deployConfig:
                                 description: DeployConfig contains generic properties for the component.
                                 x-kubernetes-preserve-unknown-fields: true
@@ -561,20 +568,9 @@ spec:
                                   Namespace is part of the address under which the component will be obtained. This namespace must NOT
                                   to be confused with the K8s cluster namespace.
                                 type: string
-                              installationState:
-                                description: |-
-                                  InstallationState contains the component's installation state. Such a state correlate with the domain Actions:
-
-
-                                   - domain.ActionInstall
-                                   - domain.ActionUninstall
-                                   - and so on
-                                type: string
                               version:
                                 description: Version contains the component's version.
                                 type: string
-                            required:
-                              - installationState
                             type: object
                           neededActions:
                             description: NeededActions contains the necessary actions to apply the wanted state for this component.
@@ -639,6 +635,8 @@ spec:
                           actual:
                             description: DoguDiffState is either the actual or desired state of a dogu in the cluster.
                             properties:
+                              absent:
+                                type: boolean
                               additionalMounts:
                                 items:
                                   description: AdditionalMount is a description of what data should be mounted to a specific Dogu volume (already defined in dogu.json).
@@ -665,8 +663,6 @@ spec:
                                     - volume
                                   type: object
                                 type: array
-                              installationState:
-                                type: string
                               namespace:
                                 type: string
                               resourceConfig:
@@ -685,12 +681,12 @@ spec:
                                 type: object
                               version:
                                 type: string
-                            required:
-                              - installationState
                             type: object
                           expected:
                             description: DoguDiffState is either the actual or desired state of a dogu in the cluster.
                             properties:
+                              absent:
+                                type: boolean
                               additionalMounts:
                                 items:
                                   description: AdditionalMount is a description of what data should be mounted to a specific Dogu volume (already defined in dogu.json).
@@ -717,8 +713,6 @@ spec:
                                     - volume
                                   type: object
                                 type: array
-                              installationState:
-                                type: string
                               namespace:
                                 type: string
                               resourceConfig:
@@ -737,8 +731,6 @@ spec:
                                 type: object
                               version:
                                 type: string
-                            required:
-                              - installationState
                             type: object
                           neededActions:
                             items:
