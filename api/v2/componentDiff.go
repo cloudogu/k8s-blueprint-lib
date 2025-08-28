@@ -24,13 +24,9 @@ type ComponentDiffState struct {
 	// Version contains the component's version.
 	// +optional
 	Version *string `json:"version,omitempty"`
-	// InstallationState contains the component's installation state. Such a state correlate with the domain Actions:
-	//
-	//  - domain.ActionInstall
-	//  - domain.ActionUninstall
-	//  - and so on
-	// +required
-	InstallationState string `json:"installationState"`
+	// Absent defines if the component should be absent in the ecosystem. Defaults to false.
+	// +optional
+	Absent *bool `json:"absent,omitempty"`
 	// DeployConfig contains generic properties for the component.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless

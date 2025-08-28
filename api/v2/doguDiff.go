@@ -17,8 +17,8 @@ type DoguDiffState struct {
 	Namespace *string `json:"namespace,omitempty"`
 	// +optional
 	Version *string `json:"version,omitempty"`
-	// +required
-	InstallationState string `json:"installationState"`
+	// +optional
+	Absent *bool `json:"absent,omitempty"`
 	// +optional
 	ResourceConfig *ResourceConfig `json:"resourceConfig,omitempty"`
 	// +optional
