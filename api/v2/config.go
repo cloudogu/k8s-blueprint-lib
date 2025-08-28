@@ -28,6 +28,10 @@ type ConfigEntry struct {
 	// +optional
 	Value *string `json:"value,omitempty"`
 
+	// Sensitive indicates whether this config is sensitive and should be stored securely (true) or not (false)
+	// +optional
+	Sensitive *bool `json:"sensitive,omitempty"`
+
 	// SecretRef is used for sensitive configuration entries
 	// Mutually exclusive with Value
 	// +optional
@@ -62,9 +66,4 @@ func (c *ConfigEntry) Validate() error {
 	}
 
 	return nil
-}
-
-// IsSensitive returns true if this is a sensitive config entry
-func (c *ConfigEntry) IsSensitive() bool {
-	return c.SecretRef != nil
 }
