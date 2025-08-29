@@ -11,7 +11,7 @@ All fields of the blueprint are described below and illustrated with examples.
 * Required
 * Data type: string
 * Content: The `blueprintApi` field specifies the API version of the blueprint.
-* Example: `"blueprintApi": "v2"`
+* Example: `blueprintApi: "v2"`
 
 ## Dogus
 
@@ -20,13 +20,9 @@ All fields of the blueprint are described below and illustrated with examples.
 * Content: The `dogus` field is a list of Dogus and describes the status of the Dogus in the system.
 * Example:
 ```
-"dogus": [
-  {
-    "name": "official/postgresql",
-    "targetState": "present",
-    "version": "12.15-2"
-  }
-]
+dogus:
+  - name: official/mysql
+    version: 8.4.6-1
 ```
 
 ### Dogu
@@ -38,21 +34,20 @@ A Dogu can contain the following fields:
 * Required
 * Data type: string
 * Content: Specifies the name including the namespace of the Dogu.
-* Example: `"name": "official/cas"`
+* Example: `name: "official/cas"`
 
-#### TargetState
+#### Absent
 
-* Required
-* Data type: string
-* Content: Specifies whether a Dogu should be present or not.
-* Example: `"targetState": "present"` or `"targetState": "absent"`
+* Data type: boolean
+* Content: Specifies whether a Dogu should be ommitted.
+* Example: `absent: true`
 
 #### Version
 
-* Optional for `targetState=absent`. Required for `targetState=present`.
+* Optional for `absent=true`. Otherwise `version` is required.
 * Data type: string
 * Content: Specifies the version of the Dogu.
-* Example: `"version": "12.15-2"`
+* Example: `version: "12.15-2"`
 
 #### PlatformConfig
 
@@ -66,18 +61,12 @@ This configuration can be used to define resources and reverse proxy configurati
 * Content: Specifies the minimum volume size of a Dogu. If the current volume is smaller, a volume increase is performed. The unit must be specified with the binary prefix (e.g. `Mi` or `Gi`).
 * Example:
 ```
-"dogus": [
-  {
-    "name": "official/nexus",
-    "targetState": "present",
-    "version":"3.59.0-2",
-    "platformConfig": {
-      "resource": {
-        "minVolumeSize": "5Gi"
-      }
-    }
-  }
-]
+dogus: 
+  name: "official/nexus"
+  version: "3.59.0-2"
+  platformConfig: 
+    resource: 
+      minVolumeSize: "5Gi"
 ```
 
 > The Dogu-Operator creates Dogus with 2Gi volumes. The Nexus Dogu requires a larger volume and must be configured via this entry.
@@ -91,18 +80,12 @@ This configuration can be used to define resources and reverse proxy configurati
 * Content: Specifies the maximum file size for HTTP request (`0`=unlimited). The unit must be specified with the decimal prefix (e.g. `M` or `G`).
 * Example:
 ```
-"dogus": [
-  {
-    "name": "official/nexus",
-    "targetState": "present",
-    "version":"3.59.0-2",
-    "platformConfig": {
-      "reverseProxy": {
-        "maxBodySize": "1G"
-      }
-    }
-  }
-]
+dogus:
+  name: "official/nexus"
+  version: "3.59.0-2"
+  platformConfig: 
+    reverseProxy: 
+      maxBodySize: "1G"
 ```
 
 ##### ReverseProxy.rewriteTarget
@@ -112,18 +95,12 @@ This configuration can be used to define resources and reverse proxy configurati
 * Content: Defines a rewrite target.
 * Example:
 ```
-"dogus": [
-  {
-    "name": "official/postgresql",
-    "targetState": "present",
-    "version": "12.15-2",
-    "platformConfig": {
-      "reverseProxy": {
-        "rewriteTarget": "/"
-      }
-    }
-  }
-]
+dogus:
+  name: "official/postgresql"
+  version: "12.15-2"
+  platformConfig: 
+    reverseProxy: 
+      rewriteTarget: "/"
 ```
 
 ##### ReverseProxy.additionalConfig
@@ -133,18 +110,12 @@ This configuration can be used to define resources and reverse proxy configurati
 * Content: Adds any additional proxy configuration.
 * Example:
 ```
-"dogus": [
-  {
-    "name": "official/postgresql",
-    "targetState": "present",
-    "version": "12.15-2",
-    "platformConfig": {
-      "reverseProxy": {
-        "additionalConfig": "<config>"
-      }
-    }
-  }
-]
+dogus:
+  name: "official/postgresql"
+  version: "12.15-2"
+  platformConfig: 
+    reverseProxy: 
+      additionalConfig: "<config>"
 ```
 
 ##### AdditionalMounts
@@ -154,19 +125,18 @@ This configuration can be used to define resources and reverse proxy configurati
 * Contents: The field `additionalDataMounts` is a list that contains elements of type `AdditionalMount`.
 * Example:
 ```
-"dogus": [
-  {
-    "name": "official/nginx-static",
-    "targetState": "present",
-    "version":"1.26.3-2",
-    "platformConfig": {
-      "additionalMounts": [
-        {"sourceType": "ConfigMap", "name": "my-html-configmap", "volume": "customhtml", "subfolder": "about"},
-        {"sourceType": "Secret", "my-ssh-key-secret", "volume": "private_data"}
-      ]
-    }
-  }
-]
+dogus:
+  name: "official/nginx-static"
+  version: "1.26.3-2"
+  platformConfig: 
+    additionalMounts: 
+      - sourceType: "ConfigMap"
+        name: "my-html-configmap"
+        volume: "customhtml"
+        subfolder: "about"
+      - sourceType: "Secret" 
+        name: "my-ssh-key-secret"
+        volume: "private_data"
 ```
 
 ###### AdditionalMount
@@ -182,28 +152,28 @@ This configuration can be used to define resources and reverse proxy configurati
   Valid options are:
     - ConfigMap - Data stored in a kubernetes ConfigMap.
     - Secret - Data stored in a kubernetes Secret.
-* Example: `"sourceType": "ConfigMap"`.
+* Example: `sourceType: ConfigMap`
 
 ###### AdditionalMount.Name
 
 * Mandatory field
 * Data type: String
 * Content: Name is the name of the data source.
-* Example: `"name": "my-configmap"`
+* Example: `name: my-configmap`
 
 ###### AdditionalMount.Volume
 
 * Mandatory field
 * Data type: String
 * Content: Volume is the name of the volume in which the data should be mounted. This is defined in the respective dogu.json file.
-* Example: `"volume": "importHistory"`.
+* Example: `volume: importHistory`
 
 ###### AdditionalMount.Subfolder
 
 * Optional
 * Data type: String
 * Content: Subfolder defines a subfolder in which the data is to be stored within the volume.
-* Example: `"subfolder": "my-configmap-subfolder"`
+* Example: `subfolder: "my-configmap-subfolder"`
 
 ## Components
 
@@ -212,18 +182,11 @@ This configuration can be used to define resources and reverse proxy configurati
 * Contents: The `components` field is a list of components and describes the status of the components in the system.
 * Example:
 ```
-"components": [
-  {
-    "name": "k8s/k8s-dogu-operator",
-    "targetState": "present",
-    "version": "1.0.1"
-  },
-  {
-    "name": "k8s/k8s-dogu-operator-crd",
-    "targetState": "present",
-    "version": "1.0.1"
-  }
-}
+components:
+  - name: "k8s/k8s-dogu-operator"
+    version: "1.0.1"
+  - name: "k8s/k8s-dogu-operator-crd"
+    version: "1.0.1"
 ```
 
 ### Component
@@ -235,21 +198,20 @@ A component can contain the following fields:
 * Required
 * Data type: string
 * Content: Specifies the name including the namespace of the component.
-* Example: `"name": "k8s/k8s-dogu-operator"`
+* Example: `name: "k8s/k8s-dogu-operator"`
 
-#### TargetState
+#### Absent
 
-* Required
-* Data type: string
-* Content: Specifies whether a component should be present or not.
-* Example: `"targetState": "present"` or `"targetState": "absent"`
+* Data type: boolean
+* Content: Specifies whether a component should be ommitted.
+* Example: `absent: true`
 
 #### Version
 
-* Optional for `targetState=absent`. Required for `targetState=present`.
+* Optional for `absent: true`. Otherwise `version` is required.
 * Data type: string
 * Content: Specifies the version of the component.
-* Example: `"version": "12.15-2"`
+* Example: `version: "12.15-2"`
 
 #### DeployConfig
 
@@ -262,16 +224,11 @@ This configuration can be used to define certain fields of the component CR and 
 * Content: Specifies the namespace in which the component is to be installed. This configuration is currently only required for the component `k8s/longhorn`.
 * Example:
 ```
-"components": [
-  {
-    "name": "k8s/k8s-longhorn",
-    "targetState": "present",
-    "version": "1.5.1-4",
-    "deployConfig":{
-      "deployNamespace": "longhorn-system"
-    }
-  }
-]
+components:
+  name: "k8s/k8s-longhorn"
+  version: "1.5.1-4"
+  deployConfig:
+    deployNamespace: "longhorn-system"
 ```
 
 ##### deployConfig.overwriteConfig
@@ -281,23 +238,15 @@ This configuration can be used to define certain fields of the component CR and 
 * Content: Defines additional configurations (Helm values) for the component.
 * Example:
 ```
-"components": [
-  {
-    "name": "k8s/k8s-longhorn",
-    "targetState": "present",
-    "version": "1.5.1-4",
-    "deployConfig":{
-      "overwriteConfig":{
-        "longhorn":{
-          "defaultSettings":{
-            "backupTarget": "s3://longhorn@dummyregion/",
-            "backupTargetCredentialSecret": "longhorn-backup-target"
-          }
-        }
-      }
-    }
-  }
-]
+components:
+  name: "k8s/k8s-longhorn"
+  version: "1.5.1-4"
+  deployConfig:
+    overwriteConfig:
+      longhorn:
+        defaultSettings:
+          backupTarget: "s3://longhorn@dummyregion/"
+          backupTargetCredentialSecret: "longhorn-backup-target"
 ```
 
 ## Config
@@ -305,117 +254,79 @@ This configuration can be used to define certain fields of the component CR and 
 The `config` field can be used to edit global and Dogu-specific configurations of the EcoSystem registry.
 It is also possible to save configurations for Dogus in encrypted form.
 
-### global.present
+### global
 
 * Optional
-* Data type: map[string]string
+* Data type: Array<configEntry>
 * Content: Sets global configurations.
 * Example:
 ```
-"config": {
-  "global": {
-    "present": {
-      "global_key1": "global_value1",
-      "global_key2": "global_value2"
-    }
-  }
-}
+config: 
+  global: 
+    - key: "gloval_key1"
+      value: "global_value1"
+    - key: "global_key2"
+      value: "global_value2"
 ```
 
-### global.absent
+### dogus
 
 * Optional
-* Data type: Array<string>
-* Content: Removes global configurations.
-* Example:
-```
-"config": {
-  "global": {
-    "absent": [
-      "global_key1", "global_key2"
-    ]
-  }
-}
-```
-
-### dogus.config.present
-
-* Optional
-* Data type: map[string]string
+* Data type: map[string]Array<configEntry>
 * Content: Sets configurations for Dogus.
 * Example:
 ```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "config": {
-        "present": {
-          "key1": "value1",
-          "key2": "value2"
-        }
-      }
-    }
-  }
-}
+config:
+  dogus:
+    postgresql:
+      - key: "key1"
+        value: "value1"
+      - key: "key2"
+        value: "value2"
 ```
 
-### dogus.config.absent
+### configEntry
 
-* Optional
-* Data type: Array<string>
-* Content: Removes configurations from Dogus.
-* Example:
-```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "config": {
-        "absent": [
-          "key1", "key2"
-        ]
-      }
-    }
-  }
-}
-```
+#### key
 
-### dogus.sensitiveConfig.present
+* Data type: string
+* Content: Specifies the configuration key.
+* Example: `key: "key1"`
+
+#### value
 
 * Optional
-* Data type: map[string]string
-* Content: Sets encrypted configurations for Dogus.
-* Example:
-```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "sensitiveConfig": {
-        "present": {
-          "key1": "value1",
-          "key2": "value2"
-        }
-      }
-    }
-  }
-}
-```
+* Data type: string
+* Content: Specifies the configuration value.
+* Example: `value: "value1"`
 
-### dogus.sensitiveConfig.absent
+#### absent
 
 * Optional
-* Data type: Array<string>
-* Content: Removes encrypted configurations from Dogus.
-* Example:
-```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "sensitiveConfig": {
-        "absent": [
-          "key1", "key2"
-        ]
-      }
-    }
-  }
-}
-```
+* Data type: boolean
+* Content: Specifies whether the configuration key should be deleted. If this value is set, only the `key` needs to be specified.
+* Example: `absent: true`
+
+#### sensitive
+
+* Optional
+* Data type: boolean
+* Content: Specifies whether the configuration is sensitive (and should be stored accordingly).
+* Example: `sensitive: true`.
+
+#### secretRef
+
+The `SecretReference` can be used to use a `key` from a secret instead of a `value`.
+
+##### name
+
+* Data type: string
+* Content: Specifies the secret name.
+* Example: `name: "my-secret"`
+
+##### key
+
+* Data type: string
+* Content: Specifies the name of the key from the secret.
+* Example: `key: "my-secret-key"`
+
