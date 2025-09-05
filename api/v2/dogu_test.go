@@ -1,12 +1,14 @@
 package v2
 
 import (
-	"github.com/stretchr/testify/assert"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
 )
 
 func TestDogu_DeepCopy(t *testing.T) {
 	falsePtr := false
+	version1234 := "1.2.3-4"
 	tests := []struct {
 		name  string
 		given *Dogu
@@ -16,12 +18,12 @@ func TestDogu_DeepCopy(t *testing.T) {
 			name: "empty",
 			given: &Dogu{
 				Name:    "test",
-				Version: "1.2.3-4",
+				Version: &version1234,
 				Absent:  &falsePtr,
 			},
 			want: &Dogu{
 				Name:    "test",
-				Version: "1.2.3-4",
+				Version: &version1234,
 				Absent:  &falsePtr,
 			},
 		},

@@ -1,11 +1,12 @@
 package v2
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"maps"
 	"slices"
 	"testing"
+
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDeployConfig_DeepCopy(t *testing.T) {
@@ -80,9 +81,10 @@ func TestComponent_DeepCopyInto(t *testing.T) {
 			Key:    "redmineKeyToBeDeleted",
 			Absent: &truePtr,
 		}}
+		version123 := "1.2.3"
 		input := Component{
 			Name:         "k8s/my-comp",
-			Version:      "1.2.3",
+			Version:      &version123,
 			Absent:       &truePtr,
 			DeployConfig: inputDeployConfig,
 		}
@@ -96,7 +98,7 @@ func TestComponent_DeepCopyInto(t *testing.T) {
 		require.NotNil(t, actual)
 		expected := Component{
 			Name:    "k8s/my-comp",
-			Version: "1.2.3",
+			Version: &version123,
 			Absent:  &truePtr,
 			DeployConfig: DeployConfig{"redmine": ConfigEntry{
 				Key:    "redmineKeyToBeDeleted",
