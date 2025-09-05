@@ -13,8 +13,8 @@ type MaskDogu struct {
 	Name string `json:"name"`
 	// Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
 	// otherwise it is optional and is not going to be interpreted.
-	// +required
-	Version string `json:"version"`
+	// +optional
+	Version *string `json:"version,omitempty"`
 	// Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
 	// +optional
 	Absent *bool `json:"absent,omitempty"`
