@@ -13,12 +13,12 @@ type DoguDiff struct {
 
 // DoguDiffState is either the actual or desired state of a dogu in the cluster.
 type DoguDiffState struct {
-	// +optional
-	Namespace *string `json:"namespace,omitempty"`
+	// +required
+	Namespace string `json:"namespace"`
 	// +optional
 	Version *string `json:"version,omitempty"`
-	// +optional
-	Absent *bool `json:"absent,omitempty"`
+	// +required
+	Absent bool `json:"absent"`
 	// +optional
 	ResourceConfig *ResourceConfig `json:"resourceConfig,omitempty"`
 	// +optional

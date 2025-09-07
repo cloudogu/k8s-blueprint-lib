@@ -19,14 +19,14 @@ type ComponentDiff struct {
 type ComponentDiffState struct {
 	// Namespace is part of the address under which the component will be obtained. This namespace must NOT
 	// to be confused with the K8s cluster namespace.
-	// +optional
-	Namespace *string `json:"distributionNamespace,omitempty"`
+	// +required
+	Namespace string `json:"distributionNamespace"`
 	// Version contains the component's version.
 	// +optional
 	Version *string `json:"version,omitempty"`
 	// Absent defines if the component should be absent in the ecosystem. Defaults to false.
-	// +optional
-	Absent *bool `json:"absent,omitempty"`
+	// +required
+	Absent bool `json:"absent"`
 	// DeployConfig contains generic properties for the component.
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless
