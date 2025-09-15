@@ -11,8 +11,8 @@ type StateDiff struct {
 	ComponentDiffs map[string]ComponentDiff `json:"componentDiffs,omitempty"`
 	// DoguConfigDiffs maps simple dogu names to the determined config diff.
 	// +optional
-	DoguConfigDiffs map[string]ConfigDiff `json:"doguConfigDiffs,omitempty"`
+	DoguConfigDiffs map[string]CombinedDoguConfigDiff `json:"doguConfigDiffs,omitempty"`
 	// GlobalConfigDiff is the difference between the GlobalConfig in the Blueprint and the cluster state.
 	// +optional
-	GlobalConfigDiff ConfigDiff `json:"globalConfigDiff,omitempty"`
+	GlobalConfigDiff GlobalConfigDiff `json:"globalConfigDiff,omitempty"`
 }
