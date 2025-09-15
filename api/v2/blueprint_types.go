@@ -41,6 +41,15 @@ type Blueprint struct {
 	Status *BlueprintStatus `json:"status,omitempty"`
 }
 
+// +kubebuilder:object:root=true
+
+// BlueprintList contains a list of Blueprint
+type BlueprintList struct {
+	metav1.TypeMeta `json:",inline"`
+	metav1.ListMeta `json:"metadata,omitempty"`
+	Items           []Blueprint `json:"items"`
+}
+
 // BlueprintSpec defines the desired state of Blueprint
 type BlueprintSpec struct {
 	// Blueprint json with the desired state of the ecosystem.
@@ -79,5 +88,5 @@ type BlueprintStatus struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Blueprint{})
+	SchemeBuilder.Register(&Blueprint{}, &BlueprintList{})
 }

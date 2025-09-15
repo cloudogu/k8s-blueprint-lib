@@ -87,7 +87,6 @@ spec:
                             type: string
                         required:
                           - name
-                          - version
                         type: object
                       type: array
                     config:
@@ -238,7 +237,6 @@ spec:
                             type: string
                         required:
                           - name
-                          - version
                         type: object
                       type: array
                   type: object
@@ -265,7 +263,6 @@ spec:
                             type: string
                         required:
                           - name
-                          - version
                         type: object
                       type: array
                   type: object
@@ -370,7 +367,6 @@ spec:
                             type: string
                         required:
                           - name
-                          - version
                         type: object
                       type: array
                     config:
@@ -521,7 +517,6 @@ spec:
                             type: string
                         required:
                           - name
-                          - version
                         type: object
                       type: array
                   type: object
@@ -553,6 +548,9 @@ spec:
                               version:
                                 description: Version contains the component's version.
                                 type: string
+                            required:
+                              - absent
+                              - distributionNamespace
                             type: object
                           expected:
                             description: Expected contains the desired component's target state.
@@ -571,6 +569,9 @@ spec:
                               version:
                                 description: Version contains the component's version.
                                 type: string
+                            required:
+                              - absent
+                              - distributionNamespace
                             type: object
                           neededActions:
                             description: NeededActions contains the necessary actions to apply the wanted state for this component.
@@ -589,41 +590,78 @@ spec:
                       type: object
                     doguConfigDiffs:
                       additionalProperties:
-                        description: ConfigDiff is a list of differences between Config in the Blueprint and the cluster state
-                        items:
-                          description: ConfigEntryDiff contains the difference and the needed actions for a single config key
-                          properties:
-                            actual:
-                              description: ConfigValueState represents either the actual or expected state of a config key
+                        properties:
+                          doguConfigDiff:
+                            items:
+                              description: ConfigEntryDiff contains the difference and the needed actions for a single config key
                               properties:
-                                exists:
-                                  type: boolean
-                                value:
+                                actual:
+                                  description: ConfigValueState represents either the actual or expected state of a config key
+                                  properties:
+                                    exists:
+                                      type: boolean
+                                    value:
+                                      type: string
+                                  required:
+                                    - exists
+                                  type: object
+                                expected:
+                                  description: ConfigValueState represents either the actual or expected state of a config key
+                                  properties:
+                                    exists:
+                                      type: boolean
+                                    value:
+                                      type: string
+                                  required:
+                                    - exists
+                                  type: object
+                                key:
+                                  type: string
+                                neededAction:
                                   type: string
                               required:
-                                - exists
+                                - actual
+                                - expected
+                                - key
+                                - neededAction
                               type: object
-                            expected:
-                              description: ConfigValueState represents either the actual or expected state of a config key
+                            type: array
+                          sensitiveDoguConfigDiff:
+                            items:
+                              description: ConfigEntryDiff contains the difference and the needed actions for a single config key
                               properties:
-                                exists:
-                                  type: boolean
-                                value:
+                                actual:
+                                  description: ConfigValueState represents either the actual or expected state of a config key
+                                  properties:
+                                    exists:
+                                      type: boolean
+                                    value:
+                                      type: string
+                                  required:
+                                    - exists
+                                  type: object
+                                expected:
+                                  description: ConfigValueState represents either the actual or expected state of a config key
+                                  properties:
+                                    exists:
+                                      type: boolean
+                                    value:
+                                      type: string
+                                  required:
+                                    - exists
+                                  type: object
+                                key:
+                                  type: string
+                                neededAction:
                                   type: string
                               required:
-                                - exists
+                                - actual
+                                - expected
+                                - key
+                                - neededAction
                               type: object
-                            key:
-                              type: string
-                            neededAction:
-                              type: string
-                          required:
-                            - actual
-                            - expected
-                            - key
-                            - neededAction
-                          type: object
-                        type: array
+                            type: array
+                        type: object
                       description: DoguConfigDiffs maps simple dogu names to the determined config diff.
                       type: object
                     doguDiffs:
@@ -681,6 +719,9 @@ spec:
                                 type: object
                               version:
                                 type: string
+                            required:
+                              - absent
+                              - namespace
                             type: object
                           expected:
                             description: DoguDiffState is either the actual or desired state of a dogu in the cluster.
@@ -731,6 +772,9 @@ spec:
                                 type: object
                               version:
                                 type: string
+                            required:
+                              - absent
+                              - namespace
                             type: object
                           neededActions:
                             items:
