@@ -4,6 +4,7 @@ metadata:
   labels:
     app: ces
     app.kubernetes.io/name: k8s-blueprint-lib
+  name: blueprint-sample
 spec:
   blueprint:
     components:
