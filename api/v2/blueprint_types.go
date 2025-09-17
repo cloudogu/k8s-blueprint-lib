@@ -24,7 +24,7 @@ const (
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Completed",type="boolean",JSONPath=".status.conditions['Completed']['status']",description="Whether the resource is completed in the current state"
+// +kubebuilder:printcolumn:name="Completed",type="string",JSONPath=".status.conditions[?(@.type == 'Completed')].status",description="Whether the resource is completed in the current state"
 // +kubebuilder:printcolumn:name="Stopped",type="boolean",JSONPath=".spec.stopped",description="Whether the resource is started as a dry run"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 
