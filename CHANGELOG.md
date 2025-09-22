@@ -18,9 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - [#7] **Breaking** use conditions instead of status phases
 - [#7] **Breaking** rename `dryRun`to `stopped` to reflect the new operating mode of the blueprint operator better
 
-### Removed
-- [#7] BlueprintList-type, because Blueprints are now singletons per namespace
-
 ## [v1.3.0] - 2025-06-04
 ### Added
 - [#3] blueprints now support additionalMounts for configMaps and secrets in dogus
