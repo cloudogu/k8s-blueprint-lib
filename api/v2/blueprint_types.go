@@ -14,18 +14,19 @@ const (
 	ConditionExecutable           = "Executable"
 	ConditionEcosystemHealthy     = "EcosystemHealthy"
 	ConditionSelfUpgradeCompleted = "SelfUpgradeCompleted"
-	ConditionConfigApplied        = "ConfigApplied"
-	ConditionComponentsApplied    = "ComponentsApplied"
-	ConditionDogusApplied         = "DogusApplied"
-	ConditionBlueprintApplied     = "BlueprintApplied"
 	ConditionCompleted            = "Completed"
+	ConditionLastApplySucceeded   = "LastApplySucceeded"
 )
 
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Completed",type="string",JSONPath=".status.conditions[?(@.type == 'Completed')].status",description="Whether the resource is completed in the current state"
 // +kubebuilder:printcolumn:name="Stopped",type="boolean",JSONPath=".spec.stopped",description="Whether the resource is started as a dry run"
+// +kubebuilder:printcolumn:name="Valid",type="string",JSONPath=".status.conditions[?(@.type == 'Valid')].status",description="Whether the resource is valid in the current state"
+// +kubebuilder:printcolumn:name="Executable",type="string",JSONPath=".status.conditions[?(@.type == 'Executable')].status",description="Whether the resource is executable in the current state"
+// +kubebuilder:printcolumn:name="Ecosystem Healthy",type="string",JSONPath=".status.conditions[?(@.type == 'EcosystemHealthy')].status",description="Whether the ecosystem is healthy in the current state"
+// +kubebuilder:printcolumn:name="Completed",type="string",JSONPath=".status.conditions[?(@.type == 'Completed')].status",description="Whether the resource is completed in the current state"
+// +kubebuilder:printcolumn:name="Last Apply Successful",type="string",JSONPath=".status.conditions[?(@.type == 'LastApplySucceeded')].status",description="Whether the last apply steps were successful"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 
 // Blueprint is the Schema for the blueprints API

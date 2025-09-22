@@ -20,14 +20,30 @@ spec:
   scope: Namespaced
   versions:
     - additionalPrinterColumns:
-        - description: Whether the resource is completed in the current state
-          jsonPath: .status.conditions[?(@.type == 'Completed')].status
-          name: Completed
-          type: string
         - description: Whether the resource is started as a dry run
           jsonPath: .spec.stopped
           name: Stopped
           type: boolean
+        - description: Whether the resource is valid in the current state
+          jsonPath: .status.conditions[?(@.type == 'Valid')].status
+          name: Valid
+          type: string
+        - description: Whether the resource is executable in the current state
+          jsonPath: .status.conditions[?(@.type == 'Executable')].status
+          name: Executable
+          type: string
+        - description: Whether the ecosystem is healthy in the current state
+          jsonPath: .status.conditions[?(@.type == 'EcosystemHealthy')].status
+          name: Ecosystem Healthy
+          type: string
+        - description: Whether the resource is completed in the current state
+          jsonPath: .status.conditions[?(@.type == 'Completed')].status
+          name: Completed
+          type: string
+        - description: Whether the last apply steps were successful
+          jsonPath: .status.conditions[?(@.type == 'LastApplySucceeded')].status
+          name: Last Apply Successful
+          type: string
         - description: The age of the resource
           jsonPath: .metadata.creationTimestamp
           name: Age
