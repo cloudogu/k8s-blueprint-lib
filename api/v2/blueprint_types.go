@@ -21,6 +21,7 @@ const (
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
+// +kubebuilder:printcolumn:name="Display Name",type="string",JSONPath=".spec.displayName",description="The display name of the blueprint"
 // +kubebuilder:printcolumn:name="Stopped",type="boolean",JSONPath=".spec.stopped",description="Whether the resource is started as a dry run"
 // +kubebuilder:printcolumn:name="Valid",type="string",JSONPath=".status.conditions[?(@.type == 'Valid')].status",description="Whether the resource is valid in the current state"
 // +kubebuilder:printcolumn:name="Executable",type="string",JSONPath=".status.conditions[?(@.type == 'Executable')].status",description="Whether the resource is executable in the current state"
@@ -53,10 +54,13 @@ type BlueprintList struct {
 
 // BlueprintSpec defines the desired state of Blueprint
 type BlueprintSpec struct {
-	// Blueprint json with the desired state of the ecosystem.
+	// DisplayName is the name of the blueprint that will be shown in the UI.
+	// +required
+	DisplayName string `json:"displayName"`
+	// Blueprint with the desired state of the ecosystem.
 	// +required
 	Blueprint BlueprintManifest `json:"blueprint"`
-	// BlueprintMask json can further restrict the desired state from the blueprint.
+	// BlueprintMask can further restrict the desired state from the blueprint.
 	// +optional
 	BlueprintMask *BlueprintMask `json:"blueprintMask,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.

@@ -20,6 +20,10 @@ spec:
   scope: Namespaced
   versions:
     - additionalPrinterColumns:
+        - description: The display name of the blueprint
+          jsonPath: .spec.displayName
+          name: Display Name
+          type: string
         - description: Whether the resource is started as a dry run
           jsonPath: .spec.stopped
           name: Stopped
@@ -79,7 +83,7 @@ spec:
                     in comparison to the blueprint.
                   type: boolean
                 blueprint:
-                  description: Blueprint json with the desired state of the ecosystem.
+                  description: Blueprint with the desired state of the ecosystem.
                   properties:
                     components:
                       description: |-
@@ -257,7 +261,7 @@ spec:
                       type: array
                   type: object
                 blueprintMask:
-                  description: BlueprintMask json can further restrict the desired state from the blueprint.
+                  description: BlueprintMask can further restrict the desired state from the blueprint.
                   properties:
                     dogus:
                       description: Dogus contains a set of dogus with their versions which should be present or absent.
@@ -282,6 +286,9 @@ spec:
                         type: object
                       type: array
                   type: object
+                displayName:
+                  description: DisplayName is the name of the blueprint that will be shown in the UI.
+                  type: string
                 ignoreComponentHealth:
                   description: IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
                   type: boolean
@@ -293,6 +300,7 @@ spec:
                   type: boolean
               required:
                 - blueprint
+                - displayName
               type: object
             status:
               description: Status defines the observed state of the Blueprint.

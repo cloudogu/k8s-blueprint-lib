@@ -6,6 +6,7 @@ metadata:
     app.kubernetes.io/name: k8s-blueprint-lib
   name: blueprint-sample
 spec:
+  displayName: "Blueprint Sample v6.834"
   blueprint:
     components:
       - name: "k8s/k8s-prometheus"
