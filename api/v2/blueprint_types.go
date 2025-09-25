@@ -77,8 +77,12 @@ type BlueprintSpec struct {
 // BlueprintStatus defines the observed state of Blueprint
 type BlueprintStatus struct {
 	// Conditions shows the current state of the blueprint
+	// +patchMergeKey=type
+	// +patchStrategy=merge
+	// +listType=map
+	// +listMapKey=type
 	// +optional
-	Conditions []metav1.Condition `json:"conditions,omitempty"`
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
 	// +optional
 	EffectiveBlueprint *BlueprintManifest `json:"effectiveBlueprint,omitempty"`
