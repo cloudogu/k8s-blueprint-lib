@@ -10,10 +10,6 @@ type BlueprintManifest struct {
 	// blueprint was applied. Optional.
 	// +optional
 	Dogus []Dogu `json:"dogus,omitempty"`
-	// Components contains a set of exact component versions which should be present or absent in the CES instance after which
-	// this blueprint was applied.
-	// +optional
-	Components []Component `json:"components,omitempty"`
 	// Config is used for ecosystem configuration to be applied.
 	// +optional
 	Config *Config `json:"config,omitempty"`

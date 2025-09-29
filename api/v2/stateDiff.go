@@ -6,9 +6,6 @@ type StateDiff struct {
 	// DoguDiffs maps simple dogu names to the determined diff.
 	// +optional
 	DoguDiffs map[string]DoguDiff `json:"doguDiffs,omitempty"`
-	// ComponentDiffs maps simple component names to the determined diff.
-	// +optional
-	ComponentDiffs map[string]ComponentDiff `json:"componentDiffs,omitempty"`
 	// DoguConfigDiffs maps simple dogu names to the determined config diff.
 	// +optional
 	DoguConfigDiffs map[string]CombinedDoguConfigDiff `json:"doguConfigDiffs,omitempty"`
