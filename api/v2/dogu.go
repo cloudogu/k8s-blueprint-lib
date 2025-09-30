@@ -20,6 +20,8 @@ type MaskDogu struct {
 	Absent *bool `json:"absent,omitempty"`
 }
 
+// +kubebuilder:validation:XValidation:message="dogu version must not be empty",rule="(!has(self.absent) || !self.absent) ? has(self.version) : true"
+
 // Dogu defines a Dogu, its version, and the installation state in which it is supposed to be after a blueprint
 // was applied.
 type Dogu struct {
