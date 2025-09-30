@@ -13,6 +13,11 @@ type Config struct {
 	Global []ConfigEntry `json:"global,omitempty"`
 }
 
+// +kubebuilder:validation:XValidation:message="absent entries cannot have value or secretRef",rule="(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true"
+// +kubebuilder:validation:XValidation:message="config entries can have either a value or a secretRef",rule="(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true"
+// +kubebuilder:validation:XValidation:message="config entries with secret references have to be sensitive",rule="has(self.secretRef) ? has(self.sensitive) && self.sensitive : true"
+// +kubebuilder:validation:XValidation:message="sensitive config entries are not allowed to have normal values",rule="(has(self.sensitive) && self.sensitive) ? !has(self.value) : true"
+
 // ConfigEntry represents a single configuration entry that can be either regular or sensitive
 type ConfigEntry struct {
 	// Key is the configuration key name

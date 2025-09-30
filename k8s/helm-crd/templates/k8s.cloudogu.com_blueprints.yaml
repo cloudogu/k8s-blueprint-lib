@@ -149,6 +149,15 @@ spec:
                               required:
                                 - key
                               type: object
+                              x-kubernetes-validations:
+                                - message: absent entries cannot have value or secretRef
+                                  rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
+                                - message: config entries can have either a value or a secretRef
+                                  rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
+                                - message: config entries with secret references have to be sensitive
+                                  rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                                - message: sensitive config entries are not allowed to have normal values
+                                  rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
                             type: array
                           description: Dogus contains Dogu specific configuration entries
                           type: object
@@ -189,6 +198,15 @@ spec:
                             required:
                               - key
                             type: object
+                            x-kubernetes-validations:
+                              - message: absent entries cannot have value or secretRef
+                                rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
+                              - message: config entries can have either a value or a secretRef
+                                rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
+                              - message: config entries with secret references have to be sensitive
+                                rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                              - message: sensitive config entries are not allowed to have normal values
+                                rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
                           type: array
                       type: object
                     dogus:
@@ -258,6 +276,9 @@ spec:
                         required:
                           - name
                         type: object
+                        x-kubernetes-validations:
+                          - message: dogu version must not be empty
+                            rule: '(!has(self.absent) || !self.absent) ? has(self.version) : true'
                       type: array
                   type: object
                 blueprintMask:
@@ -436,6 +457,15 @@ spec:
                               required:
                                 - key
                               type: object
+                              x-kubernetes-validations:
+                                - message: absent entries cannot have value or secretRef
+                                  rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
+                                - message: config entries can have either a value or a secretRef
+                                  rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
+                                - message: config entries with secret references have to be sensitive
+                                  rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                                - message: sensitive config entries are not allowed to have normal values
+                                  rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
                             type: array
                           description: Dogus contains Dogu specific configuration entries
                           type: object
@@ -476,6 +506,15 @@ spec:
                             required:
                               - key
                             type: object
+                            x-kubernetes-validations:
+                              - message: absent entries cannot have value or secretRef
+                                rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
+                              - message: config entries can have either a value or a secretRef
+                                rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
+                              - message: config entries with secret references have to be sensitive
+                                rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                              - message: sensitive config entries are not allowed to have normal values
+                                rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
                           type: array
                       type: object
                     dogus:
@@ -545,6 +584,9 @@ spec:
                         required:
                           - name
                         type: object
+                        x-kubernetes-validations:
+                          - message: dogu version must not be empty
+                            rule: '(!has(self.absent) || !self.absent) ? has(self.version) : true'
                       type: array
                   type: object
                 stateDiff:

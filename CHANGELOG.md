@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- [#7] added validation rules for dogus and config
+
 ### Changed
 
 **Breaking Changes ahead**
