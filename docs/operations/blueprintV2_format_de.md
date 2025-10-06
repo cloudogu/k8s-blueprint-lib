@@ -1,8 +1,8 @@
 # Blueprint-Format
 
-Das Blueprint bietet die Möglichkeit Dogus, Components und Konfigurationen hinzuzufügen oder zu entfernen.
-Für Dogus und Components können ebenfalls spezielle Konfigurationen definiert werden.
-Diese werden an die entsprechenden Dogu- und Component-CRs geschrieben und werden nicht in der EcoSystem-Registry gespeichert.
+Das Blueprint bietet die Möglichkeit Dogus und Konfigurationen hinzuzufügen oder zu entfernen.
+Für Dogus können ebenfalls spezielle Konfigurationen definiert werden.
+Diese werden an die entsprechenden Dogu-CRs geschrieben und werden nicht in der EcoSystem-Registry gespeichert.
 
 Folgend werden alle Felder des Blueprint beschrieben und mit Beispielen veranschaulicht.
 

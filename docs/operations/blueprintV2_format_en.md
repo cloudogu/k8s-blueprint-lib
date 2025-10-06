@@ -1,8 +1,8 @@
 # Blueprint format
 
-The blueprint offers the option of adding or removing Dogus, Components and configurations.
-Special configurations can also be defined for Dogus and components.
-These are written to the corresponding Dogu and component CRs and are not saved in the EcoSystem registry.
+The blueprint offers the option of adding or removing Dogus and configurations.
+Special configurations can also be defined for Dogus.
+These are written to the corresponding Dogu CRs and are not saved in the EcoSystem registry.
 
 All fields of the blueprint are described below and illustrated with examples.
 
