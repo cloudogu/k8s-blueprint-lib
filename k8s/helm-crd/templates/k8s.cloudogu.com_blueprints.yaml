@@ -85,30 +85,6 @@ spec:
                 blueprint:
                   description: Blueprint with the desired state of the ecosystem.
                   properties:
-                    components:
-                      description: |-
-                        Components contains a set of exact component versions which should be present or absent in the CES instance after which
-                        this blueprint was applied.
-                      items:
-                        properties:
-                          absent:
-                            description: Absent defines if the component should be absent in the ecosystem. Defaults to false.
-                            type: boolean
-                          deployConfig:
-                            description: DeployConfig defines a generic property map for the component configuration. This field is optional.
-                            x-kubernetes-preserve-unknown-fields: true
-                          name:
-                            description: Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
-                            type: string
-                          version:
-                            description: |-
-                              Version defines the version of the component that is to be installed. Must not be empty if the targetState is "present";
-                              otherwise it is optional and is not going to be interpreted.
-                            type: string
-                        required:
-                          - name
-                        type: object
-                      type: array
                     config:
                       description: Config is used for ecosystem configuration to be applied.
                       properties:
@@ -310,9 +286,6 @@ spec:
                 displayName:
                   description: DisplayName is the name of the blueprint that will be shown in the UI.
                   type: string
-                ignoreComponentHealth:
-                  description: IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
-                  type: boolean
                 ignoreDoguHealth:
                   description: IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
                   type: boolean
@@ -393,30 +366,6 @@ spec:
                 effectiveBlueprint:
                   description: EffectiveBlueprint is the blueprint after applying the blueprint mask.
                   properties:
-                    components:
-                      description: |-
-                        Components contains a set of exact component versions which should be present or absent in the CES instance after which
-                        this blueprint was applied.
-                      items:
-                        properties:
-                          absent:
-                            description: Absent defines if the component should be absent in the ecosystem. Defaults to false.
-                            type: boolean
-                          deployConfig:
-                            description: DeployConfig defines a generic property map for the component configuration. This field is optional.
-                            x-kubernetes-preserve-unknown-fields: true
-                          name:
-                            description: Name defines the name of the component including its distribution namespace, f. i. "k8s/k8s-dogu-operator". Must not be empty.
-                            type: string
-                          version:
-                            description: |-
-                              Version defines the version of the component that is to be installed. Must not be empty if the targetState is "present";
-                              otherwise it is optional and is not going to be interpreted.
-                            type: string
-                        required:
-                          - name
-                        type: object
-                      type: array
                     config:
                       description: Config is used for ecosystem configuration to be applied.
                       properties:
@@ -594,69 +543,6 @@ spec:
                     StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
                     It describes what operations need to be done to achieve the desired state of the blueprint.
                   properties:
-                    componentDiffs:
-                      additionalProperties:
-                        description: |-
-                          ComponentDiff is the comparison of a Component's desired state vs. its cluster state.
-                          It contains the operation that needs to be done to achieve this desired state.
-                        properties:
-                          actual:
-                            description: Actual contains the component's state in the current system.
-                            properties:
-                              absent:
-                                description: Absent defines if the component should be absent in the ecosystem. Defaults to false.
-                                type: boolean
-                              deployConfig:
-                                description: DeployConfig contains generic properties for the component.
-                                x-kubernetes-preserve-unknown-fields: true
-                              distributionNamespace:
-                                description: |-
-                                  Namespace is part of the address under which the component will be obtained. This namespace must NOT
-                                  to be confused with the K8s cluster namespace.
-                                type: string
-                              version:
-                                description: Version contains the component's version.
-                                type: string
-                            required:
-                              - absent
-                              - distributionNamespace
-                            type: object
-                          expected:
-                            description: Expected contains the desired component's target state.
-                            properties:
-                              absent:
-                                description: Absent defines if the component should be absent in the ecosystem. Defaults to false.
-                                type: boolean
-                              deployConfig:
-                                description: DeployConfig contains generic properties for the component.
-                                x-kubernetes-preserve-unknown-fields: true
-                              distributionNamespace:
-                                description: |-
-                                  Namespace is part of the address under which the component will be obtained. This namespace must NOT
-                                  to be confused with the K8s cluster namespace.
-                                type: string
-                              version:
-                                description: Version contains the component's version.
-                                type: string
-                            required:
-                              - absent
-                              - distributionNamespace
-                            type: object
-                          neededActions:
-                            description: NeededActions contains the necessary actions to apply the wanted state for this component.
-                            items:
-                              description: |-
-                                ComponentAction is the action that needs to be done for a component
-                                to achieve the desired state in the cluster.
-                              type: string
-                            type: array
-                        required:
-                          - actual
-                          - expected
-                          - neededActions
-                        type: object
-                      description: ComponentDiffs maps simple component names to the determined diff.
-                      type: object
                     doguConfigDiffs:
                       additionalProperties:
                         properties:

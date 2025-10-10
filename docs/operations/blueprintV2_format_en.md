@@ -1,8 +1,8 @@
 # Blueprint format
 
-The blueprint offers the option of adding or removing Dogus, Components and configurations.
-Special configurations can also be defined for Dogus and components.
-These are written to the corresponding Dogu and component CRs and are not saved in the EcoSystem registry.
+The blueprint offers the option of adding or removing Dogus and configurations.
+Special configurations can also be defined for Dogus.
+These are written to the corresponding Dogu CRs and are not saved in the EcoSystem registry.
 
 All fields of the blueprint are described below and illustrated with examples.
 
@@ -174,80 +174,6 @@ dogus:
 * Data type: String
 * Content: Subfolder defines a subfolder in which the data is to be stored within the volume.
 * Example: `subfolder: "my-configmap-subfolder"`
-
-## Components
-
-* Required
-* Data type: Array
-* Contents: The `components` field is a list of components and describes the status of the components in the system.
-* Example:
-```
-components:
-  - name: "k8s/k8s-dogu-operator"
-    version: "1.0.1"
-  - name: "k8s/k8s-dogu-operator-crd"
-    version: "1.0.1"
-```
-
-### Component
-
-A component can contain the following fields:
-
-#### Name
-
-* Required
-* Data type: string
-* Content: Specifies the name including the namespace of the component.
-* Example: `name: "k8s/k8s-dogu-operator"`
-
-#### Absent
-
-* Data type: boolean
-* Content: Specifies whether a component should be ommitted.
-* Example: `absent: true`
-
-#### Version
-
-* Optional for `absent: true`. Otherwise `version` is required.
-* Data type: string
-* Content: Specifies the version of the component.
-* Example: `version: "12.15-2"`
-
-#### DeployConfig
-
-This configuration can be used to define certain fields of the component CR and among others it is therefore possible to set helm values.
-
-##### deployConfig.deployNamespace
-
-* Optional
-* Data type: string
-* Content: Specifies the namespace in which the component is to be installed. This configuration is currently only required for the component `k8s/longhorn`.
-* Example:
-```
-components:
-  name: "k8s/k8s-longhorn"
-  version: "1.5.1-4"
-  deployConfig:
-    deployNamespace: "longhorn-system"
-```
-
-##### deployConfig.overwriteConfig
-
-* Required
-* Data type: string
-* Content: Defines additional configurations (Helm values) for the component.
-* Example:
-```
-components:
-  name: "k8s/k8s-longhorn"
-  version: "1.5.1-4"
-  deployConfig:
-    overwriteConfig:
-      longhorn:
-        defaultSettings:
-          backupTarget: "s3://longhorn@dummyregion/"
-          backupTargetCredentialSecret: "longhorn-backup-target"
-```
 
 ## Config
 

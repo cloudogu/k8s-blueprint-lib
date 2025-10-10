@@ -8,9 +8,6 @@ metadata:
 spec:
   displayName: "Blueprint Sample v6.834"
   blueprint:
-    components:
-      - name: "k8s/k8s-prometheus"
-        absent: true
     config:
       dogus:
         mysql:

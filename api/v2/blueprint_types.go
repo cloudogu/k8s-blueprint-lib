@@ -10,12 +10,11 @@ import (
 //nolint:unused
 //goland:noinspection GoUnusedConst
 const (
-	ConditionValid                = "Valid"
-	ConditionExecutable           = "Executable"
-	ConditionEcosystemHealthy     = "EcosystemHealthy"
-	ConditionSelfUpgradeCompleted = "SelfUpgradeCompleted"
-	ConditionCompleted            = "Completed"
-	ConditionLastApplySucceeded   = "LastApplySucceeded"
+	ConditionValid              = "Valid"
+	ConditionExecutable         = "Executable"
+	ConditionEcosystemHealthy   = "EcosystemHealthy"
+	ConditionCompleted          = "Completed"
+	ConditionLastApplySucceeded = "LastApplySucceeded"
 )
 
 // +kubebuilder:object:root=true
@@ -66,9 +65,6 @@ type BlueprintSpec struct {
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
 	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`
-	// IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
-	// +optional
-	IgnoreComponentHealth *bool `json:"ignoreComponentHealth,omitempty"`
 	// AllowDoguNamespaceSwitch lets the user switch the namespace of dogus in the blueprint mask
 	// in comparison to the blueprint.
 	// +optional
