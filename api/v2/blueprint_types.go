@@ -7,62 +7,26 @@ import (
 // EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
 // NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
 
-type StatusPhase string
-
+//nolint:unused
+//goland:noinspection GoUnusedConst
 const (
-	// StatusPhaseNew marks a newly created blueprint-CR.
-	StatusPhaseNew StatusPhase = ""
-	// StatusPhaseStaticallyValidated marks the given blueprint spec as validated.
-	StatusPhaseStaticallyValidated StatusPhase = "staticallyValidated"
-	// StatusPhaseValidated marks the given blueprint spec as validated.
-	StatusPhaseValidated StatusPhase = "validated"
-	// StatusPhaseEffectiveBlueprintGenerated marks that the effective blueprint was generated out of the blueprint and the mask.
-	StatusPhaseEffectiveBlueprintGenerated StatusPhase = "effectiveBlueprintGenerated"
-	// StatusPhaseStateDiffDetermined marks that the diff to the ecosystem state was successfully determined.
-	StatusPhaseStateDiffDetermined StatusPhase = "stateDiffDetermined"
-	// StatusPhaseInvalid marks the given blueprint spec is semantically incorrect.
-	StatusPhaseInvalid StatusPhase = "invalid"
-	// StatusPhaseEcosystemHealthyUpfront marks that all currently installed dogus are healthy.
-	StatusPhaseEcosystemHealthyUpfront StatusPhase = "ecosystemHealthyUpfront"
-	// StatusPhaseEcosystemUnhealthyUpfront marks that some currently installed dogus are unhealthy.
-	StatusPhaseEcosystemUnhealthyUpfront StatusPhase = "ecosystemUnhealthyUpfront"
-	// StatusPhaseBlueprintApplicationPreProcessed shows that all pre-processing steps for the blueprint application
-	// were successful.
-	StatusPhaseBlueprintApplicationPreProcessed StatusPhase = "blueprintApplicationPreProcessed"
-	// StatusPhaseAwaitSelfUpgrade marks that the blueprint operator waits for termination for a self upgrade.
-	StatusPhaseAwaitSelfUpgrade StatusPhase = "awaitSelfUpgrade"
-	// StatusPhaseSelfUpgradeCompleted marks that the blueprint operator itself got successfully upgraded.
-	StatusPhaseSelfUpgradeCompleted StatusPhase = "selfUpgradeCompleted"
-	// StatusPhaseInProgress marks that the blueprint is currently being processed.
-	StatusPhaseInProgress StatusPhase = "inProgress"
-	// StatusPhaseBlueprintApplicationFailed shows that the blueprint application failed.
-	StatusPhaseBlueprintApplicationFailed StatusPhase = "blueprintApplicationFailed"
-	// StatusPhaseBlueprintApplied indicates that the blueprint was applied but the ecosystem is not healthy yet.
-	StatusPhaseBlueprintApplied StatusPhase = "blueprintApplied"
-	// StatusPhaseEcosystemHealthyAfterwards shows that the ecosystem got healthy again after applying the blueprint.
-	StatusPhaseEcosystemHealthyAfterwards StatusPhase = "ecosystemHealthyAfterwards"
-	// StatusPhaseEcosystemUnhealthyAfterwards shows that the ecosystem got not healthy again after applying the blueprint.
-	StatusPhaseEcosystemUnhealthyAfterwards StatusPhase = "ecosystemUnhealthyAfterwards"
-	// StatusPhaseFailed marks that an error occurred during processing of the blueprint.
-	StatusPhaseFailed StatusPhase = "failed"
-	// StatusPhaseCompleted marks the blueprint as successfully applied.
-	StatusPhaseCompleted StatusPhase = "completed"
-	// StatusPhaseApplyEcosystemConfig indicates that the apply ecosystem config phase is active.
-	StatusPhaseApplyEcosystemConfig StatusPhase = "applyEcosystemConfig"
-	// StatusPhaseApplyEcosystemConfigFailed indicates that the phase to apply ecosystem config failed.
-	StatusPhaseApplyEcosystemConfigFailed StatusPhase = "applyEcosystemConfigFailed"
-	// StatusPhaseEcosystemConfigApplied indicates that the phase to apply ecosystem config succeeded.
-	StatusPhaseEcosystemConfigApplied StatusPhase = "ecosystemConfigApplied"
-	// StatusPhaseRestartsTriggered indicates that a restart has been triggered for all Dogus that needed a restart.
-	// Restarts are needed when the Dogu config changes.
-	StatusPhaseRestartsTriggered StatusPhase = "restartsTriggered"
+	ConditionValid              = "Valid"
+	ConditionExecutable         = "Executable"
+	ConditionEcosystemHealthy   = "EcosystemHealthy"
+	ConditionCompleted          = "Completed"
+	ConditionLastApplySucceeded = "LastApplySucceeded"
 )
 
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bp
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Status",type="string",JSONPath=".status.phase",description="The current status of the resource"
-// +kubebuilder:printcolumn:name="DryRun",type="boolean",JSONPath=".spec.dryRun",description="Whether the resource is started as a dry run"
+// +kubebuilder:printcolumn:name="Display Name",type="string",JSONPath=".spec.displayName",description="The display name of the blueprint"
+// +kubebuilder:printcolumn:name="Stopped",type="boolean",JSONPath=".spec.stopped",description="Whether the resource is started as a dry run"
+// +kubebuilder:printcolumn:name="Valid",type="string",JSONPath=".status.conditions[?(@.type == 'Valid')].status",description="Whether the resource is valid in the current state"
+// +kubebuilder:printcolumn:name="Executable",type="string",JSONPath=".status.conditions[?(@.type == 'Executable')].status",description="Whether the resource is executable in the current state"
+// +kubebuilder:printcolumn:name="Ecosystem Healthy",type="string",JSONPath=".status.conditions[?(@.type == 'EcosystemHealthy')].status",description="Whether the ecosystem is healthy in the current state"
+// +kubebuilder:printcolumn:name="Completed",type="string",JSONPath=".status.conditions[?(@.type == 'Completed')].status",description="Whether the resource is completed in the current state"
+// +kubebuilder:printcolumn:name="Last Apply Successful",type="string",JSONPath=".status.conditions[?(@.type == 'LastApplySucceeded')].status",description="Whether the last apply steps were successful"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 
 // Blueprint is the Schema for the blueprints API
@@ -71,9 +35,11 @@ type Blueprint struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec defines the desired state of the Blueprint.
-	Spec BlueprintSpec `json:"spec,omitempty"`
+	// +required
+	Spec BlueprintSpec `json:"spec"`
 	// Status defines the observed state of the Blueprint.
-	Status BlueprintStatus `json:"status,omitempty"`
+	// +optional
+	Status *BlueprintStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -87,30 +53,43 @@ type BlueprintList struct {
 
 // BlueprintSpec defines the desired state of Blueprint
 type BlueprintSpec struct {
-	// Blueprint json with the desired state of the ecosystem.
+	// DisplayName is the name of the blueprint that will be shown in the UI.
+	// +required
+	DisplayName string `json:"displayName"`
+	// Blueprint with the desired state of the ecosystem.
+	// +required
 	Blueprint BlueprintManifest `json:"blueprint"`
-	// BlueprintMask json can further restrict the desired state from the blueprint.
-	BlueprintMask BlueprintMask `json:"blueprintMask,omitempty"`
+	// BlueprintMask can further restrict the desired state from the blueprint.
+	// +optional
+	BlueprintMask *BlueprintMask `json:"blueprintMask,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
-	IgnoreDoguHealth bool `json:"ignoreDoguHealth,omitempty"`
-	// IgnoreComponentHealth lets the user execute the blueprint even if components are unhealthy at the moment.
-	IgnoreComponentHealth bool `json:"ignoreComponentHealth,omitempty"`
+	// +optional
+	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`
 	// AllowDoguNamespaceSwitch lets the user switch the namespace of dogus in the blueprint mask
 	// in comparison to the blueprint.
-	AllowDoguNamespaceSwitch bool `json:"allowDoguNamespaceSwitch,omitempty"`
-	// DryRun lets the user test a blueprint run to check if all attributes of the blueprint are correct and avoid a result with a failure state.
-	DryRun bool `json:"dryRun,omitempty"`
+	// +optional
+	AllowDoguNamespaceSwitch *bool `json:"allowDoguNamespaceSwitch,omitempty"`
+	// Stopped lets the user stop the blueprint execution. The blueprint will still check if all attributes are correct and avoid a result with a failure state.
+	// +optional
+	Stopped *bool `json:"stopped,omitempty"`
 }
 
 // BlueprintStatus defines the observed state of Blueprint
 type BlueprintStatus struct {
-	// Phase represents the processing state of the blueprint
-	Phase StatusPhase `json:"phase,omitempty"`
+	// Conditions shows the current state of the blueprint
+	// +patchMergeKey=type
+	// +patchStrategy=merge
+	// +listType=map
+	// +listMapKey=type
+	// +optional
+	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 	// EffectiveBlueprint is the blueprint after applying the blueprint mask.
-	EffectiveBlueprint BlueprintManifest `json:"effectiveBlueprint,omitempty"`
+	// +optional
+	EffectiveBlueprint *BlueprintManifest `json:"effectiveBlueprint,omitempty"`
 	// StateDiff is the result of comparing the EffectiveBlueprint to the current cluster state.
 	// It describes what operations need to be done to achieve the desired state of the blueprint.
-	StateDiff StateDiff `json:"stateDiff,omitempty"`
+	// +optional
+	StateDiff *StateDiff `json:"stateDiff,omitempty"`
 }
 
 func init() {

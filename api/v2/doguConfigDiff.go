@@ -1,19 +1,15 @@
 package v2
 
 type CombinedDoguConfigDiff struct {
-	DoguConfigDiff          DoguConfigDiff          `json:"doguConfigDiff,omitempty"`
+	// +optional
+	DoguConfigDiff DoguConfigDiff `json:"doguConfigDiff,omitempty"`
+	// +optional
 	SensitiveDoguConfigDiff SensitiveDoguConfigDiff `json:"sensitiveDoguConfigDiff,omitempty"`
 }
 
 type DoguConfigValueState ConfigValueState
 
-type DoguConfigDiff []DoguConfigEntryDiff
-type DoguConfigEntryDiff struct {
-	Key          string               `json:"key"`
-	Actual       DoguConfigValueState `json:"actual"`
-	Expected     DoguConfigValueState `json:"expected"`
-	NeededAction ConfigAction         `json:"neededAction"`
-}
+type DoguConfigDiff []ConfigEntryDiff
 
 // +kubebuilder:object:generate:=false
 
@@ -21,4 +17,4 @@ type SensitiveDoguConfigDiff = DoguConfigDiff
 
 // +kubebuilder:object:generate:=false
 
-type SensitiveDoguConfigEntryDiff = DoguConfigEntryDiff
+type SensitiveDoguConfigEntryDiff = ConfigEntryDiff

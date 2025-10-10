@@ -8,13 +8,11 @@ package v2
 type BlueprintManifest struct {
 	// Dogus contains a set of exact dogu versions which should be present or absent in the CES instance after which this
 	// blueprint was applied. Optional.
+	// +optional
 	Dogus []Dogu `json:"dogus,omitempty"`
-	// Components contains a set of exact component versions which should be present or absent in the CES instance after which
-	// this blueprint was applied. Optional.
-	Components []Component `json:"components,omitempty"`
 	// Config is used for ecosystem configuration to be applied.
-	// Optional.
-	Config Config `json:"config,omitempty"`
+	// +optional
+	Config *Config `json:"config,omitempty"`
 }
 
 // BlueprintMask describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
@@ -24,6 +22,6 @@ type BlueprintManifest struct {
 // renaming are breaking changes and require a new blueprint API version.
 type BlueprintMask struct {
 	// Dogus contains a set of dogus with their versions which should be present or absent.
-	// +Optional.
+	// +optional
 	Dogus []MaskDogu `json:"dogus,omitempty"`
 }

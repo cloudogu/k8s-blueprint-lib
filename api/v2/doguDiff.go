@@ -3,19 +3,28 @@ package v2
 // DoguDiff is the comparison of a Dogu's desired state vs. its cluster state.
 // It contains the operation that needs to be done to achieve this desired state.
 type DoguDiff struct {
-	Actual        DoguDiffState `json:"actual"`
-	Expected      DoguDiffState `json:"expected"`
-	NeededActions []DoguAction  `json:"neededActions"`
+	// +required
+	Actual DoguDiffState `json:"actual"`
+	// +required
+	Expected DoguDiffState `json:"expected"`
+	// +required
+	NeededActions []DoguAction `json:"neededActions"`
 }
 
 // DoguDiffState is either the actual or desired state of a dogu in the cluster.
 type DoguDiffState struct {
-	Namespace          string             `json:"namespace,omitempty"`
-	Version            string             `json:"version,omitempty"`
-	InstallationState  string             `json:"installationState"`
-	ResourceConfig     ResourceConfig     `json:"resourceConfig,omitempty"`
-	ReverseProxyConfig ReverseProxyConfig `json:"reverseProxyConfig,omitempty"`
-	AdditionalMounts   []AdditionalMount  `json:"additionalMounts,omitempty" patchStrategy:"replace"`
+	// +required
+	Namespace string `json:"namespace"`
+	// +optional
+	Version *string `json:"version,omitempty"`
+	// +required
+	Absent bool `json:"absent"`
+	// +optional
+	ResourceConfig *ResourceConfig `json:"resourceConfig,omitempty"`
+	// +optional
+	ReverseProxyConfig *ReverseProxyConfig `json:"reverseProxyConfig,omitempty"`
+	// +optional
+	AdditionalMounts []AdditionalMount `json:"additionalMounts,omitempty" patchStrategy:"replace"`
 }
 
 // DoguAction is the action that needs to be done for a dogu
