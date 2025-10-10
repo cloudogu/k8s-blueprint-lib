@@ -36,8 +36,8 @@ type Blueprint struct {
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec defines the desired state of the Blueprint.
-	// +optional
-	Spec *BlueprintSpec `json:"spec,omitempty"`
+	// +required
+	Spec BlueprintSpec `json:"spec"`
 	// Status defines the observed state of the Blueprint.
 	// +optional
 	Status *BlueprintStatus `json:"status,omitempty"`
