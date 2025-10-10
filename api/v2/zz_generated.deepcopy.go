@@ -38,11 +38,7 @@ func (in *Blueprint) DeepCopyInto(out *Blueprint) {
 	*out = *in
 	out.TypeMeta = in.TypeMeta
 	in.ObjectMeta.DeepCopyInto(&out.ObjectMeta)
-	if in.Spec != nil {
-		in, out := &in.Spec, &out.Spec
-		*out = new(BlueprintSpec)
-		(*in).DeepCopyInto(*out)
-	}
+	in.Spec.DeepCopyInto(&out.Spec)
 	if in.Status != nil {
 		in, out := &in.Status, &out.Status
 		*out = new(BlueprintStatus)
