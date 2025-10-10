@@ -10,12 +10,11 @@ import (
 //nolint:unused
 //goland:noinspection GoUnusedConst
 const (
-	ConditionValid                = "Valid"
-	ConditionExecutable           = "Executable"
-	ConditionEcosystemHealthy     = "EcosystemHealthy"
-	ConditionSelfUpgradeCompleted = "SelfUpgradeCompleted"
-	ConditionCompleted            = "Completed"
-	ConditionLastApplySucceeded   = "LastApplySucceeded"
+	ConditionValid              = "Valid"
+	ConditionExecutable         = "Executable"
+	ConditionEcosystemHealthy   = "EcosystemHealthy"
+	ConditionCompleted          = "Completed"
+	ConditionLastApplySucceeded = "LastApplySucceeded"
 )
 
 // +kubebuilder:object:root=true
