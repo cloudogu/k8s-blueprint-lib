@@ -1,8 +1,8 @@
 # Blueprint-Format
 
-Das Blueprint bietet die Möglichkeit Dogus, Components und Konfigurationen hinzuzufügen oder zu entfernen.
-Für Dogus und Components können ebenfalls spezielle Konfigurationen definiert werden.
-Diese werden an die entsprechenden Dogu- und Component-CRs geschrieben und werden nicht in der EcoSystem-Registry gespeichert.
+Das Blueprint bietet die Möglichkeit Dogus und Konfigurationen hinzuzufügen oder zu entfernen.
+Für Dogus können ebenfalls spezielle Konfigurationen definiert werden.
+Diese werden an die entsprechenden Dogu-CRs geschrieben und werden nicht in der EcoSystem-Registry gespeichert.
 
 Folgend werden alle Felder des Blueprint beschrieben und mit Beispielen veranschaulicht.
 
@@ -11,7 +11,7 @@ Folgend werden alle Felder des Blueprint beschrieben und mit Beispielen veransch
 * Pflichtfeld
 * Datentyp: string
 * Inhalt: Das Feld `blueprintApi` gibt die API-Version des Blueprints an.
-* Beispiel: `"blueprintApi": "v2"`
+* Beispiel: `blueprintApi: "v2"`
 
 ## Dogus
 
@@ -20,13 +20,9 @@ Folgend werden alle Felder des Blueprint beschrieben und mit Beispielen veransch
 * Inhalt: Das Feld `dogus` ist eine Liste von Dogus und beschreibt den Zustand der Dogus im System.
 * Beispiel: 
 ```
-"dogus": [
-  {
-    "name":"official/postgresql",
-    "targetState":"present",
-    "version":"12.15-2"
-  }
-]
+dogus:
+  - name: official/mysql
+    version: 8.4.6-1
 ```
 
 ### Dogu
@@ -38,21 +34,21 @@ Ein Dogu kann folgende Felder beinhalten:
 * Pflichtfeld
 * Datentyp: string
 * Inhalt: Gibt den Namen inklusive Namespace des Dogus an.
-* Beispiel: `"name": "official/cas"`
+* Beispiel: `name: "official/cas"`
 
-#### TargetState
+#### Absent
 
-* Pflichtfeld
-* Datentyp: string
-* Inhalt: Gibt an, ob ein Dogu vorhanden oder nicht vorhanden sein soll.
-* Beispiel: `"targetState": "present"` oder `"targetState": "absent"`
+* Datentyp: boolean
+* Inhalt: Gibt an, ob ein Dogu entfernt werden soll.
+* Beispiel: `absent: true`
 
 #### Version
 
-* Bei `targetState=absent` optional. Bei `targetState=present` is die Version ein Pflichtfeld.
+* Bei `absent=true` optional. Sonst is die Version ein Pflichtfeld.
 * Datentyp: string
 * Inhalt: Gibt die Version des Dogus an.
-* Beispiel: `"version": "12.15-2"`
+* Beispiel: `version: "12.15-2"`
+
 
 #### PlatformConfig
 
@@ -66,18 +62,12 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
 * Inhalt: Gibt die minimale Volume-Size eines Dogus an. Falls das aktuelle Volume kleiner ist, wird eine Volume-Vergrößerung durchgeführt. Die Einheit muss mit dem Binär-Prefix angegeben werden (z.B. `Mi` oder `Gi`).
 * Beispiel:
 ```
-"dogus": [
-  {
-    "name":"official/nexus",
-    "targetState":"present",
-    "version":"3.59.0-2",
-    "platformConfig": {
-      "resource": {
-        "minVolumeSize": "5Gi"
-      }
-    }
-  }
-]
+dogus: 
+  name: "official/nexus"
+  version: "3.59.0-2"
+  platformConfig: 
+    resource: 
+      minVolumeSize: "5Gi"
 ```
 
 > Der Dogu-Operator erstellt Dogus mit 2Gi Volumes. Das Nexus-Dogu benötigt ein größeres Volume und muss
@@ -92,18 +82,12 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
 * Inhalt: Gibt die maximale Dateigröße für HTTP-Request an (`0`=unbegrenzt). Die Einheit muss mit dem Dezimal-Prefix angegeben werden (z.B. `M` oder `G`).
 * Beispiel:
 ```
-"dogus": [
-  {
-    "name":"official/nexus",
-    "targetState":"present",
-    "version":"3.59.0-2",
-    "platformConfig": {
-      "reverseProxy": {
-        "maxBodySize": "1G"
-      }
-    }
-  }
-]
+dogus:
+  name: "official/nexus"
+  version: "3.59.0-2"
+  platformConfig: 
+    reverseProxy: 
+      maxBodySize: "1G"
 ```
 
 ##### ReverseProxy.rewriteTarget
@@ -113,18 +97,12 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
 * Inhalt: Definiert ein Rewrite-Target.
 * Beispiel:
 ```
-"dogus": [
-  {
-    "name":"official/postgresql",
-    "targetState":"present",
-    "version":"12.15-2",
-    "platformConfig": {
-      "reverseProxy": {
-        "rewriteTarget": "/"
-      }
-    }
-  }
-]
+dogus:
+  name: "official/postgresql"
+  version: "12.15-2"
+  platformConfig: 
+    reverseProxy: 
+      rewriteTarget: "/"
 ```
 
 ##### ReverseProxy.additionalConfig
@@ -134,18 +112,12 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
 * Inhalt: Fügt beliebige zusätzliche Proxy-Konfiguration hinzu.
 * Beispiel:
 ```
-"dogus": [
-  {
-    "name":"official/postgresql",
-    "targetState":"present",
-    "version":"12.15-2",
-    "platformConfig": {
-      "reverseProxy": {
-        "additionalConfig": "<config>"
-      }
-    }
-  }
-]
+dogus:
+  name: "official/postgresql"
+  version: "12.15-2"
+  platformConfig: 
+    reverseProxy: 
+      additionalConfig: "<config>"
 ```
 
 ##### AdditionalMounts
@@ -155,19 +127,18 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
 * Inhalt: Das Feld `additionalDataMounts` ist eine List die Elemente von Typ `AdditionalMount` enthält
 * Beispiel:
 ```
-"dogus": [
-  {
-    "name":"official/nginx-static",
-    "targetState":"present",
-    "version":"1.26.3-2",
-    "platformConfig": {
-      "additionalMounts": [
-        {"sourceType": "ConfigMap","name": "my-html-configmap","volume":"customhtml","subfolder":"about"},
-        {"sourceType": "Secret", "my-ssh-key-secret","volume":"private_data"}
-      ]
-    }
-  }
-]
+dogus:
+  name: "official/nginx-static"
+  version: "1.26.3-2"
+  platformConfig: 
+    additionalMounts: 
+      - sourceType: "ConfigMap"
+        name: "my-html-configmap"
+        volume: "customhtml"
+        subfolder: "about"
+      - sourceType: "Secret" 
+        name: "my-ssh-key-secret"
+        volume: "private_data"
 ```
 
 ###### AdditionalMount
@@ -183,14 +154,14 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
   Gültige Optionen sind:
     - ConfigMap - Daten, die in einer kubernetes ConfigMap gespeichert sind.
     - Secret - Daten, die in einem kubernetes Secret gespeichert sind.
-* Beispiel: `"sourceType": ConfigMap`
+* Beispiel: `sourceType: ConfigMap`
 
 ###### AdditionalMount.Name
 
 * Pflichtfeld
 * Datentyp: String
 * Inhalt: Name ist der Name der Datenquelle.
-* Beispiel: `"name": my-configmap`
+* Beispiel: `name: my-configmap`
 
 ###### AdditionalMount.Volume
 
@@ -198,226 +169,92 @@ Mit dieser Konfiguration können Ressourcen und Reverse-Proxy-Konfigurationen de
 * Datentyp: String
 * Inhalt: Volume ist der Name des Volumes, in das die Daten gemountet werden sollen. Dieses wird in der jeweiligen
   dogu.json definiert.
-* Beispiel: `"volume": importHistory`
+* Beispiel: `volume: importHistory`
 
 ###### AdditionalMount.Subfolder
 
 * Optional
 * Datentyp: String
 * Inhalt: Subfolder definiert einen Unterordner, in dem die Daten innerhalb des Volumes abgelegt werden sollen.
-* Beispiel: `"subfolder": "my-configmap-subfolder"`
-
-## Components
-
-* Pflichtfeld
-* Datentyp: Array
-* Inhalt: Das Feld `components` ist eine Liste von Components und beschreibt den Zustand der Components im System.
-* Beispiel:
-```
-"components": [
-  {
-    "name":"k8s/k8s-dogu-operator",
-    "targetState":"present",
-    "version":"1.0.1"
-  },
-  {
-    "name":"k8s/k8s-dogu-operator-crd",
-    "targetState":"present",
-    "version":"1.0.1"
-  }
-}
-```
-
-### Component
-
-Eine Component kann folgende Felder beinhalten:
-
-#### Name
-
-* Pflichtfeld
-* Datentyp: string
-* Inhalt: Gibt den Namen inklusive Namespace der Component an.
-* Beispiel: `"name": "k8s/k8s-dogu-operator"`
-
-#### TargetState
-
-* Pflichtfeld
-* Datentyp: string
-* Inhalt: Gibt an, ob eine Component vorhanden oder nicht vorhanden sein soll.
-* Beispiel: `"targetState": "present"` oder `"targetState": "absent"`
-
-#### Version
-
-* Bei `targetState=absent` optional. Bei `targetState=present` ist die Version ein Pflichtfeld.
-* Datentyp: string
-* Inhalt: Gibt die Version der Component an.
-* Beispiel: `"version": "12.15-2"`
-
-#### DeployConfig
-
-Mit dieser Konfiguration können bestimmte Felder der Component-CR, und somit unter anderem Helm-Values definiert werden.
-
-##### deployConfig.deployNamespace
-
-* Optional
-* Datentyp: string
-* Inhalt: Gibt den Namespace an in den die Component installiert werden soll. Diese Konfiguration wird bisher nur für die Component `k8s/longhorn` benötigt.
-* Beispiel: 
-```
-"components": [
-  {
-    "name":"k8s/k8s-longhorn",
-    "targetState":"present",
-    "version":"1.5.1-4",
-    "deployConfig":{
-      "deployNamespace":"longhorn-system"
-    }
-  }
-]
-```
-
-##### deployConfig.overwriteConfig
-
-* Optional
-* Datentyp: string
-* Inhalt: Definiert zusätzliche Konfigurationen (Helm-Values) für die Component.
-* Beispiel:
-```
-"components": [
-  {
-    "name":"k8s/k8s-longhorn",
-    "targetState":"present",
-    "version":"1.5.1-4",
-    "deployConfig":{
-      "overwriteConfig":{
-        "longhorn":{
-          "defaultSettings":{
-            "backupTarget":"s3://longhorn@dummyregion/",
-            "backupTargetCredentialSecret":"longhorn-backup-target"
-          }
-        }
-      }
-    }
-  }
-]
-```
+* Beispiel: `subfolder: "my-configmap-subfolder"`
 
 ## Config
 
 Mit dem Feld `config` können globale und dogu-spezifische Konfigurationen der EcoSystem-Registry bearbeitet werden.
 Außerdem ist es möglich Konfigurationen für Dogus verschlüsselt zu speichern.
 
-### global.present
+### global
 
 * Optional
-* Datentyp: map[string]string
+* Datentyp: Array<configEntry>
 * Inhalt: Setzt globale Konfigurationen.
 * Beispiel:
 ```
-"config": {
-  "global": {
-    "present": {
-      "global_key1": "global_value1",
-      "global_key2": "global_value2"
-    }
-  }
-}
+config: 
+  global: 
+    - key: "gloval_key1"
+      value: "global_value1"
+    - key: "global_key2"
+      value: "global_value2"
 ```
 
-### global.absent
+### dogus
 
 * Optional
-* Datentyp: Array<string>
-* Inhalt: Entfernt globale Konfigurationen.
-* Beispiel:
-```
-"config": {
-  "global": {
-    "absent": [
-      "global_key1", "global_key2"
-    ]
-  }
-}
-```
-
-### dogus.config.present
-
-* Optional
-* Datentyp: map[string]string
+* Datentyp: map[string]Array<configEntry>
 * Inhalt: Setzt Konfigurationen für Dogus.
 * Beispiel:
 ```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "config": {
-        "present": {
-          "key1": "value1",
-          "key2": "value2"
-        }
-      }
-    }
-  }
-}
+config:
+  dogus:
+    postgresql:
+      - key: "key1"
+        value: "value1"
+      - key: "key2"
+        value: "value2"
 ```
 
-### dogus.config.absent
+### configEntry
 
-* Optional
-* Datentyp: Array<string>
-* Inhalt: Entfernt Konfigurationen von Dogus.
-* Beispiel:
-```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "config": {
-        "absent": [
-          "key1", "key2"
-        ]
-      }
-    }
-  }
-}
-```
+#### key
 
-### dogus.sensitiveConfig.present
+* Datentyp: string
+* Inhalt: Gibt den Schlüssel der Konfiguration an.
+* Beispiel: `key: "key1"`
+
+#### value
 
 * Optional
-* Datentyp: map[string]string
-* Inhalt: Setzt verschlüsselte Konfigurationen für Dogus.
-* Beispiel:
-```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "sensitiveConfig": {
-        "present": {
-          "key1": "value1",
-          "key2": "value2"
-        }
-      }
-    }
-  }
-}
-```
+* Datentyp: string
+* Inhalt: Gibt den Wert der Konfiguration an.
+* Beispiel: `value: "value1"` 
 
-### dogus.sensitiveConfig.absent
+#### absent
 
 * Optional
-* Datentyp: Array<string>
-* Inhalt: Entfernt verschlüsselte Konfigurationen von Dogus.
-* Beispiel:
-```
-"config": {
-  "dogus": {
-    "postgresql": {
-      "sensitiveConfig": {
-        "absent": [
-          "key1", "key2"
-        ]
-      }
-    }
-  }
-}
-```
+* Datentyp: boolean
+* Inhalt: Gibt an, ob der Konfigurationsschlüssel gelöscht werden soll. Wird dieser Wert gesetzt, muss lediglich der `key` mit angegeben werden.
+* Beispiel: `absent: true`
+
+#### sensitive
+
+* Optional
+* Datentyp: boolean
+* Inhalt: Gibt an, ob die Konfiguration sensibel ist (und entsprechend gespeichert werden soll).
+* Beispiel: `sensitive: true`.
+
+#### secretRef
+
+Die `SecretReference` kann genutzt werden, um statt eines `value` einen `key` aus einem Secret zu verwenden. 
+
+##### name
+
+* Datentyp: string
+* Inhalt: Gibt den Namen des Secrets an.
+* Beispiel: `name: "my-secret"`
+
+##### key
+
+* Datentyp: string
+* Inhalt: Gibt den Namen des Schlüssels aus dem Secret an.
+* Beispiel: `key: "my-secret-key"`

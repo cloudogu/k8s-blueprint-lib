@@ -1,0 +1,34 @@
+apiVersion: k8s.cloudogu.com/v2
+kind: Blueprint
+metadata:
+  labels:
+    app: ces
+    app.kubernetes.io/name: k8s-blueprint-lib
+  name: blueprint-sample
+spec:
+  displayName: "Blueprint Sample v6.834"
+  blueprint:
+    config:
+      dogus:
+        mysql:
+          - key: "logging/root"
+            value: "WARN"
+          - key: "sa-ldap/password"
+            sensitive: true
+            secretRef:
+              name: "ldap-sa-secret"
+              key: "password"
+          - key: "to/be/deleted"
+            absent: true
+      global:
+        - key: "my/global/key"
+          value: "myValue"
+        - absent: true
+          key: "global/to/be/delete"
+    dogus:
+      - name: "official/mysql"
+        version: "8.4.6-1"
+  blueprintMask:
+    dogus:
+      - absent: true
+        name: "official/mysql"
