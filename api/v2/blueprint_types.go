@@ -63,7 +63,7 @@ type BlueprintSpec struct {
 	// +optional
 	BlueprintMask *BlueprintMaskManifest `json:"blueprintMask,omitempty"`
 	// BlueprintMaskRef is a reference to a BlueprintMask
-	BlueprintMaskRef *string `json:"blueprintMaskRef,omitempty"`
+	BlueprintMaskRef *BlueprintMaskRef `json:"blueprintMaskRef,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
 	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`

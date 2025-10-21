@@ -25,3 +25,8 @@ type BlueprintMaskManifest struct {
 	// +optional
 	Dogus []MaskDogu `json:"dogus,omitempty"`
 }
+
+// BlueprintMaskRef points to a v2.BlueprintMask in the same namespace.
+type BlueprintMaskRef struct {
+	Name string `json:"name"`
+}
