@@ -61,8 +61,8 @@ type BlueprintSpec struct {
 	Blueprint BlueprintManifest `json:"blueprint"`
 	// BlueprintMask can further restrict the desired state from the blueprint.
 	// +optional
-	BlueprintMask *BlueprintMask `json:"blueprintMask,omitempty"`
-	// BlueprintMaskRef is a reference to a BlueprintMaskResource
+	BlueprintMask *BlueprintMaskManifest `json:"blueprintMask,omitempty"`
+	// BlueprintMaskRef is a reference to a BlueprintMask
 	BlueprintMaskRef *string `json:"blueprintMaskRef,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
@@ -95,5 +95,5 @@ type BlueprintStatus struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Blueprint{}, &BlueprintList{}, &BlueprintMaskResource{}, &BlueprintMaskResourceList{})
+	SchemeBuilder.Register(&Blueprint{}, &BlueprintList{}, &BlueprintMask{}, &BlueprintMaskList{})
 }

@@ -12,35 +12,36 @@ import (
 // +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Valid",type="string",JSONPath=".status.conditions[?(@.type == 'Valid')].status",description="Whether the resource is valid in the current state"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
+// +kubebuilder:gen
 
-// BlueprintMaskResource is the Schema for the blueprint mask API
+// BlueprintMask is the Schema for the blueprint mask API
 // TODO naming
-type BlueprintMaskResource struct {
+type BlueprintMask struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
-	// Spec defines the desired state of the BlueprintMaskResource.
+	// Spec defines the desired state of the BlueprintMask.
 	// +required
 	Spec BlueprintMaskResourceSpec `json:"spec"`
-	// Status defines the observed state of the BlueprintMaskResource.
+	// Status defines the observed state of the BlueprintMask.
 	// +optional
 	Status *BlueprintMaskResourceStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
 
-// BlueprintMaskResourceList contains a list of BlueprintMaskResource
-type BlueprintMaskResourceList struct {
+// BlueprintMaskList contains a list of BlueprintMask
+type BlueprintMaskList struct {
 	metav1.TypeMeta `json:",inline"`
 	metav1.ListMeta `json:"metadata,omitempty"`
-	Items           []BlueprintMaskResource `json:"items"`
+	Items           []BlueprintMask `json:"items"`
 }
 
-// BlueprintMaskResourceSpec defines the desired state of BlueprintMaskResource
+// BlueprintMaskResourceSpec defines the desired state of BlueprintMask
 type BlueprintMaskResourceSpec struct {
-	// BlueprintMask contains a list of dogus which should modify a dogu set in a blueprint.
+	// BlueprintMaskManifest contains a list of dogus which should modify a dogu set in a blueprint.
 	// +required
-	BlueprintMask
+	BlueprintMaskManifest
 }
 
 // BlueprintMaskResourceStatus defines the observed state of Blueprint

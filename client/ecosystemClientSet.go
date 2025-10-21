@@ -28,6 +28,8 @@ type V1Alpha1Interface interface {
 type blueprintGetter interface {
 	// Blueprints returns a client for blueprints in the given namespace.
 	Blueprints(namespace string) BlueprintInterface
+	// BlueprintMasks returns a client for blueprint masks in the given namespace.
+	BlueprintMasks(namespace string) BlueprintMaskInterface
 }
 
 // NewClientSet creates a new instance of the client set for this operator.
@@ -99,6 +101,14 @@ type V1Alpha1Client struct {
 // Blueprints returns a client for Blueprints in the given namespace.
 func (brc *V1Alpha1Client) Blueprints(namespace string) BlueprintInterface {
 	return &blueprintClient{
+		client: brc.restClient,
+		ns:     namespace,
+	}
+}
+
+// BlueprintMasks returns a client for BlueprintMasks in the given namespace.
+func (brc *V1Alpha1Client) BlueprintMasks(namespace string) BlueprintMaskInterface {
+	return &blueprintMaskClient{
 		client: brc.restClient,
 		ns:     namespace,
 	}

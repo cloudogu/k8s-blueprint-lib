@@ -15,12 +15,12 @@ type BlueprintManifest struct {
 	Config *Config `json:"config,omitempty"`
 }
 
-// BlueprintMask describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
+// BlueprintMaskManifest describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
 // and use the blueprint mask to remove dogus from it.
 //
 // In general additions without changing the version are fine, as long as they don't change semantics. Removal or
 // renaming are breaking changes and require a new blueprint API version.
-type BlueprintMask struct {
+type BlueprintMaskManifest struct {
 	// Dogus contains a set of dogus with their versions which should be present or absent.
 	// +optional
 	Dogus []MaskDogu `json:"dogus,omitempty"`
