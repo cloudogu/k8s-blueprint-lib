@@ -40,7 +40,7 @@ type BlueprintMaskList struct {
 type BlueprintMaskSpec struct {
 	// BlueprintMaskManifest contains a list of dogus which should modify a dogu set in a blueprint.
 	// +required
-	BlueprintMaskManifest
+	*BlueprintMaskManifest
 }
 
 // BlueprintMaskStatus defines the observed state of BlueprintMask
