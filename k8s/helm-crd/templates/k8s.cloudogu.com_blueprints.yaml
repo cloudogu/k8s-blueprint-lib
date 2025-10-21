@@ -283,6 +283,14 @@ spec:
                         type: object
                       type: array
                   type: object
+                blueprintMaskRef:
+                  description: BlueprintMaskRef is a reference to a BlueprintMask
+                  properties:
+                    name:
+                      type: string
+                  required:
+                    - name
+                  type: object
                 displayName:
                   description: DisplayName is the name of the blueprint that will be shown in the UI.
                   type: string
@@ -296,6 +304,9 @@ spec:
                 - blueprint
                 - displayName
               type: object
+              x-kubernetes-validations:
+                - message: Only one of BlueprintMask and BlueprintMaskRef can be set at a time
+                  rule: (has(self.blueprintMask) && !has(self.blueprintMaskRef)) || (!has(self.blueprintMask) && has(self.blueprintMaskRef))
             status:
               description: Status defines the observed state of the Blueprint.
               properties:

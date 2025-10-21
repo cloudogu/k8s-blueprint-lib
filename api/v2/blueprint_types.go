@@ -52,6 +52,7 @@ type BlueprintList struct {
 }
 
 // BlueprintSpec defines the desired state of Blueprint
+// +kubebuilder:validation:XValidation:rule="(has(self.blueprintMask) && !has(self.blueprintMaskRef)) || (!has(self.blueprintMask) && has(self.blueprintMaskRef))", message="Only one of BlueprintMask and BlueprintMaskRef can be set at a time"
 type BlueprintSpec struct {
 	// DisplayName is the name of the blueprint that will be shown in the UI.
 	// +required
