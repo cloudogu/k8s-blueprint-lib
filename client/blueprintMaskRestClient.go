@@ -13,7 +13,7 @@ import (
 	"github.com/cloudogu/k8s-blueprint-lib/v2/api/v2"
 )
 
-const resourceMaskName = "blueprintMasks"
+const resourceMaskName = "blueprintmasks"
 
 type BlueprintMaskInterface interface {
 	// Create takes the representation of a v2.BlueprintMask and creates it. Returns the server's representation of the v2.BlueprintMask, and an error, if there is any.
