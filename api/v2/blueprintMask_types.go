@@ -15,17 +15,16 @@ import (
 // +kubebuilder:gen
 
 // BlueprintMask is the Schema for the blueprint mask API
-// TODO naming
 type BlueprintMask struct {
 	metav1.TypeMeta   `json:",inline"`
 	metav1.ObjectMeta `json:"metadata,omitempty"`
 
 	// Spec defines the desired state of the BlueprintMask.
 	// +required
-	Spec BlueprintMaskResourceSpec `json:"spec"`
+	Spec BlueprintMaskSpec `json:"spec"`
 	// Status defines the observed state of the BlueprintMask.
 	// +optional
-	Status *BlueprintMaskResourceStatus `json:"status,omitempty"`
+	Status *BlueprintMaskStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -37,16 +36,16 @@ type BlueprintMaskList struct {
 	Items           []BlueprintMask `json:"items"`
 }
 
-// BlueprintMaskResourceSpec defines the desired state of BlueprintMask
-type BlueprintMaskResourceSpec struct {
+// BlueprintMaskSpec defines the desired state of BlueprintMask
+type BlueprintMaskSpec struct {
 	// BlueprintMaskManifest contains a list of dogus which should modify a dogu set in a blueprint.
 	// +required
 	BlueprintMaskManifest
 }
 
-// BlueprintMaskResourceStatus defines the observed state of Blueprint
-type BlueprintMaskResourceStatus struct {
-	// Conditions shows the current state of the blueprint
+// BlueprintMaskStatus defines the observed state of BlueprintMask
+type BlueprintMaskStatus struct {
+	// Conditions shows the current state of the BlueprintMask
 	// +patchMergeKey=type
 	// +patchStrategy=merge
 	// +listType=map

@@ -16,31 +16,31 @@ import (
 const resourceMaskName = "blueprintMasks"
 
 type BlueprintMaskInterface interface {
-	// Create takes the representation of a BlueprintMaskManifest and creates it.  Returns the server's representation of the blueprint, and an error, if there is any.
-	Create(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.CreateOptions) (*v2.BlueprintMask, error)
+	// Create takes the representation of a v2.BlueprintMask and creates it. Returns the server's representation of the v2.BlueprintMask, and an error, if there is any.
+	Create(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.CreateOptions) (*v2.BlueprintMask, error)
 
-	// Update takes the representation of a blueprint and updates it. Returns the server's representation of the blueprint, and an error, if there is any.
-	Update(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
+	// Update takes the representation of a v2.BlueprintMask and updates it. Returns the server's representation of the v2.BlueprintMask, and an error, if there is any.
+	Update(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
 
 	// UpdateStatus was generated because the type contains a Status member.
-	UpdateStatus(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
+	UpdateStatus(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
 
-	// Delete takes name of the blueprint and deletes it. Returns an error if one occurs.
+	// Delete takes name of the v2.BlueprintMask and deletes it. Returns an error if one occurs.
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 
 	// DeleteCollection deletes a collection of objects.
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
 
-	// Get takes name of the blueprint, and returns the corresponding blueprint object, and an error if there is any.
+	// Get takes name of the v2.BlueprintMask, and returns the corresponding v2.BlueprintMask object, and an error if there is any.
 	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v2.BlueprintMask, error)
 
-	// List takes label and field selectors, and returns the list of Blueprints that match those selectors.
+	// List takes label and field selectors, and returns the list of v2.BlueprintMask that match those selectors.
 	List(ctx context.Context, opts metav1.ListOptions) (*v2.BlueprintMaskList, error)
 
-	// Watch returns a watch.Interface that watches the requested blueprints.
+	// Watch returns a watch.Interface that watches the requested blueprintMasks.
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
 
-	// Patch applies the patch and returns the patched blueprint.
+	// Patch applies the patch and returns the patched v2.BlueprintMask.
 	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v2.BlueprintMask, err error)
 }
 
@@ -49,7 +49,6 @@ type blueprintMaskClient struct {
 	ns     string
 }
 
-// Get takes name of the blueprint, and returns the corresponding blueprint object, and an error if there is any.
 func (d *blueprintMaskClient) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v2.BlueprintMask, err error) {
 	result = &v2.BlueprintMask{}
 	err = d.client.Get().
@@ -62,7 +61,6 @@ func (d *blueprintMaskClient) Get(ctx context.Context, name string, options meta
 	return
 }
 
-// List takes label and field selectors, and returns the list of Blueprints that match those selectors.
 func (d *blueprintMaskClient) List(ctx context.Context, opts metav1.ListOptions) (result *v2.BlueprintMaskList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
@@ -79,7 +77,6 @@ func (d *blueprintMaskClient) List(ctx context.Context, opts metav1.ListOptions)
 	return
 }
 
-// Watch returns a watch.Interface that watches the requested blueprints.
 func (d *blueprintMaskClient) Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
@@ -94,7 +91,6 @@ func (d *blueprintMaskClient) Watch(ctx context.Context, opts metav1.ListOptions
 		Watch(ctx)
 }
 
-// Create takes the representation of a blueprint and creates it.  Returns the server's representation of the blueprint, and an error, if there is any.
 func (d *blueprintMaskClient) Create(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.CreateOptions) (result *v2.BlueprintMask, err error) {
 	result = &v2.BlueprintMask{}
 	err = d.client.Post().
@@ -107,7 +103,6 @@ func (d *blueprintMaskClient) Create(ctx context.Context, blueprint *v2.Blueprin
 	return
 }
 
-// Update takes the representation of a blueprint and updates it. Returns the server's representation of the blueprint, and an error, if there is any.
 func (d *blueprintMaskClient) Update(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.UpdateOptions) (result *v2.BlueprintMask, err error) {
 	result = &v2.BlueprintMask{}
 	err = d.client.Put().
@@ -121,8 +116,6 @@ func (d *blueprintMaskClient) Update(ctx context.Context, blueprint *v2.Blueprin
 	return
 }
 
-// UpdateStatus was generated because the type contains a Status member.
-// Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
 func (d *blueprintMaskClient) UpdateStatus(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.UpdateOptions) (result *v2.BlueprintMask, err error) {
 	result = &v2.BlueprintMask{}
 	err = d.client.Put().
@@ -137,7 +130,6 @@ func (d *blueprintMaskClient) UpdateStatus(ctx context.Context, blueprint *v2.Bl
 	return
 }
 
-// Delete takes name of the blueprint and deletes it. Returns an error if one occurs.
 func (d *blueprintMaskClient) Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error {
 	return d.client.Delete().
 		Namespace(d.ns).
@@ -148,7 +140,6 @@ func (d *blueprintMaskClient) Delete(ctx context.Context, name string, opts meta
 		Error()
 }
 
-// DeleteCollection deletes a collection of objects.
 func (d *blueprintMaskClient) DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error {
 	var timeout time.Duration
 	if listOpts.TimeoutSeconds != nil {
@@ -164,7 +155,6 @@ func (d *blueprintMaskClient) DeleteCollection(ctx context.Context, opts metav1.
 		Error()
 }
 
-// Patch applies the patch and returns the patched blueprint.
 func (d *blueprintMaskClient) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v2.BlueprintMask, err error) {
 	result = &v2.BlueprintMask{}
 	err = d.client.Patch(pt).
