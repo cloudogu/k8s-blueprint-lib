@@ -10,7 +10,6 @@ import (
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bpm
 // +kubebuilder:subresource:status
-// +kubebuilder:printcolumn:name="Valid",type="string",JSONPath=".status.conditions[?(@.type == 'Valid')].status",description="Whether the resource is valid in the current state"
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 // +kubebuilder:gen
 
