@@ -20,10 +20,6 @@ spec:
   scope: Namespaced
   versions:
     - additionalPrinterColumns:
-        - description: Whether the resource is valid in the current state
-          jsonPath: .status.conditions[?(@.type == 'Valid')].status
-          name: Valid
-          type: string
         - description: The age of the resource
           jsonPath: .metadata.creationTimestamp
           name: Age
