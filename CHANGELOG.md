@@ -7,6 +7,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- [#11] Blueprint mask crd. It can be used with the field `blueprintMaskRef` instead of the field `blueprintMask` in the Blueprint. 
+
 ## [v2.0.0] - 2025-10-10
 
 **Breaking Changes ahead**
