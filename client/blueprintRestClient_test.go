@@ -16,12 +16,12 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
 
-	bpv2 "github.com/cloudogu/k8s-blueprint-lib/v3/api/v3"
+	bpv3 "github.com/cloudogu/k8s-blueprint-lib/v3/api/v3"
 )
 
 var testCtx = context.Background()
 
-var apiBasePathTestNS = fmt.Sprintf("/apis/%s/%s/namespaces/test/%s", bpv2.GroupVersion.Group, bpv2.GroupVersion.Version, resourceName)
+var apiBasePathTestNS = fmt.Sprintf("/apis/%s/%s/namespaces/test/%s", bpv3.GroupVersion.Group, bpv3.GroupVersion.Version, resourceName)
 
 func Test_blueprintClient_Get(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
@@ -32,7 +32,7 @@ func Test_blueprintClient_Get(t *testing.T) {
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
-			blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
+			blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
 			blueprintBytes, err := json.Marshal(blueprint)
 			require.NoError(t, err)
 			_, err = writer.Write(blueprintBytes)
@@ -63,8 +63,8 @@ func Test_blueprintClient_List(t *testing.T) {
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
-			blueprintList := bpv2.BlueprintList{}
-			blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
+			blueprintList := bpv3.BlueprintList{}
+			blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
 			blueprintList.Items = append(blueprintList.Items, *blueprint)
 			blueprintBytes, err := json.Marshal(blueprintList)
 			require.NoError(t, err)
@@ -119,7 +119,7 @@ func Test_blueprintClient_Watch(t *testing.T) {
 func Test_blueprintClient_Create(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPost, request.Method)
@@ -128,7 +128,7 @@ func Test_blueprintClient_Create(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &bpv2.Blueprint{}
+			createdBlueprint := &bpv3.Blueprint{}
 			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
 			assert.Equal(t, "tocreate", createdBlueprint.Name)
 
@@ -155,7 +155,7 @@ func Test_blueprintClient_Create(t *testing.T) {
 func Test_blueprintClient_Update(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
@@ -164,7 +164,7 @@ func Test_blueprintClient_Update(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &bpv2.Blueprint{}
+			createdBlueprint := &bpv3.Blueprint{}
 			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
 			assert.Equal(t, "tocreate", createdBlueprint.Name)
 
@@ -191,7 +191,7 @@ func Test_blueprintClient_Update(t *testing.T) {
 func Test_blueprintClient_UpdateStatus(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv2.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
@@ -200,7 +200,7 @@ func Test_blueprintClient_UpdateStatus(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &bpv2.Blueprint{}
+			createdBlueprint := &bpv3.Blueprint{}
 			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
 			assert.Equal(t, "tocreate", createdBlueprint.Name)
 
@@ -285,7 +285,7 @@ func Test_blueprintClient_Patch(t *testing.T) {
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 			assert.Equal(t, []byte("test"), bytes)
-			result, err := json.Marshal(bpv2.Blueprint{})
+			result, err := json.Marshal(bpv3.Blueprint{})
 			require.NoError(t, err)
 
 			writer.Header().Add("content-type", "application/json")
