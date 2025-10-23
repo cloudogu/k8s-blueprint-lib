@@ -62,7 +62,7 @@ type BlueprintSpec struct {
 	Blueprint BlueprintManifest `json:"blueprint"`
 	// MaskSource references a blueprint mask that can further restrict the desired state from the blueprint.
 	// +optional
-	MaskSource *MaskSource `json:"maskSource,omitempty"`
+	MaskSource *MaskSource `json:"blueprintMask,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
 	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`
@@ -76,12 +76,12 @@ type BlueprintSpec struct {
 }
 
 type MaskSource struct {
-	// Embedded describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
+	// Manifest describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
 	// +optional
-	Embedded *BlueprintMaskManifest `json:"embedded,omitempty"`
-	// BlueprintMaskCRRef is a reference to a BlueprintMask
+	Manifest *BlueprintMaskManifest `json:"manifest,omitempty"`
+	// CrRef is a reference to a BlueprintMask
 	// +optional
-	BlueprintMaskCRRef *BlueprintMaskCRRef `json:"blueprintMaskCRRef,omitempty"`
+	CrRef *BlueprintMaskCRRef `json:"crRef,omitempty"`
 }
 
 // BlueprintStatus defines the observed state of Blueprint

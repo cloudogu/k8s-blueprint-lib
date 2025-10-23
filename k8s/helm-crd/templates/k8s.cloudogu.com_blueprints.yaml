@@ -257,25 +257,19 @@ spec:
                             rule: '(!has(self.absent) || !self.absent) ? has(self.version) : true'
                       type: array
                   type: object
-                displayName:
-                  description: DisplayName is the name of the blueprint that will be shown in the UI.
-                  type: string
-                ignoreDoguHealth:
-                  description: IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
-                  type: boolean
-                maskSource:
+                blueprintMask:
                   description: MaskSource references a blueprint mask that can further restrict the desired state from the blueprint.
                   properties:
-                    blueprintMaskCRRef:
-                      description: BlueprintMaskCRRef is a reference to a BlueprintMask
+                    crRef:
+                      description: CrRef is a reference to a BlueprintMask
                       properties:
                         name:
                           type: string
                       required:
                         - name
                       type: object
-                    embedded:
-                      description: Embedded describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
+                    manifest:
+                      description: Manifest describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
                       properties:
                         dogus:
                           description: Dogus contains a set of dogus with their versions which should be present or absent.
@@ -301,6 +295,12 @@ spec:
                           type: array
                       type: object
                   type: object
+                displayName:
+                  description: DisplayName is the name of the blueprint that will be shown in the UI.
+                  type: string
+                ignoreDoguHealth:
+                  description: IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
+                  type: boolean
                 stopped:
                   description: Stopped lets the user stop the blueprint execution. The blueprint will still check if all attributes are correct and avoid a result with a failure state.
                   type: boolean
