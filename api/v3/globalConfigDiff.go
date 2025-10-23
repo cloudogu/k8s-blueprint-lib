@@ -1,4 +1,4 @@
-package v2
+package v3
 
 // GlobalConfigDiff is a list of differences between the GlobalConfig in the Blueprint and the cluster state
 type GlobalConfigDiff []ConfigEntryDiff

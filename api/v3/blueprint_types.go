@@ -1,4 +1,4 @@
-package v2
+package v3
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -59,9 +59,9 @@ type BlueprintSpec struct {
 	// Blueprint with the desired state of the ecosystem.
 	// +required
 	Blueprint BlueprintManifest `json:"blueprint"`
-	// BlueprintMask can further restrict the desired state from the blueprint.
+	// MaskSource references a blueprint mask that can further restrict the desired state from the blueprint.
 	// +optional
-	BlueprintMask *BlueprintMask `json:"blueprintMask,omitempty"`
+	MaskSource *MaskSource `json:"blueprintMask,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
 	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`
@@ -72,6 +72,17 @@ type BlueprintSpec struct {
 	// Stopped lets the user stop the blueprint execution. The blueprint will still check if all attributes are correct and avoid a result with a failure state.
 	// +optional
 	Stopped *bool `json:"stopped,omitempty"`
+}
+
+// MaskSource is a union type to add a blueprint mask either directly or via references
+// +kubebuilder:validation:XValidation:rule="(has(self.manifest) && !has(self.crRef)) || (!has(self.manifest) && has(self.crRef))", message="Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)"
+type MaskSource struct {
+	// Manifest describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
+	// +optional
+	Manifest *BlueprintMaskManifest `json:"manifest,omitempty"`
+	// CrRef is a reference to a BlueprintMask
+	// +optional
+	CrRef *BlueprintMaskCRRef `json:"crRef,omitempty"`
 }
 
 // BlueprintStatus defines the observed state of Blueprint
@@ -93,5 +104,5 @@ type BlueprintStatus struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Blueprint{}, &BlueprintList{})
+	SchemeBuilder.Register(&Blueprint{}, &BlueprintList{}, &BlueprintMask{}, &BlueprintMaskList{})
 }

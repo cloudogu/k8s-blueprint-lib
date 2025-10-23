@@ -2,11 +2,12 @@ package kubernetes
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"testing"
 )
 
 func TestNewForConfig(t *testing.T) {
