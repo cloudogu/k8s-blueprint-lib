@@ -30,3 +30,14 @@ type DoguDiffState struct {
 // DoguAction is the action that needs to be done for a dogu
 // to achieve the desired state in the cluster.
 type DoguAction string
+
+const (
+	DoguActionInstall                     DoguAction = "install"
+	DoguActionUninstall                   DoguAction = "uninstall"
+	DoguActionUpgrade                     DoguAction = "upgrade"
+	DoguActionDowngrade                   DoguAction = "downgrade"
+	DoguActionSwitchNamespace             DoguAction = "dogu namespace switch"
+	DoguActionUpdateReverseProxyConfig    DoguAction = "update reverse proxy"
+	DoguActionUpdateResourceMinVolumeSize DoguAction = "update resource minimum volume size"
+	DoguActionUpdateAdditionalMounts      DoguAction = "update additional mounts"
+)
