@@ -3,8 +3,11 @@ package v2
 type ConfigAction string
 
 const (
-	ConfigActionNone   ConfigAction = "none"
-	ConfigActionSet    ConfigAction = "set"
+	// ConfigActionNone means that nothing is to do for this config key
+	ConfigActionNone ConfigAction = "none"
+	// ConfigActionSet means that the config key needs to be set as given
+	ConfigActionSet ConfigAction = "set"
+	// ConfigActionRemove means that the config key needs to be deleted
 	ConfigActionRemove ConfigAction = "remove"
 )
 

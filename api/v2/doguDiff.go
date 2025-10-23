@@ -32,12 +32,20 @@ type DoguDiffState struct {
 type DoguAction string
 
 const (
-	DoguActionInstall                     DoguAction = "install"
-	DoguActionUninstall                   DoguAction = "uninstall"
-	DoguActionUpgrade                     DoguAction = "upgrade"
-	DoguActionDowngrade                   DoguAction = "downgrade"
-	DoguActionSwitchNamespace             DoguAction = "dogu namespace switch"
-	DoguActionUpdateReverseProxyConfig    DoguAction = "update reverse proxy"
+	// DoguActionInstall means the dogu is to be installed
+	DoguActionInstall DoguAction = "install"
+	// DoguActionUninstall means the dogu is to be uninstalled
+	DoguActionUninstall DoguAction = "uninstall"
+	// DoguActionUpgrade means an upgrade needs to be performed for the dogu
+	DoguActionUpgrade DoguAction = "upgrade"
+	// DoguActionDowngrade means a downgrade needs to be performed for the dogu
+	DoguActionDowngrade DoguAction = "downgrade"
+	// DoguActionSwitchNamespace means the dogu should be pulled from a different dogu registry namespace
+	DoguActionSwitchNamespace DoguAction = "dogu namespace switch"
+	// DoguActionUpdateReverseProxyConfig means the reverse proxy config of the dogu needs to be updated
+	DoguActionUpdateReverseProxyConfig DoguAction = "update reverse proxy"
+	// DoguActionUpdateResourceMinVolumeSize means the minimum volume size of the dogu needs to be changed
 	DoguActionUpdateResourceMinVolumeSize DoguAction = "update resource minimum volume size"
-	DoguActionUpdateAdditionalMounts      DoguAction = "update additional mounts"
+	// DoguActionUpdateAdditionalMounts means the additional mounts should be updated for the dogu
+	DoguActionUpdateAdditionalMounts DoguAction = "update additional mounts"
 )
