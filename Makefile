@@ -2,7 +2,7 @@
 PROJECT_NAME=k8s-blueprint-lib
 ARTIFACT_ID=k8s-blueprint-operator-crd
 APPEND_CRD_SUFFIX=false
-VERSION=3.0.0
+VERSION=3.0.1
 
 GOTAG?=1.25.3
 MAKEFILES_VERSION=10.4.0
