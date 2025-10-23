@@ -8,7 +8,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Added
-- [#11] Blueprint mask crd. It can be used with the field `blueprintMaskRef` instead of the field `blueprintMask` in the Blueprint. 
+- [#11] Blueprint mask CRD, so that masks can be applied separately to the blueprint
+
+### Changed
+- [#11] **Breaking** blueprint mask have now a union type, where they can or added directly or referenced 
+  - if you have a mask in your blueprint, you have to add it in the union type now
+
+## [v2.0.1] - 2025-10-23
+
+### Added
+- [#14] Extracted state diff constants from operator
 
 ## [v2.0.0] - 2025-10-10
 
