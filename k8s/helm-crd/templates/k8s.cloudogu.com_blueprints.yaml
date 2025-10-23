@@ -295,6 +295,9 @@ spec:
                           type: array
                       type: object
                   type: object
+                  x-kubernetes-validations:
+                    - message: Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)
+                      rule: (has(self.manifest) && !has(self.crRef)) || (!has(self.manifest) && has(self.crRef))
                 displayName:
                   description: DisplayName is the name of the blueprint that will be shown in the UI.
                   type: string
@@ -308,9 +311,6 @@ spec:
                 - blueprint
                 - displayName
               type: object
-              x-kubernetes-validations:
-                - message: Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)
-                  rule: (has(self.maskSource.embedded) && !has(self.maskSource.blueprintMaskRef)) || (!has(self.maskSource.embedded) && has(self.maskSource.blueprintMaskRef))
             status:
               description: Status defines the observed state of the Blueprint.
               properties:
