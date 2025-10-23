@@ -11,20 +11,20 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
 
-	"github.com/cloudogu/k8s-blueprint-lib/v2/api/v2"
+	"github.com/cloudogu/k8s-blueprint-lib/v3/api/v3"
 )
 
 const resourceName = "blueprints"
 
 type BlueprintInterface interface {
 	// Create takes the representation of a blueprint and creates it.  Returns the server's representation of the blueprint, and an error, if there is any.
-	Create(ctx context.Context, blueprint *v2.Blueprint, opts metav1.CreateOptions) (*v2.Blueprint, error)
+	Create(ctx context.Context, blueprint *v3.Blueprint, opts metav1.CreateOptions) (*v3.Blueprint, error)
 
 	// Update takes the representation of a blueprint and updates it. Returns the server's representation of the blueprint, and an error, if there is any.
-	Update(ctx context.Context, blueprint *v2.Blueprint, opts metav1.UpdateOptions) (*v2.Blueprint, error)
+	Update(ctx context.Context, blueprint *v3.Blueprint, opts metav1.UpdateOptions) (*v3.Blueprint, error)
 
 	// UpdateStatus was generated because the type contains a Status member.
-	UpdateStatus(ctx context.Context, blueprint *v2.Blueprint, opts metav1.UpdateOptions) (*v2.Blueprint, error)
+	UpdateStatus(ctx context.Context, blueprint *v3.Blueprint, opts metav1.UpdateOptions) (*v3.Blueprint, error)
 
 	// Delete takes name of the blueprint and deletes it. Returns an error if one occurs.
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
@@ -33,16 +33,16 @@ type BlueprintInterface interface {
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
 
 	// Get takes name of the blueprint, and returns the corresponding blueprint object, and an error if there is any.
-	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v2.Blueprint, error)
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v3.Blueprint, error)
 
 	// List takes label and field selectors, and returns the list of Blueprints that match those selectors.
-	List(ctx context.Context, opts metav1.ListOptions) (*v2.BlueprintList, error)
+	List(ctx context.Context, opts metav1.ListOptions) (*v3.BlueprintList, error)
 
 	// Watch returns a watch.Interface that watches the requested blueprints.
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
 
 	// Patch applies the patch and returns the patched blueprint.
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v2.Blueprint, err error)
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v3.Blueprint, err error)
 }
 
 type blueprintClient struct {
@@ -51,8 +51,8 @@ type blueprintClient struct {
 }
 
 // Get takes name of the blueprint, and returns the corresponding blueprint object, and an error if there is any.
-func (d *blueprintClient) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v2.Blueprint, err error) {
-	result = &v2.Blueprint{}
+func (d *blueprintClient) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v3.Blueprint, err error) {
+	result = &v3.Blueprint{}
 	err = d.client.Get().
 		Namespace(d.ns).
 		Resource(resourceName).
@@ -64,12 +64,12 @@ func (d *blueprintClient) Get(ctx context.Context, name string, options metav1.G
 }
 
 // List takes label and field selectors, and returns the list of Blueprints that match those selectors.
-func (d *blueprintClient) List(ctx context.Context, opts metav1.ListOptions) (result *v2.BlueprintList, err error) {
+func (d *blueprintClient) List(ctx context.Context, opts metav1.ListOptions) (result *v3.BlueprintList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
 	}
-	result = &v2.BlueprintList{}
+	result = &v3.BlueprintList{}
 	err = d.client.Get().
 		Namespace(d.ns).
 		Resource(resourceName).
@@ -96,8 +96,8 @@ func (d *blueprintClient) Watch(ctx context.Context, opts metav1.ListOptions) (w
 }
 
 // Create takes the representation of a blueprint and creates it.  Returns the server's representation of the blueprint, and an error, if there is any.
-func (d *blueprintClient) Create(ctx context.Context, blueprint *v2.Blueprint, opts metav1.CreateOptions) (result *v2.Blueprint, err error) {
-	result = &v2.Blueprint{}
+func (d *blueprintClient) Create(ctx context.Context, blueprint *v3.Blueprint, opts metav1.CreateOptions) (result *v3.Blueprint, err error) {
+	result = &v3.Blueprint{}
 	err = d.client.Post().
 		Namespace(d.ns).
 		Resource(resourceName).
@@ -109,8 +109,8 @@ func (d *blueprintClient) Create(ctx context.Context, blueprint *v2.Blueprint, o
 }
 
 // Update takes the representation of a blueprint and updates it. Returns the server's representation of the blueprint, and an error, if there is any.
-func (d *blueprintClient) Update(ctx context.Context, blueprint *v2.Blueprint, opts metav1.UpdateOptions) (result *v2.Blueprint, err error) {
-	result = &v2.Blueprint{}
+func (d *blueprintClient) Update(ctx context.Context, blueprint *v3.Blueprint, opts metav1.UpdateOptions) (result *v3.Blueprint, err error) {
+	result = &v3.Blueprint{}
 	err = d.client.Put().
 		Namespace(d.ns).
 		Resource(resourceName).
@@ -124,8 +124,8 @@ func (d *blueprintClient) Update(ctx context.Context, blueprint *v2.Blueprint, o
 
 // UpdateStatus was generated because the type contains a Status member.
 // Add a +genclient:noStatus comment above the type to avoid generating UpdateStatus().
-func (d *blueprintClient) UpdateStatus(ctx context.Context, blueprint *v2.Blueprint, opts metav1.UpdateOptions) (result *v2.Blueprint, err error) {
-	result = &v2.Blueprint{}
+func (d *blueprintClient) UpdateStatus(ctx context.Context, blueprint *v3.Blueprint, opts metav1.UpdateOptions) (result *v3.Blueprint, err error) {
+	result = &v3.Blueprint{}
 	err = d.client.Put().
 		Namespace(d.ns).
 		Resource(resourceName).
@@ -166,8 +166,8 @@ func (d *blueprintClient) DeleteCollection(ctx context.Context, opts metav1.Dele
 }
 
 // Patch applies the patch and returns the patched blueprint.
-func (d *blueprintClient) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v2.Blueprint, err error) {
-	result = &v2.Blueprint{}
+func (d *blueprintClient) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v3.Blueprint, err error) {
+	result = &v3.Blueprint{}
 	err = d.client.Patch(pt).
 		Namespace(d.ns).
 		Resource(resourceName).

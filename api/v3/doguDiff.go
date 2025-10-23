@@ -1,4 +1,4 @@
-package v2
+package v3
 
 // DoguDiff is the comparison of a Dogu's desired state vs. its cluster state.
 // It contains the operation that needs to be done to achieve this desired state.

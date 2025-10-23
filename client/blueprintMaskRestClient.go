@@ -11,35 +11,35 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/rest"
 
-	"github.com/cloudogu/k8s-blueprint-lib/v2/api/v2"
+	"github.com/cloudogu/k8s-blueprint-lib/v3/api/v3"
 )
 
 const resourceMaskName = "blueprintmasks"
 
 type BlueprintMaskInterface interface {
-	// Create takes the representation of a v2.BlueprintMask and creates it. Returns the server's representation of the v2.BlueprintMask, and an error, if there is any.
-	Create(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.CreateOptions) (*v2.BlueprintMask, error)
+	// Create takes the representation of a v3.BlueprintMask and creates it. Returns the server's representation of the v3.BlueprintMask, and an error, if there is any.
+	Create(ctx context.Context, blueprintMask *v3.BlueprintMask, opts metav1.CreateOptions) (*v3.BlueprintMask, error)
 
-	// Update takes the representation of a v2.BlueprintMask and updates it. Returns the server's representation of the v2.BlueprintMask, and an error, if there is any.
-	Update(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
+	// Update takes the representation of a v3.BlueprintMask and updates it. Returns the server's representation of the v3.BlueprintMask, and an error, if there is any.
+	Update(ctx context.Context, blueprintMask *v3.BlueprintMask, opts metav1.UpdateOptions) (*v3.BlueprintMask, error)
 
-	// Delete takes name of the v2.BlueprintMask and deletes it. Returns an error if one occurs.
+	// Delete takes name of the v3.BlueprintMask and deletes it. Returns an error if one occurs.
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 
 	// DeleteCollection deletes a collection of objects.
 	DeleteCollection(ctx context.Context, opts metav1.DeleteOptions, listOpts metav1.ListOptions) error
 
-	// Get takes name of the v2.BlueprintMask, and returns the corresponding v2.BlueprintMask object, and an error if there is any.
-	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v2.BlueprintMask, error)
+	// Get takes name of the v3.BlueprintMask, and returns the corresponding v3.BlueprintMask object, and an error if there is any.
+	Get(ctx context.Context, name string, opts metav1.GetOptions) (*v3.BlueprintMask, error)
 
-	// List takes label and field selectors, and returns the list of v2.BlueprintMask that match those selectors.
-	List(ctx context.Context, opts metav1.ListOptions) (*v2.BlueprintMaskList, error)
+	// List takes label and field selectors, and returns the list of v3.BlueprintMask that match those selectors.
+	List(ctx context.Context, opts metav1.ListOptions) (*v3.BlueprintMaskList, error)
 
 	// Watch returns a watch.Interface that watches the requested blueprintMasks.
 	Watch(ctx context.Context, opts metav1.ListOptions) (watch.Interface, error)
 
-	// Patch applies the patch and returns the patched v2.BlueprintMask.
-	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v2.BlueprintMask, err error)
+	// Patch applies the patch and returns the patched v3.BlueprintMask.
+	Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v3.BlueprintMask, err error)
 }
 
 type blueprintMaskClient struct {
@@ -47,8 +47,8 @@ type blueprintMaskClient struct {
 	ns     string
 }
 
-func (d *blueprintMaskClient) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v2.BlueprintMask, err error) {
-	result = &v2.BlueprintMask{}
+func (d *blueprintMaskClient) Get(ctx context.Context, name string, options metav1.GetOptions) (result *v3.BlueprintMask, err error) {
+	result = &v3.BlueprintMask{}
 	err = d.client.Get().
 		Namespace(d.ns).
 		Resource(resourceMaskName).
@@ -59,12 +59,12 @@ func (d *blueprintMaskClient) Get(ctx context.Context, name string, options meta
 	return
 }
 
-func (d *blueprintMaskClient) List(ctx context.Context, opts metav1.ListOptions) (result *v2.BlueprintMaskList, err error) {
+func (d *blueprintMaskClient) List(ctx context.Context, opts metav1.ListOptions) (result *v3.BlueprintMaskList, err error) {
 	var timeout time.Duration
 	if opts.TimeoutSeconds != nil {
 		timeout = time.Duration(*opts.TimeoutSeconds) * time.Second
 	}
-	result = &v2.BlueprintMaskList{}
+	result = &v3.BlueprintMaskList{}
 	err = d.client.Get().
 		Namespace(d.ns).
 		Resource(resourceMaskName).
@@ -89,8 +89,8 @@ func (d *blueprintMaskClient) Watch(ctx context.Context, opts metav1.ListOptions
 		Watch(ctx)
 }
 
-func (d *blueprintMaskClient) Create(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.CreateOptions) (result *v2.BlueprintMask, err error) {
-	result = &v2.BlueprintMask{}
+func (d *blueprintMaskClient) Create(ctx context.Context, blueprint *v3.BlueprintMask, opts metav1.CreateOptions) (result *v3.BlueprintMask, err error) {
+	result = &v3.BlueprintMask{}
 	err = d.client.Post().
 		Namespace(d.ns).
 		Resource(resourceMaskName).
@@ -101,8 +101,8 @@ func (d *blueprintMaskClient) Create(ctx context.Context, blueprint *v2.Blueprin
 	return
 }
 
-func (d *blueprintMaskClient) Update(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.UpdateOptions) (result *v2.BlueprintMask, err error) {
-	result = &v2.BlueprintMask{}
+func (d *blueprintMaskClient) Update(ctx context.Context, blueprint *v3.BlueprintMask, opts metav1.UpdateOptions) (result *v3.BlueprintMask, err error) {
+	result = &v3.BlueprintMask{}
 	err = d.client.Put().
 		Namespace(d.ns).
 		Resource(resourceMaskName).
@@ -139,8 +139,8 @@ func (d *blueprintMaskClient) DeleteCollection(ctx context.Context, opts metav1.
 		Error()
 }
 
-func (d *blueprintMaskClient) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v2.BlueprintMask, err error) {
-	result = &v2.BlueprintMask{}
+func (d *blueprintMaskClient) Patch(ctx context.Context, name string, pt types.PatchType, data []byte, opts metav1.PatchOptions, subresources ...string) (result *v3.BlueprintMask, err error) {
+	result = &v3.BlueprintMask{}
 	err = d.client.Patch(pt).
 		Namespace(d.ns).
 		Resource(resourceMaskName).

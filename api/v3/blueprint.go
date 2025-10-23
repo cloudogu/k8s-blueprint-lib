@@ -1,4 +1,4 @@
-package v2
+package v3
 
 // BlueprintManifest describes an abstraction of CES components which should be absent or present within one or more CES
 // instances.
@@ -26,7 +26,7 @@ type BlueprintMaskManifest struct {
 	Dogus []MaskDogu `json:"dogus,omitempty"`
 }
 
-// BlueprintMaskCRRef points to a v2.BlueprintMask in the same namespace.
+// BlueprintMaskCRRef points to a v3.BlueprintMask in the same namespace.
 type BlueprintMaskCRRef struct {
 	Name string `json:"name"`
 }

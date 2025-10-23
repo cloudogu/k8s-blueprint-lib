@@ -15,7 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/rest"
 
-	bpv2 "github.com/cloudogu/k8s-blueprint-lib/v2/api/v2"
+	bpv2 "github.com/cloudogu/k8s-blueprint-lib/v3/api/v3"
 )
 
 var maskApiBasePathTestNS = fmt.Sprintf("/apis/%s/%s/namespaces/test/%s", bpv2.GroupVersion.Group, bpv2.GroupVersion.Version, resourceMaskName)
