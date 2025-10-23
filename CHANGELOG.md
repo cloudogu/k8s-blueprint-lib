@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.0.1] - 2025-10-23
+### Fixed
+- Invalid blueprint CRD by regenerating it
+- old kubebuilder version in CRDs
+
 ## [v3.0.0] - 2025-10-23
 
 ### Added
