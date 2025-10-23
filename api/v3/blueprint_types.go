@@ -52,7 +52,6 @@ type BlueprintList struct {
 }
 
 // BlueprintSpec defines the desired state of Blueprint
-// +kubebuilder:validation:XValidation:rule="(has(self.maskSource.embedded) && !has(self.maskSource.blueprintMaskRef)) || (!has(self.maskSource.embedded) && has(self.maskSource.blueprintMaskRef))", message="Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)"
 type BlueprintSpec struct {
 	// DisplayName is the name of the blueprint that will be shown in the UI.
 	// +required
@@ -75,6 +74,8 @@ type BlueprintSpec struct {
 	Stopped *bool `json:"stopped,omitempty"`
 }
 
+// MaskSource is a union type to add a blueprint mask either directly or via references
+// +kubebuilder:validation:XValidation:rule="(has(self.manifest) && !has(self.crRef)) || (!has(self.manifest) && has(self.crRef))", message="Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)"
 type MaskSource struct {
 	// Manifest describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
 	// +optional
