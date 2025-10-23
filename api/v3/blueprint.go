@@ -1,4 +1,4 @@
-package v2
+package v3
 
 // BlueprintManifest describes an abstraction of CES components which should be absent or present within one or more CES
 // instances.
@@ -15,13 +15,18 @@ type BlueprintManifest struct {
 	Config *Config `json:"config,omitempty"`
 }
 
-// BlueprintMask describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
+// BlueprintMaskManifest describes changes to the given blueprint. Often customers use the same blueprint for multiple instances
 // and use the blueprint mask to remove dogus from it.
 //
 // In general additions without changing the version are fine, as long as they don't change semantics. Removal or
 // renaming are breaking changes and require a new blueprint API version.
-type BlueprintMask struct {
+type BlueprintMaskManifest struct {
 	// Dogus contains a set of dogus with their versions which should be present or absent.
 	// +optional
 	Dogus []MaskDogu `json:"dogus,omitempty"`
+}
+
+// BlueprintMaskCRRef points to a v3.BlueprintMask in the same namespace.
+type BlueprintMaskCRRef struct {
+	Name string `json:"name"`
 }

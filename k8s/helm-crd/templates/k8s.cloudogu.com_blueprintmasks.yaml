@@ -1,0 +1,80 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.14.0
+  name: blueprintmasks.k8s.cloudogu.com
+  labels:
+    app: ces
+    app.kubernetes.io/name: k8s-blueprint-lib
+spec:
+  group: k8s.cloudogu.com
+  names:
+    kind: BlueprintMask
+    listKind: BlueprintMaskList
+    plural: blueprintmasks
+    shortNames:
+      - bpm
+    singular: blueprintmask
+  scope: Namespaced
+  versions:
+    - additionalPrinterColumns:
+        - description: The age of the resource
+          jsonPath: .metadata.creationTimestamp
+          name: Age
+          type: date
+      name: v3
+      schema:
+        openAPIV3Schema:
+          description: BlueprintMask is the Schema for the blueprint mask API
+          properties:
+            apiVersion:
+              description: |-
+                APIVersion defines the versioned schema of this representation of an object.
+                Servers should convert recognized schemas to the latest internal value, and
+                may reject unrecognized values.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+              type: string
+            kind:
+              description: |-
+                Kind is a string value representing the REST resource this object represents.
+                Servers may infer this from the endpoint the client submits requests to.
+                Cannot be updated.
+                In CamelCase.
+                More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+              type: string
+            metadata:
+              type: object
+            spec:
+              description: Spec defines the desired state of the BlueprintMask.
+              properties:
+                dogus:
+                  description: Dogus contains a set of dogus with their versions which should be present or absent.
+                  items:
+                    description: |-
+                      MaskDogu is used to override dogu versions and the Absent state.
+                      You cannot add dogus which are not yet in the blueprint.
+                    properties:
+                      absent:
+                        description: Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+                        type: boolean
+                      name:
+                        description: Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
+                        type: string
+                      version:
+                        description: |-
+                          Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
+                          otherwise it is optional and is not going to be interpreted.
+                        type: string
+                    required:
+                      - name
+                    type: object
+                  type: array
+              type: object
+          required:
+            - spec
+          type: object
+      served: true
+      storage: true
+      subresources: {}
