@@ -2,6 +2,15 @@ package v2
 
 type ConfigAction string
 
+const (
+	// ConfigActionNone means that nothing is to do for this config key
+	ConfigActionNone ConfigAction = "none"
+	// ConfigActionSet means that the config key needs to be set as given
+	ConfigActionSet ConfigAction = "set"
+	// ConfigActionRemove means that the config key needs to be deleted
+	ConfigActionRemove ConfigAction = "remove"
+)
+
 // ConfigValueState represents either the actual or expected state of a config key
 type ConfigValueState struct {
 	// +optional
