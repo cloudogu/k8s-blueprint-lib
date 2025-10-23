@@ -1,4 +1,4 @@
-package v2
+package v3
 
 // StateDiff is the result of comparing the Blueprint to the current cluster state.
 // It describes what operations need to be done to achieve the desired state of the blueprint.

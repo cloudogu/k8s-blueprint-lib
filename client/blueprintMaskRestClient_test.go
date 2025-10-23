@@ -1,7 +1,6 @@
 package kubernetes
 
 import (
-	"context"
 	"encoding/json"
 	"fmt"
 	"io"
@@ -19,23 +18,21 @@ import (
 	bpv3 "github.com/cloudogu/k8s-blueprint-lib/v3/api/v3"
 )
 
-var testCtx = context.Background()
+var maskApiBasePathTestNS = fmt.Sprintf("/apis/%s/%s/namespaces/test/%s", bpv3.GroupVersion.Group, bpv3.GroupVersion.Version, resourceMaskName)
 
-var apiBasePathTestNS = fmt.Sprintf("/apis/%s/%s/namespaces/test/%s", bpv3.GroupVersion.Group, bpv3.GroupVersion.Version, resourceName)
-
-func Test_blueprintClient_Get(t *testing.T) {
+func Test_blueprintMaskClient_Get(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, "GET", request.Method)
-			assert.Equal(t, apiBasePathTestNS+"/testblueprint", request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS+"/testblueprintmask", request.URL.Path)
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
-			blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
-			blueprintBytes, err := json.Marshal(blueprint)
+			blueprintMask := &bpv3.BlueprintMask{ObjectMeta: v1.ObjectMeta{Name: "testblueprintmask", Namespace: "test"}}
+			blueprintMaskBytes, err := json.Marshal(blueprintMask)
 			require.NoError(t, err)
-			_, err = writer.Write(blueprintBytes)
+			_, err = writer.Write(blueprintMaskBytes)
 			require.NoError(t, err)
 		}))
 
@@ -44,31 +41,31 @@ func Test_blueprintClient_Get(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
-		_, err = dClient.Get(testCtx, "testblueprint", v1.GetOptions{})
+		_, err = dClient.Get(testCtx, "testblueprintmask", v1.GetOptions{})
 
 		// then
 		require.NoError(t, err)
 	})
 }
 
-func Test_blueprintClient_List(t *testing.T) {
+func Test_blueprintMaskClient_List(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodGet, request.Method)
-			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS, request.URL.Path)
 			assert.Equal(t, http.NoBody, request.Body)
 
 			writer.Header().Add("content-type", "application/json")
-			blueprintList := bpv3.BlueprintList{}
-			blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "testblueprint", Namespace: "test"}}
-			blueprintList.Items = append(blueprintList.Items, *blueprint)
-			blueprintBytes, err := json.Marshal(blueprintList)
+			blueprintMaskList := bpv3.BlueprintMaskList{}
+			blueprintMask := &bpv3.BlueprintMask{ObjectMeta: v1.ObjectMeta{Name: "testblueprintmask", Namespace: "test"}}
+			blueprintMaskList.Items = append(blueprintMaskList.Items, *blueprintMask)
+			blueprintMaskBytes, err := json.Marshal(blueprintMaskList)
 			require.NoError(t, err)
-			_, err = writer.Write(blueprintBytes)
+			_, err = writer.Write(blueprintMaskBytes)
 			require.NoError(t, err)
 		}))
 
@@ -77,7 +74,7 @@ func Test_blueprintClient_List(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
 		_, err = dClient.List(testCtx, v1.ListOptions{})
@@ -87,12 +84,12 @@ func Test_blueprintClient_List(t *testing.T) {
 	})
 }
 
-func Test_blueprintClient_Watch(t *testing.T) {
+func Test_blueprintMaskClient_Watch(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, "GET", request.Method)
-			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS, request.URL.Path)
 			assert.Equal(t, http.NoBody, request.Body)
 			assert.Equal(t, "labelSelector=test&watch=true", request.URL.RawQuery)
 
@@ -106,7 +103,7 @@ func Test_blueprintClient_Watch(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
 		_, err = dClient.Watch(testCtx, v1.ListOptions{LabelSelector: "test"})
@@ -116,21 +113,21 @@ func Test_blueprintClient_Watch(t *testing.T) {
 	})
 }
 
-func Test_blueprintClient_Create(t *testing.T) {
+func Test_blueprintMaskClient_Create(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprintMask := &bpv3.BlueprintMask{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPost, request.Method)
-			assert.Equal(t, apiBasePathTestNS, request.URL.Path, resourceName)
+			assert.Equal(t, maskApiBasePathTestNS, request.URL.Path, resourceName)
 
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &bpv3.Blueprint{}
-			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
-			assert.Equal(t, "tocreate", createdBlueprint.Name)
+			createdBlueprintMask := &bpv3.BlueprintMask{}
+			require.NoError(t, json.Unmarshal(bytes, createdBlueprintMask))
+			assert.Equal(t, "tocreate", createdBlueprintMask.Name)
 
 			writer.Header().Add("content-type", "application/json")
 			_, err = writer.Write(bytes)
@@ -142,31 +139,31 @@ func Test_blueprintClient_Create(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
-		_, err = dClient.Create(testCtx, blueprint, v1.CreateOptions{})
+		_, err = dClient.Create(testCtx, blueprintMask, v1.CreateOptions{})
 
 		// then
 		require.NoError(t, err)
 	})
 }
 
-func Test_blueprintClient_Update(t *testing.T) {
+func Test_blueprintMaskClient_Update(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
-		blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
+		blueprintMask := &bpv3.BlueprintMask{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
 
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPut, request.Method)
-			assert.Equal(t, apiBasePathTestNS+"/tocreate", request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS+"/tocreate", request.URL.Path)
 
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 
-			createdBlueprint := &bpv3.Blueprint{}
-			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
-			assert.Equal(t, "tocreate", createdBlueprint.Name)
+			createdBlueprintMask := &bpv3.BlueprintMask{}
+			require.NoError(t, json.Unmarshal(bytes, createdBlueprintMask))
+			assert.Equal(t, "tocreate", createdBlueprintMask.Name)
 
 			writer.Header().Add("content-type", "application/json")
 			_, err = writer.Write(bytes)
@@ -178,58 +175,22 @@ func Test_blueprintClient_Update(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
-		_, err = dClient.Update(testCtx, blueprint, v1.UpdateOptions{})
+		_, err = dClient.Update(testCtx, blueprintMask, v1.UpdateOptions{})
 
 		// then
 		require.NoError(t, err)
 	})
 }
 
-func Test_blueprintClient_UpdateStatus(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		// given
-		blueprint := &bpv3.Blueprint{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
-
-		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			assert.Equal(t, http.MethodPut, request.Method)
-			assert.Equal(t, apiBasePathTestNS+"/tocreate/status", request.URL.Path)
-
-			bytes, err := io.ReadAll(request.Body)
-			require.NoError(t, err)
-
-			createdBlueprint := &bpv3.Blueprint{}
-			require.NoError(t, json.Unmarshal(bytes, createdBlueprint))
-			assert.Equal(t, "tocreate", createdBlueprint.Name)
-
-			writer.Header().Add("content-type", "application/json")
-			_, err = writer.Write(bytes)
-			require.NoError(t, err)
-		}))
-
-		config := rest.Config{
-			Host: server.URL,
-		}
-		client, err := newForConfig(&config)
-		require.NoError(t, err)
-		dClient := client.Blueprints("test")
-
-		// when
-		_, err = dClient.UpdateStatus(testCtx, blueprint, v1.UpdateOptions{})
-
-		// then
-		require.NoError(t, err)
-	})
-}
-
-func Test_blueprintClient_Delete(t *testing.T) {
+func Test_blueprintMaskClient_Delete(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodDelete, request.Method)
-			assert.Equal(t, apiBasePathTestNS+"/testblueprint", request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS+"/testblueprintmask", request.URL.Path)
 
 			writer.Header().Add("content-type", "application/json")
 			writer.WriteHeader(200)
@@ -240,22 +201,22 @@ func Test_blueprintClient_Delete(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
-		err = dClient.Delete(testCtx, "testblueprint", v1.DeleteOptions{})
+		err = dClient.Delete(testCtx, "testblueprintmask", v1.DeleteOptions{})
 
 		// then
 		require.NoError(t, err)
 	})
 }
 
-func Test_blueprintClient_DeleteCollection(t *testing.T) {
+func Test_blueprintMaskClient_DeleteCollection(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodDelete, request.Method)
-			assert.Equal(t, apiBasePathTestNS, request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS, request.URL.Path)
 			assert.Equal(t, "labelSelector=test", request.URL.RawQuery)
 			writer.Header().Add("content-type", "application/json")
 			writer.WriteHeader(200)
@@ -266,7 +227,7 @@ func Test_blueprintClient_DeleteCollection(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		// when
 		err = dClient.DeleteCollection(testCtx, v1.DeleteOptions{}, v1.ListOptions{LabelSelector: "test"})
@@ -276,16 +237,16 @@ func Test_blueprintClient_DeleteCollection(t *testing.T) {
 	})
 }
 
-func Test_blueprintClient_Patch(t *testing.T) {
+func Test_blueprintMaskClient_Patch(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
 		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
 			assert.Equal(t, http.MethodPatch, request.Method)
-			assert.Equal(t, apiBasePathTestNS+"/testblueprint", request.URL.Path)
+			assert.Equal(t, maskApiBasePathTestNS+"/testblueprintmask", request.URL.Path)
 			bytes, err := io.ReadAll(request.Body)
 			require.NoError(t, err)
 			assert.Equal(t, []byte("test"), bytes)
-			result, err := json.Marshal(bpv3.Blueprint{})
+			result, err := json.Marshal(bpv3.BlueprintMask{})
 			require.NoError(t, err)
 
 			writer.Header().Add("content-type", "application/json")
@@ -298,12 +259,12 @@ func Test_blueprintClient_Patch(t *testing.T) {
 		}
 		client, err := newForConfig(&config)
 		require.NoError(t, err)
-		dClient := client.Blueprints("test")
+		dClient := client.BlueprintMasks("test")
 
 		patchData := []byte("test")
 
 		// when
-		_, err = dClient.Patch(testCtx, "testblueprint", types.JSONPatchType, patchData, v1.PatchOptions{})
+		_, err = dClient.Patch(testCtx, "testblueprintmask", types.JSONPatchType, patchData, v1.PatchOptions{})
 
 		// then
 		require.NoError(t, err)

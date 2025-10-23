@@ -52,7 +52,7 @@ spec:
           jsonPath: .metadata.creationTimestamp
           name: Age
           type: date
-      name: v2
+      name: v3
       schema:
         openAPIV3Schema:
           description: Blueprint is the Schema for the blueprints API
@@ -258,30 +258,42 @@ spec:
                       type: array
                   type: object
                 blueprintMask:
-                  description: BlueprintMask can further restrict the desired state from the blueprint.
+                  description: MaskSource references a blueprint mask that can further restrict the desired state from the blueprint.
                   properties:
-                    dogus:
-                      description: Dogus contains a set of dogus with their versions which should be present or absent.
-                      items:
-                        description: |-
-                          MaskDogu is used to override dogu versions and the Absent state.
-                          You cannot add dogus which are not yet in the blueprint.
-                        properties:
-                          absent:
-                            description: Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
-                            type: boolean
-                          name:
-                            description: Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
-                            type: string
-                          version:
+                    crRef:
+                      description: CrRef is a reference to a BlueprintMask
+                      properties:
+                        name:
+                          type: string
+                      required:
+                        - name
+                      type: object
+                    manifest:
+                      description: Manifest describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
+                      properties:
+                        dogus:
+                          description: Dogus contains a set of dogus with their versions which should be present or absent.
+                          items:
                             description: |-
-                              Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
-                              otherwise it is optional and is not going to be interpreted.
-                            type: string
-                        required:
-                          - name
-                        type: object
-                      type: array
+                              MaskDogu is used to override dogu versions and the Absent state.
+                              You cannot add dogus which are not yet in the blueprint.
+                            properties:
+                              absent:
+                                description: Absent defines if the dogu should be absent in the ecosystem. Defaults to false.
+                                type: boolean
+                              name:
+                                description: Name defines the name of the dogu including its namespace, f. i. "official/nginx". Must not be empty.
+                                type: string
+                              version:
+                                description: |-
+                                  Version defines the version of the dogu that is to be installed. Must not be empty if the targetState is "present";
+                                  otherwise it is optional and is not going to be interpreted.
+                                type: string
+                            required:
+                              - name
+                            type: object
+                          type: array
+                      type: object
                   type: object
                 displayName:
                   description: DisplayName is the name of the blueprint that will be shown in the UI.
@@ -296,6 +308,9 @@ spec:
                 - blueprint
                 - displayName
               type: object
+              x-kubernetes-validations:
+                - message: Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)
+                  rule: (has(self.maskSource.embedded) && !has(self.maskSource.blueprintMaskRef)) || (!has(self.maskSource.embedded) && has(self.maskSource.blueprintMaskRef))
             status:
               description: Status defines the observed state of the Blueprint.
               properties:
