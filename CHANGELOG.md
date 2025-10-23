@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.0.0] - 2025-10-23
+
 ### Added
 - [#11] Blueprint mask CRD, so that masks can be applied separately to the blueprint
 
