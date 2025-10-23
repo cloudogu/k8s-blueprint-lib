@@ -52,7 +52,7 @@ type BlueprintList struct {
 }
 
 // BlueprintSpec defines the desired state of Blueprint
-// +kubebuilder:validation:XValidation:rule="(has(self.blueprintMask) && !has(self.blueprintMaskRef)) || (!has(self.blueprintMask) && has(self.blueprintMaskRef))", message="Only one of BlueprintMask and BlueprintMaskRef can be set at a time"
+// +kubebuilder:validation:XValidation:rule="(has(self.maskSource.embedded) && !has(self.maskSource.blueprintMaskRef)) || (!has(self.maskSource.embedded) && has(self.maskSource.blueprintMaskRef))", message="Only one MaskSource can be set at a time (BlueprintMaskManifest or BlueprintMaskCRRef)"
 type BlueprintSpec struct {
 	// DisplayName is the name of the blueprint that will be shown in the UI.
 	// +required
@@ -60,11 +60,9 @@ type BlueprintSpec struct {
 	// Blueprint with the desired state of the ecosystem.
 	// +required
 	Blueprint BlueprintManifest `json:"blueprint"`
-	// BlueprintMask can further restrict the desired state from the blueprint.
+	// MaskSource references a blueprint mask that can further restrict the desired state from the blueprint.
 	// +optional
-	BlueprintMask *BlueprintMaskManifest `json:"blueprintMask,omitempty"`
-	// BlueprintMaskRef is a reference to a BlueprintMask
-	BlueprintMaskRef *BlueprintMaskRef `json:"blueprintMaskRef,omitempty"`
+	MaskSource *MaskSource `json:"maskSource,omitempty"`
 	// IgnoreDoguHealth lets the user execute the blueprint even if dogus are unhealthy at the moment.
 	// +optional
 	IgnoreDoguHealth *bool `json:"ignoreDoguHealth,omitempty"`
@@ -75,6 +73,15 @@ type BlueprintSpec struct {
 	// Stopped lets the user stop the blueprint execution. The blueprint will still check if all attributes are correct and avoid a result with a failure state.
 	// +optional
 	Stopped *bool `json:"stopped,omitempty"`
+}
+
+type MaskSource struct {
+	// Embedded describes a BlueprintMaskManifest that can further restrict the desired state from the blueprint.
+	// +optional
+	Embedded *BlueprintMaskManifest `json:"embedded,omitempty"`
+	// BlueprintMaskCRRef is a reference to a BlueprintMask
+	// +optional
+	BlueprintMaskCRRef *BlueprintMaskCRRef `json:"blueprintMaskCRRef,omitempty"`
 }
 
 // BlueprintStatus defines the observed state of Blueprint
