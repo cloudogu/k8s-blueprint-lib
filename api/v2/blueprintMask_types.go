@@ -9,7 +9,6 @@ import (
 
 // +kubebuilder:object:root=true
 // +kubebuilder:resource:shortName=bpm
-// +kubebuilder:subresource:status
 // +kubebuilder:printcolumn:name="Age",type="date",JSONPath=".metadata.creationTimestamp",description="The age of the resource"
 // +kubebuilder:gen
 
@@ -21,9 +20,6 @@ type BlueprintMask struct {
 	// Spec defines the desired state of the BlueprintMask.
 	// +required
 	Spec BlueprintMaskSpec `json:"spec"`
-	// Status defines the observed state of the BlueprintMask.
-	// +optional
-	Status *BlueprintMaskStatus `json:"status,omitempty"`
 }
 
 // +kubebuilder:object:root=true
@@ -40,15 +36,4 @@ type BlueprintMaskSpec struct {
 	// BlueprintMaskManifest contains a list of dogus which should modify a dogu set in a blueprint.
 	// +required
 	*BlueprintMaskManifest `json:",inline"`
-}
-
-// BlueprintMaskStatus defines the observed state of BlueprintMask
-type BlueprintMaskStatus struct {
-	// Conditions shows the current state of the BlueprintMask
-	// +patchMergeKey=type
-	// +patchStrategy=merge
-	// +listType=map
-	// +listMapKey=type
-	// +optional
-	Conditions []metav1.Condition `json:"conditions,omitempty" patchStrategy:"merge" patchMergeKey:"type"`
 }

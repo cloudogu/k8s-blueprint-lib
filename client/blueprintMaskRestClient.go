@@ -23,9 +23,6 @@ type BlueprintMaskInterface interface {
 	// Update takes the representation of a v2.BlueprintMask and updates it. Returns the server's representation of the v2.BlueprintMask, and an error, if there is any.
 	Update(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
 
-	// UpdateStatus was generated because the type contains a Status member.
-	UpdateStatus(ctx context.Context, blueprintMask *v2.BlueprintMask, opts metav1.UpdateOptions) (*v2.BlueprintMask, error)
-
 	// Delete takes name of the v2.BlueprintMask and deletes it. Returns an error if one occurs.
 	Delete(ctx context.Context, name string, opts metav1.DeleteOptions) error
 
@@ -110,20 +107,6 @@ func (d *blueprintMaskClient) Update(ctx context.Context, blueprint *v2.Blueprin
 		Namespace(d.ns).
 		Resource(resourceMaskName).
 		Name(blueprint.Name).
-		VersionedParams(&opts, scheme.ParameterCodec).
-		Body(blueprint).
-		Do(ctx).
-		Into(result)
-	return
-}
-
-func (d *blueprintMaskClient) UpdateStatus(ctx context.Context, blueprint *v2.BlueprintMask, opts metav1.UpdateOptions) (result *v2.BlueprintMask, err error) {
-	result = &v2.BlueprintMask{}
-	err = d.client.Put().
-		Namespace(d.ns).
-		Resource(resourceMaskName).
-		Name(blueprint.Name).
-		SubResource("status").
 		VersionedParams(&opts, scheme.ParameterCodec).
 		Body(blueprint).
 		Do(ctx).

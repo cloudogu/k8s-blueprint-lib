@@ -185,42 +185,6 @@ func Test_blueprintMaskClient_Update(t *testing.T) {
 	})
 }
 
-func Test_blueprintMaskClient_UpdateStatus(t *testing.T) {
-	t.Run("success", func(t *testing.T) {
-		// given
-		blueprintMask := &bpv2.BlueprintMask{ObjectMeta: v1.ObjectMeta{Name: "tocreate", Namespace: "test"}}
-
-		server := httptest.NewServer(http.HandlerFunc(func(writer http.ResponseWriter, request *http.Request) {
-			assert.Equal(t, http.MethodPut, request.Method)
-			assert.Equal(t, maskApiBasePathTestNS+"/tocreate/status", request.URL.Path)
-
-			bytes, err := io.ReadAll(request.Body)
-			require.NoError(t, err)
-
-			createdBlueprintMask := &bpv2.BlueprintMask{}
-			require.NoError(t, json.Unmarshal(bytes, createdBlueprintMask))
-			assert.Equal(t, "tocreate", createdBlueprintMask.Name)
-
-			writer.Header().Add("content-type", "application/json")
-			_, err = writer.Write(bytes)
-			require.NoError(t, err)
-		}))
-
-		config := rest.Config{
-			Host: server.URL,
-		}
-		client, err := newForConfig(&config)
-		require.NoError(t, err)
-		dClient := client.BlueprintMasks("test")
-
-		// when
-		_, err = dClient.UpdateStatus(testCtx, blueprintMask, v1.UpdateOptions{})
-
-		// then
-		require.NoError(t, err)
-	})
-}
-
 func Test_blueprintMaskClient_Delete(t *testing.T) {
 	t.Run("success", func(t *testing.T) {
 		// given
