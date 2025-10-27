@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- [#18] fix required empty field in blueprint mask
+
+
 ## [v3.0.1] - 2025-10-23
 ### Fixed
 - Invalid blueprint CRD by regenerating it
