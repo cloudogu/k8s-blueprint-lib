@@ -72,14 +72,14 @@ func (c *ConfigEntry) Validate() error {
 	hasSecretRef := c.SecretRef != nil
 	hasConfigRef := c.ConfigRef != nil
 
-	if !c.hasOnlyOneValueConfiguration(hasValue, hasSecretRef, hasConfigRef) {
+	if !exclusiveOr(hasValue, hasSecretRef, hasConfigRef) {
 		return fmt.Errorf("config entries can have either a value, configRef or a secretRef")
 	}
 
 	return nil
 }
 
-func (c *ConfigEntry) hasOnlyOneValueConfiguration(bools ...bool) bool {
+func exclusiveOr(bools ...bool) bool {
 	hasValue := false
 	for _, b := range bools {
 		if b && !hasValue {
