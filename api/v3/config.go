@@ -13,10 +13,13 @@ type Config struct {
 	Global []ConfigEntry `json:"global,omitempty"`
 }
 
-// +kubebuilder:validation:XValidation:message="absent entries cannot have value or secretRef",rule="(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true"
+// +kubebuilder:validation:XValidation:message="absent entries cannot have value or secretRef",rule="(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true"
 // +kubebuilder:validation:XValidation:message="config entries with secret references have to be sensitive",rule="has(self.secretRef) ? has(self.sensitive) && self.sensitive : true"
 // +kubebuilder:validation:XValidation:message="sensitive config entries are not allowed to have normal values",rule="(has(self.sensitive) && self.sensitive) ? !has(self.value) : true"
-// +kubebuilder:validation:XValidation:message="sensitive config entries are not allowed to have normal values",rule="(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true"
+// +kubebuilder:validation:XValidation:message="sensitive config entries are not allowed to have config map references",rule="(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true"
+// +kubebuilder:validation:XValidation:message="config map references cannot be used with normal values or secret references",rule="has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="secret references cannot be used with normal values or config map references",rule="has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="normal values cannot be used with config map references or secret references",rule="has(self.value) ? !has(self.configRef) && !has(self.value) : true"
 
 // ConfigEntry represents a single configuration entry that can be either regular or sensitive
 type ConfigEntry struct {
