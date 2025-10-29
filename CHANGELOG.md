@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [v3.1.0] - 2025-10-29
+### Added
+- [#13] reference config by configmap
+
+### Changed
+- [#13] reference secrets in global config
+
 ## [v3.0.2] - 2025-10-27
 
 ### Fixed
