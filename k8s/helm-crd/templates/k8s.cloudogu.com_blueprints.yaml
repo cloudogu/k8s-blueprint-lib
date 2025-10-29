@@ -143,18 +143,16 @@ spec:
                               x-kubernetes-validations:
                                 - message: absent entries cannot have value or secretRef
                                   rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
-                                - message: config entries with secret references have to be sensitive
-                                  rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
                                 - message: sensitive config entries are not allowed to have normal values
                                   rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
-                                - message: sensitive config entries are not allowed to have normal values
+                                - message: sensitive config entries are not allowed to have config map references
                                   rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
-                                - message: sensitive config entries are not allowed to have normal values
+                                - message: config map references cannot be used with normal values or secret references
                                   rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
-                                - message: sensitive config entries are not allowed to have normal values
+                                - message: secret references cannot be used with normal values or config map references
                                   rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
-                                - message: sensitive config entries are not allowed to have normal values
-                                  rule: 'has(self.value) ? !has(self.configRef) && !has(self.value) : true'
+                                - message: normal values cannot be used with config map references or secret references
+                                  rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                             type: array
                           description: Dogus contains Dogu specific configuration entries
                           type: object
@@ -213,18 +211,16 @@ spec:
                             x-kubernetes-validations:
                               - message: absent entries cannot have value or secretRef
                                 rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
-                              - message: config entries with secret references have to be sensitive
-                                rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
                               - message: sensitive config entries are not allowed to have normal values
                                 rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
-                              - message: sensitive config entries are not allowed to have normal values
+                              - message: sensitive config entries are not allowed to have config map references
                                 rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
-                              - message: sensitive config entries are not allowed to have normal values
+                              - message: config map references cannot be used with normal values or secret references
                                 rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
-                              - message: sensitive config entries are not allowed to have normal values
+                              - message: secret references cannot be used with normal values or config map references
                                 rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
-                              - message: sensitive config entries are not allowed to have normal values
-                                rule: 'has(self.value) ? !has(self.configRef) && !has(self.value) : true'
+                              - message: normal values cannot be used with config map references or secret references
+                                rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                           type: array
                       type: object
                     dogus:
@@ -476,18 +472,16 @@ spec:
                               x-kubernetes-validations:
                                 - message: absent entries cannot have value or secretRef
                                   rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
-                                - message: config entries with secret references have to be sensitive
-                                  rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
                                 - message: sensitive config entries are not allowed to have normal values
                                   rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
-                                - message: sensitive config entries are not allowed to have normal values
+                                - message: sensitive config entries are not allowed to have config map references
                                   rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
-                                - message: sensitive config entries are not allowed to have normal values
+                                - message: config map references cannot be used with normal values or secret references
                                   rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
-                                - message: sensitive config entries are not allowed to have normal values
+                                - message: secret references cannot be used with normal values or config map references
                                   rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
-                                - message: sensitive config entries are not allowed to have normal values
-                                  rule: 'has(self.value) ? !has(self.configRef) && !has(self.value) : true'
+                                - message: normal values cannot be used with config map references or secret references
+                                  rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                             type: array
                           description: Dogus contains Dogu specific configuration entries
                           type: object
@@ -546,18 +540,16 @@ spec:
                             x-kubernetes-validations:
                               - message: absent entries cannot have value or secretRef
                                 rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
-                              - message: config entries with secret references have to be sensitive
-                                rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
                               - message: sensitive config entries are not allowed to have normal values
                                 rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
-                              - message: sensitive config entries are not allowed to have normal values
+                              - message: sensitive config entries are not allowed to have config map references
                                 rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
-                              - message: sensitive config entries are not allowed to have normal values
+                              - message: config map references cannot be used with normal values or secret references
                                 rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
-                              - message: sensitive config entries are not allowed to have normal values
+                              - message: secret references cannot be used with normal values or config map references
                                 rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
-                              - message: sensitive config entries are not allowed to have normal values
-                                rule: 'has(self.value) ? !has(self.configRef) && !has(self.value) : true'
+                              - message: normal values cannot be used with config map references or secret references
+                                rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                           type: array
                       type: object
                     dogus:
