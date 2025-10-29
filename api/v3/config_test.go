@@ -14,7 +14,8 @@ func TestConfigEntry_Validate(t *testing.T) {
 		Key       string
 		Absent    *bool
 		Value     *string
-		SecretRef *SecretReference
+		SecretRef *Reference
+		ConfigRef *Reference
 	}
 	tests := []struct {
 		name    string
@@ -34,10 +35,10 @@ func TestConfigEntry_Validate(t *testing.T) {
 			fields: fields{
 				Key:       "testKey",
 				Absent:    &truePtr,
-				SecretRef: &SecretReference{Name: "testSecret"},
+				SecretRef: &Reference{Name: "testSecret"},
 			},
 			wantErr: func(t assert.TestingT, err error, _ ...interface{}) bool {
-				return assert.ErrorContains(t, err, "absent entries cannot have value or secretRef")
+				return assert.ErrorContains(t, err, "absent entries cannot have value, configRef or secretRef")
 			},
 		},
 		{
@@ -48,7 +49,7 @@ func TestConfigEntry_Validate(t *testing.T) {
 				Value:  &testValue,
 			},
 			wantErr: func(t assert.TestingT, err error, _ ...interface{}) bool {
-				return assert.ErrorContains(t, err, "absent entries cannot have value or secretRef")
+				return assert.ErrorContains(t, err, "absent entries cannot have value, configRef or secretRef")
 			},
 		},
 		{
@@ -63,7 +64,15 @@ func TestConfigEntry_Validate(t *testing.T) {
 			name: "Only SecretRef is valid",
 			fields: fields{
 				Key:       "testKey",
-				SecretRef: &SecretReference{Name: "testSecret"},
+				SecretRef: &Reference{Name: "testSecret"},
+			},
+			wantErr: assert.NoError,
+		},
+		{
+			name: "Only ConfigRef is valid",
+			fields: fields{
+				Key:       "testKey",
+				ConfigRef: &Reference{Name: "testConfigMap"},
 			},
 			wantErr: assert.NoError,
 		},
@@ -72,10 +81,22 @@ func TestConfigEntry_Validate(t *testing.T) {
 			fields: fields{
 				Key:       "testKey",
 				Value:     &testValue,
-				SecretRef: &SecretReference{Name: "testSecret"},
+				SecretRef: &Reference{Name: "testSecret"},
 			},
 			wantErr: func(t assert.TestingT, err error, _ ...interface{}) bool {
-				return assert.ErrorContains(t, err, "config entries can have either a value or a secretRef")
+				return assert.ErrorContains(t, err, "config entries can have either a value, configRef or a secretRef")
+			},
+		},
+		{
+			name: "Value, ConfigRef, SecretRef is not valid",
+			fields: fields{
+				Key:       "testKey",
+				Value:     &testValue,
+				SecretRef: &Reference{Name: "testSecret"},
+				ConfigRef: &Reference{Name: "testConfigMap"},
+			},
+			wantErr: func(t assert.TestingT, err error, _ ...interface{}) bool {
+				return assert.ErrorContains(t, err, "config entries can have either a value, configRef or a secretRef")
 			},
 		},
 		{
@@ -84,7 +105,7 @@ func TestConfigEntry_Validate(t *testing.T) {
 				Key: "testKey",
 			},
 			wantErr: func(t assert.TestingT, err error, _ ...interface{}) bool {
-				return assert.ErrorContains(t, err, "config entries can have either a value or a secretRef")
+				return assert.ErrorContains(t, err, "config entries can have either a value, configRef or a secretRef")
 			},
 		},
 	}
@@ -95,6 +116,7 @@ func TestConfigEntry_Validate(t *testing.T) {
 				Absent:    tt.fields.Absent,
 				Value:     tt.fields.Value,
 				SecretRef: tt.fields.SecretRef,
+				ConfigRef: tt.fields.ConfigRef,
 			}
 			tt.wantErr(t, c.Validate(), fmt.Sprintf("Validate()"))
 		})

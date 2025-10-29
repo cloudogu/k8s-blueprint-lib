@@ -13,10 +13,12 @@ type Config struct {
 	Global []ConfigEntry `json:"global,omitempty"`
 }
 
-// +kubebuilder:validation:XValidation:message="absent entries cannot have value or secretRef",rule="(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true"
-// +kubebuilder:validation:XValidation:message="config entries can have either a value or a secretRef",rule="(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true"
-// +kubebuilder:validation:XValidation:message="config entries with secret references have to be sensitive",rule="has(self.secretRef) ? has(self.sensitive) && self.sensitive : true"
+// +kubebuilder:validation:XValidation:message="absent entries cannot have value or secretRef",rule="(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true"
 // +kubebuilder:validation:XValidation:message="sensitive config entries are not allowed to have normal values",rule="(has(self.sensitive) && self.sensitive) ? !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="sensitive config entries are not allowed to have config map references",rule="(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true"
+// +kubebuilder:validation:XValidation:message="config map references cannot be used with normal values or secret references",rule="has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="secret references cannot be used with normal values or config map references",rule="has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true"
+// +kubebuilder:validation:XValidation:message="normal values cannot be used with config map references or secret references",rule="has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true"
 
 // ConfigEntry represents a single configuration entry that can be either regular or sensitive
 type ConfigEntry struct {
@@ -29,7 +31,7 @@ type ConfigEntry struct {
 	Absent *bool `json:"absent,omitempty"`
 
 	// Value is used for regular (non-sensitive) configuration entries
-	// Mutually exclusive with SecretRef
+	// Mutually exclusive with SecretRef and ConfigRef
 	// +optional
 	Value *string `json:"value,omitempty"`
 
@@ -40,15 +42,20 @@ type ConfigEntry struct {
 	// SecretRef is used for sensitive configuration entries
 	// Mutually exclusive with Value
 	// +optional
-	SecretRef *SecretReference `json:"secretRef,omitempty"`
+	SecretRef *Reference `json:"secretRef,omitempty"`
+
+	// ConfigRef is used for configuration entries
+	// Mutually exclusive with Value
+	// +optional
+	ConfigRef *Reference `json:"configRef,omitempty"`
 }
 
-// SecretReference points to a value in a Kubernetes secret
-type SecretReference struct {
-	// Name is the name of the secret in the same namespace
+// Reference points to a value in a Kubernetes secret
+type Reference struct {
+	// Name is the name of the secret or configmap in the same namespace
 	// +required
 	Name string `json:"name"`
-	// Key is the key within the secret
+	// Key is the key within the secret or configmap
 	// +required
 	Key string `json:"key"`
 }
@@ -56,8 +63,8 @@ type SecretReference struct {
 // Validate ensures ConfigEntry has valid state
 func (c *ConfigEntry) Validate() error {
 	if c.Absent != nil && *c.Absent {
-		if c.Value != nil || c.SecretRef != nil {
-			return fmt.Errorf("absent entries cannot have value or secretRef")
+		if c.Value != nil || c.SecretRef != nil || c.ConfigRef != nil {
+			return fmt.Errorf("absent entries cannot have value, configRef or secretRef")
 		}
 		return nil
 	}
@@ -65,10 +72,23 @@ func (c *ConfigEntry) Validate() error {
 	// For present entries, exactly one of Value or SecretRef must be set
 	hasValue := c.Value != nil
 	hasSecretRef := c.SecretRef != nil
+	hasConfigRef := c.ConfigRef != nil
 
-	if hasValue == hasSecretRef {
-		return fmt.Errorf("config entries can have either a value or a secretRef")
+	if !exclusiveOr(hasValue, hasSecretRef, hasConfigRef) {
+		return fmt.Errorf("config entries can have either a value, configRef or a secretRef")
 	}
 
 	return nil
+}
+
+func exclusiveOr(bools ...bool) bool {
+	hasValue := false
+	for _, b := range bools {
+		if b && !hasValue {
+			hasValue = true
+		} else if b {
+			return false
+		}
+	}
+	return hasValue
 }

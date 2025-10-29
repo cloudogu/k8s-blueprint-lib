@@ -96,6 +96,21 @@ spec:
                                 absent:
                                   description: Absent indicates whether this key should be deleted (true) or set (false)
                                   type: boolean
+                                configRef:
+                                  description: |-
+                                    ConfigRef is used for configuration entries
+                                    Mutually exclusive with Value
+                                  properties:
+                                    key:
+                                      description: Key is the key within the secret or configmap
+                                      type: string
+                                    name:
+                                      description: Name is the name of the secret or configmap in the same namespace
+                                      type: string
+                                  required:
+                                    - key
+                                    - name
+                                  type: object
                                 key:
                                   description: Key is the configuration key name
                                   type: string
@@ -105,10 +120,10 @@ spec:
                                     Mutually exclusive with Value
                                   properties:
                                     key:
-                                      description: Key is the key within the secret
+                                      description: Key is the key within the secret or configmap
                                       type: string
                                     name:
-                                      description: Name is the name of the secret in the same namespace
+                                      description: Name is the name of the secret or configmap in the same namespace
                                       type: string
                                   required:
                                     - key
@@ -120,20 +135,24 @@ spec:
                                 value:
                                   description: |-
                                     Value is used for regular (non-sensitive) configuration entries
-                                    Mutually exclusive with SecretRef
+                                    Mutually exclusive with SecretRef and ConfigRef
                                   type: string
                               required:
                                 - key
                               type: object
                               x-kubernetes-validations:
                                 - message: absent entries cannot have value or secretRef
-                                  rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
-                                - message: config entries can have either a value or a secretRef
-                                  rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
-                                - message: config entries with secret references have to be sensitive
-                                  rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                                  rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
                                 - message: sensitive config entries are not allowed to have normal values
                                   rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
+                                - message: sensitive config entries are not allowed to have config map references
+                                  rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
+                                - message: config map references cannot be used with normal values or secret references
+                                  rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
+                                - message: secret references cannot be used with normal values or config map references
+                                  rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
+                                - message: normal values cannot be used with config map references or secret references
+                                  rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                             type: array
                           description: Dogus contains Dogu specific configuration entries
                           type: object
@@ -145,6 +164,21 @@ spec:
                               absent:
                                 description: Absent indicates whether this key should be deleted (true) or set (false)
                                 type: boolean
+                              configRef:
+                                description: |-
+                                  ConfigRef is used for configuration entries
+                                  Mutually exclusive with Value
+                                properties:
+                                  key:
+                                    description: Key is the key within the secret or configmap
+                                    type: string
+                                  name:
+                                    description: Name is the name of the secret or configmap in the same namespace
+                                    type: string
+                                required:
+                                  - key
+                                  - name
+                                type: object
                               key:
                                 description: Key is the configuration key name
                                 type: string
@@ -154,10 +188,10 @@ spec:
                                   Mutually exclusive with Value
                                 properties:
                                   key:
-                                    description: Key is the key within the secret
+                                    description: Key is the key within the secret or configmap
                                     type: string
                                   name:
-                                    description: Name is the name of the secret in the same namespace
+                                    description: Name is the name of the secret or configmap in the same namespace
                                     type: string
                                 required:
                                   - key
@@ -169,20 +203,24 @@ spec:
                               value:
                                 description: |-
                                   Value is used for regular (non-sensitive) configuration entries
-                                  Mutually exclusive with SecretRef
+                                  Mutually exclusive with SecretRef and ConfigRef
                                 type: string
                             required:
                               - key
                             type: object
                             x-kubernetes-validations:
                               - message: absent entries cannot have value or secretRef
-                                rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
-                              - message: config entries can have either a value or a secretRef
-                                rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
-                              - message: config entries with secret references have to be sensitive
-                                rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                                rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
                               - message: sensitive config entries are not allowed to have normal values
                                 rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
+                              - message: sensitive config entries are not allowed to have config map references
+                                rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
+                              - message: config map references cannot be used with normal values or secret references
+                                rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
+                              - message: secret references cannot be used with normal values or config map references
+                                rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
+                              - message: normal values cannot be used with config map references or secret references
+                                rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                           type: array
                       type: object
                     dogus:
@@ -387,6 +425,21 @@ spec:
                                 absent:
                                   description: Absent indicates whether this key should be deleted (true) or set (false)
                                   type: boolean
+                                configRef:
+                                  description: |-
+                                    ConfigRef is used for configuration entries
+                                    Mutually exclusive with Value
+                                  properties:
+                                    key:
+                                      description: Key is the key within the secret or configmap
+                                      type: string
+                                    name:
+                                      description: Name is the name of the secret or configmap in the same namespace
+                                      type: string
+                                  required:
+                                    - key
+                                    - name
+                                  type: object
                                 key:
                                   description: Key is the configuration key name
                                   type: string
@@ -396,10 +449,10 @@ spec:
                                     Mutually exclusive with Value
                                   properties:
                                     key:
-                                      description: Key is the key within the secret
+                                      description: Key is the key within the secret or configmap
                                       type: string
                                     name:
-                                      description: Name is the name of the secret in the same namespace
+                                      description: Name is the name of the secret or configmap in the same namespace
                                       type: string
                                   required:
                                     - key
@@ -411,20 +464,24 @@ spec:
                                 value:
                                   description: |-
                                     Value is used for regular (non-sensitive) configuration entries
-                                    Mutually exclusive with SecretRef
+                                    Mutually exclusive with SecretRef and ConfigRef
                                   type: string
                               required:
                                 - key
                               type: object
                               x-kubernetes-validations:
                                 - message: absent entries cannot have value or secretRef
-                                  rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
-                                - message: config entries can have either a value or a secretRef
-                                  rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
-                                - message: config entries with secret references have to be sensitive
-                                  rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                                  rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
                                 - message: sensitive config entries are not allowed to have normal values
                                   rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
+                                - message: sensitive config entries are not allowed to have config map references
+                                  rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
+                                - message: config map references cannot be used with normal values or secret references
+                                  rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
+                                - message: secret references cannot be used with normal values or config map references
+                                  rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
+                                - message: normal values cannot be used with config map references or secret references
+                                  rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                             type: array
                           description: Dogus contains Dogu specific configuration entries
                           type: object
@@ -436,6 +493,21 @@ spec:
                               absent:
                                 description: Absent indicates whether this key should be deleted (true) or set (false)
                                 type: boolean
+                              configRef:
+                                description: |-
+                                  ConfigRef is used for configuration entries
+                                  Mutually exclusive with Value
+                                properties:
+                                  key:
+                                    description: Key is the key within the secret or configmap
+                                    type: string
+                                  name:
+                                    description: Name is the name of the secret or configmap in the same namespace
+                                    type: string
+                                required:
+                                  - key
+                                  - name
+                                type: object
                               key:
                                 description: Key is the configuration key name
                                 type: string
@@ -445,10 +517,10 @@ spec:
                                   Mutually exclusive with Value
                                 properties:
                                   key:
-                                    description: Key is the key within the secret
+                                    description: Key is the key within the secret or configmap
                                     type: string
                                   name:
-                                    description: Name is the name of the secret in the same namespace
+                                    description: Name is the name of the secret or configmap in the same namespace
                                     type: string
                                 required:
                                   - key
@@ -460,20 +532,24 @@ spec:
                               value:
                                 description: |-
                                   Value is used for regular (non-sensitive) configuration entries
-                                  Mutually exclusive with SecretRef
+                                  Mutually exclusive with SecretRef and ConfigRef
                                 type: string
                             required:
                               - key
                             type: object
                             x-kubernetes-validations:
                               - message: absent entries cannot have value or secretRef
-                                rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) : true'
-                              - message: config entries can have either a value or a secretRef
-                                rule: '(!has(self.absent) || !self.absent) ? has(self.value) != has(self.secretRef) : true'
-                              - message: config entries with secret references have to be sensitive
-                                rule: 'has(self.secretRef) ? has(self.sensitive) && self.sensitive : true'
+                                rule: '(has(self.absent) && self.absent) ? !has(self.value) && !has(self.secretRef) && !has(self.configRef) : true'
                               - message: sensitive config entries are not allowed to have normal values
                                 rule: '(has(self.sensitive) && self.sensitive) ? !has(self.value) : true'
+                              - message: sensitive config entries are not allowed to have config map references
+                                rule: '(has(self.sensitive) && self.sensitive) ? !has(self.configRef) : true'
+                              - message: config map references cannot be used with normal values or secret references
+                                rule: 'has(self.configRef) ? !has(self.secretRef) && !has(self.value) : true'
+                              - message: secret references cannot be used with normal values or config map references
+                                rule: 'has(self.secretRef) ? !has(self.configRef) && !has(self.value) : true'
+                              - message: normal values cannot be used with config map references or secret references
+                                rule: 'has(self.value) ? !has(self.configRef) && !has(self.secretRef) : true'
                           type: array
                       type: object
                     dogus:
