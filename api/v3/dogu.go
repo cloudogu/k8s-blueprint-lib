@@ -62,6 +62,12 @@ func (in *Dogu) DeepCopyInto(out *Dogu) {
 type ResourceConfig struct {
 	// +optional
 	MinVolumeSize *string `json:"minVolumeSize,omitempty"`
+	// StorageClassName specifies the storage class to be used for the data volume.
+	// Assumes the default storage class configured in the cluster if empty.
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="StorageClassName is immutable"
+	// +kubebuilder:validation:MaxLength=253
+	StorageClassName *string `json:"storageClassName,omitempty"`
 }
 
 type ReverseProxyConfig struct {
@@ -104,6 +110,7 @@ type AdditionalMount struct {
 
 type PlatformConfig struct {
 	// +optional
+	// +kubebuilder:validation:XValidation:rule="(!has(oldSelf.storageClassName) && !has(self.storageClassName)) || (has(oldSelf.storageClassName) && has(self.storageClassName))", message="StorageClassName cannot be set or unset after creation"
 	ResourceConfig *ResourceConfig `json:"resource,omitempty"`
 	// +optional
 	ReverseProxyConfig *ReverseProxyConfig `json:"reverseProxy,omitempty"`
