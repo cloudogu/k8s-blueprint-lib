@@ -314,7 +314,7 @@ func (in *CombinedDoguConfigDiff) DeepCopyInto(out *CombinedDoguConfigDiff) {
 	}
 	if in.SensitiveDoguConfigDiff != nil {
 		in, out := &in.SensitiveDoguConfigDiff, &out.SensitiveDoguConfigDiff
-		*out = make(SensitiveDoguConfigDiff, len(*in))
+		*out = make(DoguConfigDiff, len(*in))
 		for i := range *in {
 			(*in)[i].DeepCopyInto(&(*out)[i])
 		}
@@ -712,6 +712,11 @@ func (in *ResourceConfig) DeepCopyInto(out *ResourceConfig) {
 	*out = *in
 	if in.MinVolumeSize != nil {
 		in, out := &in.MinVolumeSize, &out.MinVolumeSize
+		*out = new(string)
+		**out = **in
+	}
+	if in.StorageClassName != nil {
+		in, out := &in.StorageClassName, &out.StorageClassName
 		*out = new(string)
 		**out = **in
 	}

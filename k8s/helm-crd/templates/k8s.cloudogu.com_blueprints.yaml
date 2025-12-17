@@ -3,7 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.19.0
+    controller-gen.kubebuilder.io/version: v0.14.0
   name: blueprints.k8s.cloudogu.com
   labels:
     app: ces
@@ -271,6 +271,14 @@ spec:
                                 properties:
                                   minVolumeSize:
                                     type: string
+                                  storageClassName:
+                                    description: |-
+                                      StorageClassName specifies the storage class to be used for the data volume of the dogu.
+                                      Cannot be changed after installation of the dogu.
+                                      For the difference between null and empty string, see the appropriate kubernetes documentation:
+                                      https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+                                    maxLength: 253
+                                    type: string
                                 type: object
                               reverseProxy:
                                 properties:
@@ -355,7 +363,7 @@ spec:
                 conditions:
                   description: Conditions shows the current state of the blueprint
                   items:
-                    description: Condition contains details for one aspect of the current state of this API Resource.
+                    description: "Condition contains details for one aspect of the current state of this API Resource.\n---\nThis struct is intended for direct use as an array at the field path .status.conditions.  For example,\n\n\n\ttype FooStatus struct{\n\t    // Represents the observations of a foo's current state.\n\t    // Known .status.conditions.type are: \"Available\", \"Progressing\", and \"Degraded\"\n\t    // +patchMergeKey=type\n\t    // +patchStrategy=merge\n\t    // +listType=map\n\t    // +listMapKey=type\n\t    Conditions []metav1.Condition `json:\"conditions,omitempty\" patchStrategy:\"merge\" patchMergeKey:\"type\" protobuf:\"bytes,1,rep,name=conditions\"`\n\n\n\t    // other fields\n\t}"
                     properties:
                       lastTransitionTime:
                         description: |-
@@ -396,7 +404,12 @@ spec:
                           - Unknown
                         type: string
                       type:
-                        description: type of condition in CamelCase or in foo.example.com/CamelCase.
+                        description: |-
+                          type of condition in CamelCase or in foo.example.com/CamelCase.
+                          ---
+                          Many .condition.type values are consistent across resources like Available, but because arbitrary conditions can be
+                          useful (see .node.status.conditions), the ability to deconflict is important.
+                          The regex it matches is (dns1123SubdomainFmt/)?(qualifiedNameFmt)
                         maxLength: 316
                         pattern: ^([a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*/)?(([A-Za-z0-9][-A-Za-z0-9_.]*)?[A-Za-z0-9])$
                         type: string
@@ -600,6 +613,14 @@ spec:
                                 properties:
                                   minVolumeSize:
                                     type: string
+                                  storageClassName:
+                                    description: |-
+                                      StorageClassName specifies the storage class to be used for the data volume of the dogu.
+                                      Cannot be changed after installation of the dogu.
+                                      For the difference between null and empty string, see the appropriate kubernetes documentation:
+                                      https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+                                    maxLength: 253
+                                    type: string
                                 type: object
                               reverseProxy:
                                 properties:
@@ -748,6 +769,14 @@ spec:
                                 properties:
                                   minVolumeSize:
                                     type: string
+                                  storageClassName:
+                                    description: |-
+                                      StorageClassName specifies the storage class to be used for the data volume of the dogu.
+                                      Cannot be changed after installation of the dogu.
+                                      For the difference between null and empty string, see the appropriate kubernetes documentation:
+                                      https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+                                    maxLength: 253
+                                    type: string
                                 type: object
                               reverseProxyConfig:
                                 properties:
@@ -800,6 +829,14 @@ spec:
                               resourceConfig:
                                 properties:
                                   minVolumeSize:
+                                    type: string
+                                  storageClassName:
+                                    description: |-
+                                      StorageClassName specifies the storage class to be used for the data volume of the dogu.
+                                      Cannot be changed after installation of the dogu.
+                                      For the difference between null and empty string, see the appropriate kubernetes documentation:
+                                      https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+                                    maxLength: 253
                                     type: string
                                 type: object
                               reverseProxyConfig:
