@@ -66,7 +66,6 @@ type ResourceConfig struct {
 	// For the difference between null and empty string, see the appropriate kubernetes documentation:
 	// https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
 	// +kubebuilder:validation:Optional
-	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="StorageClassName is immutable"
 	// +kubebuilder:validation:MaxLength=253
 	StorageClassName *string `json:"storageClassName,omitempty"`
 }
@@ -111,7 +110,6 @@ type AdditionalMount struct {
 
 type PlatformConfig struct {
 	// +optional
-	// +kubebuilder:validation:XValidation:rule="(!has(oldSelf.storageClassName) && !has(self.storageClassName)) || (has(oldSelf.storageClassName) && has(self.storageClassName))", message="StorageClassName cannot be set or unset after creation"
 	ResourceConfig *ResourceConfig `json:"resource,omitempty"`
 	// +optional
 	ReverseProxyConfig *ReverseProxyConfig `json:"reverseProxy,omitempty"`
