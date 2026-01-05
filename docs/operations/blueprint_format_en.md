@@ -11,7 +11,7 @@ All fields of the blueprint are described below and illustrated with examples.
 * Required
 * Data type: string
 * Content: The `blueprintApi` field specifies the API version of the blueprint.
-* Example: `blueprintApi: "v2"`
+* Example: `blueprintApi: "v3"`
 
 ## Dogus
 

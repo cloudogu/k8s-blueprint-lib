@@ -62,6 +62,13 @@ func (in *Dogu) DeepCopyInto(out *Dogu) {
 type ResourceConfig struct {
 	// +optional
 	MinVolumeSize *string `json:"minVolumeSize,omitempty"`
+	// StorageClassName specifies the storage class to be used for the data volume of the dogu.
+	// Cannot be changed after installation of the dogu.
+	// For the difference between null and empty string, see the appropriate kubernetes documentation:
+	// https://kubernetes.io/docs/concepts/storage/persistent-volumes/#class-1
+	// +kubebuilder:validation:Optional
+	// +kubebuilder:validation:MaxLength=253
+	StorageClassName *string `json:"storageClassName,omitempty"`
 }
 
 type ReverseProxyConfig struct {
